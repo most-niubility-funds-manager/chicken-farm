@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"sourceMap": true,
+    "target": "esnext",
+    "module": "esnext",
+		"jsx": "react",
+		"allowSyntheticDefaultImports": true,	//	模块引入方式
+		"types": ["chrome"]
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules"]
+}

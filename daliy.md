@@ -1,0 +1,5 @@
+- 7/27
+  - indexedDB 操作理解及方法封装完毕
+  - table sticky完成
+  - table 基础UI完成
+  - 数据库存入holiday 减轻[百度]api压力完成
