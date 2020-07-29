@@ -5,6 +5,7 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
   max-height: 700px;
   background-color: ${props => props.theme.background};
   padding-top: 20px;
+  position: relative;
 `
 
 const Content = styled.div.attrs({ className:'content' })`

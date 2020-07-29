@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Section = styled.div.attrs({ className: 'section-item' })`
-  width: 100%;
+  width: 100px;
   height: 80px;
   border-radius: 5px;
   background-color: ${props => props.theme.background};
@@ -29,7 +29,7 @@ const Detail = styled.p.attrs({ className: 'item-detail' })`
   font-size: 12px;
 
   span:first-of-type {
-    margin-right: 10px
+    margin-right: 5px
   }
 `
 

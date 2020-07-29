@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:52:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-26 13:43:55
+ * @LastEditTime: 2020-07-29 14:21:51
  * @Description: 主题色
  */
 
@@ -23,5 +23,16 @@ export const theme = {
 		tabelCellHover: "#2e4466",
 		background: "#30343a",
 		status: "#e2a229",
+
+		searchPageBg: '#2b323e',
+		searchShadow: 'rgb(0 0 0 / 0.3)',
+		listBg: '#1A1B1F',
+		addBtn: '#037cff',
+		addBtnDisabled: '#999',
+		searchTip: "#eee",
+		errorBorder: '#e23321',
+		errorBg: 'rgb(255 24 0 / 45%)',
+
+		loading: "#fec54f",
 	},
 };

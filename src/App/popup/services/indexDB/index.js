@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 12:40:25
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-27 00:16:36
+ * @LastEditTime: 2020-07-29 13:55:53
  * @Description: indexdb数据库操作
  */
 
@@ -12,32 +12,36 @@
 // trade  交易记录 | code | name | unit 买卖 | state | time 交易状态
 /**
  * @description: 打开/创建数据库
- * @param {Object} { store:数据库名, table: 表名, keyPath: 主键(默认id), keyMap: 表内结构{ key: 是否自增 } }
+ * @param {Object} { store:数据库名, tables: { name: structure } 表名和表结构, keyPath: 主键(默认id) }
  * @return: 数据库实例
  */
-const createDB = ({ store, table, keyPath = "id", keyMap }, version = 1) =>
+const createDB = ({ store, tables, keyPath = "id" }, version = 1) =>
 	new Promise((resolve, reject) => {
 		const request = window.indexedDB.open(store, version);
     // 更新
 		request.onupgradeneeded = ({ target }) => {
       const db = target.result;
-			const keys = Object.keys(keyMap); //  展开表字段
+			const tableNames = Object.keys(tables); //  展开表字段
 			let objectStore;
-      // 判断当前表是否存在
-			if (!db.objectStoreNames.contains(table)) {
-				// keyPath为id时 自增
-				objectStore = db.createObjectStore(table, { keyPath, autoIncrement: keyPath === "id" });
 
-				// 创建表中属性对应索引
-				keys.forEach((key) => {
-					objectStore.createIndex(key, key, { unique: keyMap[key] });
-				});
-			}
+			tableNames.map(name => {
+				// 判断当前表是否存在
+				if (!db.objectStoreNames.contains(name)) {
+					// keyPath为id时 自增
+					objectStore = db.createObjectStore(name, { keyPath, autoIncrement: keyPath === "id" });
+					// 获取表名对应的表结构对象的键值组
+					const structure = Object.keys(tables[name])
+	
+					// 创建表中属性对应索引
+					structure.forEach((key) => {
+						objectStore.createIndex(key, key, { unique: tables[name][key] });
+					});
+				}
+			})
 		};
 
 		// 打开
-		request.onsuccess = ({ target: { result } }) => resolve(result);
-
+		request.onsuccess = ({ target: { result } }) => resolve(result)
 		//  失败
 		request.onerror = (e) => reject(e);
 	});
@@ -143,6 +147,11 @@ const indexedUpdate = ({ store, table, data }) =>
 			.catch((e) => reject(e));
 	});
 
+/**
+ * @description: 删除指定某条数据
+ * @param {Object} { store, table, key: { 字段：值 } }
+ * @return: Promise.resolve
+ */
 const indexedDelete = ({ store, table, key: { k, v } }) =>
 	new Promise((resolve, reject) => {
 		openDB(store)

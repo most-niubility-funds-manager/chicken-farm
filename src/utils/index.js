@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 13:50:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-25 12:35:37
+ * @LastEditTime: 2020-07-28 22:38:23
  * @Description: 小工具
  */ 
 import Constants from '../constants'
@@ -98,4 +98,19 @@ const isMarketOpen = async () => {
   return true
 }
 
-export { requestRecursion, checkFundOpen, isMarketOpen }
+/**
+ * @description: 时间格式转换(死板)，传入正常的时间数据就行
+ * @param {String|Number} param
+ * @return: eg: 07-28 00:00
+ */
+const formatTime = (param) => {
+  const date = new Date(param)
+  const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
+  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
+  const hour = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
+  const minute = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
+
+  return `${month}-${day} ${hour}:${minute}`
+}
+
+export { requestRecursion, checkFundOpen, isMarketOpen, formatTime }

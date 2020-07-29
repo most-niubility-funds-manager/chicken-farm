@@ -6,11 +6,10 @@ import { getLargeCap } from "../../services/index";
 import { requestRecursion } from "../../../../utils";
 
 const SectionGroup = () => {
-	const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   const theme = useSelector((state) => state.theme);
   const isMarketOpen = useSelector((state) => state.isMarketOpen)
   const intervalCheck = () => !isMarketOpen
-  console.log('isMarketOpen', isMarketOpen)
 
   useEffect(() => {
     requestRecursion(getLargeCap, intervalCheck, 1000, (originData) => {
@@ -24,7 +23,7 @@ const SectionGroup = () => {
   
       setData(formatData);
     });
-  }, [])
+  }, [isMarketOpen])
 
 
 	return (

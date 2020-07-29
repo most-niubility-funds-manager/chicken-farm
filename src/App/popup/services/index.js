@@ -1,12 +1,13 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-27 00:16:12
+ * @LastEditTime: 2020-07-29 14:55:03
  * @Description: 天天基金api
  */
 
-import { requestGet, sendMessage } from "./request";
-import { indexedAdd, indexedFindAll, indexedFindSingle } from "./indexDB";
+import { requestGet } from "./request";
+import { indexedAdd, indexedFindAll, indexedFindSingle, indexedUpdate } from "./indexDB";
+import { formatTime } from "../../../utils";
 import Constants from "../../../constants";
 
 /**
@@ -41,18 +42,15 @@ const getLargeCap = async () => {
  * @return: data
  */
 const fetchAllYearholiday = async () => {
-	const { COMMANDS } = Constants;
-
-	const parms = {
+	const params = {
 		url: "https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php",
 		params: {
 			query: new Date().getFullYear(),
 			resource_id: 6018,
 		},
-		method: "get",
 	};
 
-	const { data } = await sendMessage({ command: COMMANDS.REQUEST, data: parms });
+	const { data } = await requestGet(params);
 
 	return data;
 };
@@ -73,7 +71,7 @@ const getAllYearholiday = async () => {
 		resultData = [...data];
 	} catch (e) {
 		console.log("数据库错误", e);
-		
+
 		const originData = await fetchAllYearholiday();
 		const { holiday } = originData[0];
 		const weekend = [0, 6]; //	周末的getDay
@@ -91,7 +89,7 @@ const getAllYearholiday = async () => {
 			return times;
 		}, []);
 
-		resultData = [...new Set(resultData)]
+		resultData = [...new Set(resultData)];
 
 		// 存数据库中
 		const params = {
@@ -104,4 +102,107 @@ const getAllYearholiday = async () => {
 	return resultData; //	去重
 };
 
-export { getLargeCap, getAllYearholiday };
+/**
+ * @description: 查询单个基金代码数值
+ * @param {String} code
+ * @return: null | Object
+ */
+const fetchSingleFund = async (code) => {
+	const params = {
+		url: `http://fundgz.1234567.com.cn/js/${code}.js`,
+		params: {
+			rt: Date.now(),
+		},
+		type: "text",
+	};
+
+	try {
+		const result = await requestGet(params);
+		const noFindReg = /doctype/g;
+		const jsonp = /\{.*?\}/g;
+		if (noFindReg.test(result)) {
+			return null;
+		}
+
+		let tempData = result.match(jsonp, (match) => match)[0];
+		tempData = tempData.replace(/\{|\}|"/g, "");
+		tempData = tempData.split(",");
+		const resultJson = tempData.reduce((obj, value) => {
+			const [k, v] = value.split(":");
+			obj[k] = v;
+			return obj;
+		}, {});
+		console.log("鸡精数据", resultJson);
+		return resultJson;
+	} catch (error) {
+		console.log(
+			"result.match(jsonp, (match) => match)",
+			result.match(jsonp, (match) => match)
+		);
+		console.log("查询基金代码出错", error);
+		return null;
+	}
+};
+
+/**
+ * @description: UI层传入解析后的数组，统一进行请求，给出code对应数据，及请求失败的code对应原因
+ * @param {Array} codes
+ * @return: { succ: [{ name, code, lastUnit, currUnit, range, time }], fail: [code] }
+ */
+const convertCodeFetch = (codes) =>
+	Promise.all(codes.map((v) => fetchSingleFund(v))).then((datas) => {
+		// 传回null数据 对应的下标
+		const emptyDataIndex = datas.reduce((arr, curr, idx) => {
+			curr === null && arr.push(idx);
+			return arr;
+		}, []);
+		// 成功
+		const succDatas = datas
+			.filter((v) => v)
+			.map(({ fundcode, dwjz, gsz, gszzl, gztime, jzrq, name }) => ({
+				name,
+				code: fundcode,
+				lastUnit: dwjz,
+				currUnit: gsz,
+				range: gszzl,
+				time: formatTime(Date.now()),
+			}));
+		// 或失败
+		const failDatas = emptyDataIndex.map((idx) => codes[idx]);
+
+		const result = {
+			succ: succDatas,
+			fail: failDatas,
+		};
+
+		return result;
+	});
+
+/**
+ * @description: funds表 添加|更新 单个数据
+ * @param {Object} data { code, name, unit, state, create }
+ * @return: Promise
+ */
+const updateSingleFund = (data) =>
+	indexedUpdate({
+		store: Constants.INDEX_STORE,
+		table: Constants.INDEX_FUND,
+		data,
+	});
+
+/**
+ * @description: 添加多个基金
+ * @param {Array} data [{ code, name, unit, state, create }]
+ * @return: Promise.resolve
+ */
+const addAllFunds = (data) =>
+	indexedAdd({ store: Constants.INDEX_STORE, table: Constants.INDEX_FUND, data });
+
+export {
+	getLargeCap,
+	getAllYearholiday,
+	fetchSingleFund,
+	convertCodeFetch,
+	updateSingleFund,
+	addAllFunds,
+};

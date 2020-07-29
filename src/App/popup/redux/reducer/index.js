@@ -3,6 +3,9 @@ import {
 	SET_MARKET_STATE,
 	SET_MARKET_STATE_TEXT,
 	SET_ACTIVE_TR,
+	CHANGE_SEARCH_STATE,
+	SET_SEARCH_LOADING,
+	SET_SEARCH_RESULT,
 } from "../actionTypes";
 
 // 默认全部状态
@@ -11,6 +14,9 @@ const defaultState = {
 	isMarketOpen: false, //  今日现在是否已休市
 	marketState: "", //  开盘中 午间休市 已休市
 	activeTrIndex: 0, //  当前hover状态的tr index
+	isSearch: false, //	搜索结果页
+	isSearchLoading: false, //	搜索结果loading
+	searchData: {}, //	搜索结果
 };
 
 export default (state = defaultState, action) => {
@@ -28,6 +34,14 @@ export default (state = defaultState, action) => {
 		case SET_ACTIVE_TR:
 			state.activeTrIndex = action.index;
 			return state;
+		case CHANGE_SEARCH_STATE:
+			state.isSearch = action.state;
+			return state;
+		case SET_SEARCH_LOADING:
+			state.isSearchLoading = action.state;
+			return state;
+		case SET_SEARCH_RESULT:
+			return Object.assign({}, state, { searchData: action.data });
 		default:
 			return state;
 	}

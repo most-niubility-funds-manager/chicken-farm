@@ -11,7 +11,7 @@ const Wrapper = styled.div.attrs({ className: "subtable-wrapper" })`
 
 	&.left {
 		position: sticky;
-		left: -1px;
+		left: 0px;
 		border-right: 1px solid ${(props) => props.theme.border};
 		z-index: 1;
 	}
@@ -42,7 +42,7 @@ const Table = styled.table.attrs({ className: "subtable" })`
 
 const Th = styled.th`
 	position: sticky;
-	top: -1px;
+	top: 0px;
 	height: 40px;
 	background-color: ${(props) => props.theme.theadBg};
 	color: ${(props) => props.theme.normal};

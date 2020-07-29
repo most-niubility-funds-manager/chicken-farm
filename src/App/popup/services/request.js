@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 23:03:59
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-24 22:18:45
+ * @LastEditTime: 2020-07-28 14:46:34
  * @Description: fetch 调用
  */
 
@@ -11,7 +11,7 @@
  * @return: response
  */
 
-const requestGet = ({ url, params }) => {
+const requestGet = ({ url, params, type = 'json' }) => {
 	const stringify = params
 		? Object.keys(params).reduce((str, curr) => {
 				str = str + `${curr}=${params[curr]}&`;
@@ -20,8 +20,13 @@ const requestGet = ({ url, params }) => {
 		: "";
 
 	const link = url + stringify;
-
-	return fetch(link).then((_) => _.json());
+	
+	switch (type) {
+		case 'json':
+			return fetch(link).then((_) => _.json());
+		case 'text':
+			return fetch(link).then((_) => _.text());
+	}
 };
 
 /**

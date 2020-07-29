@@ -21,7 +21,8 @@
     "tabs",
     "webRequest",
     "notifications",
-    "*://*.baidu.com/*"
+    "*://*.baidu.com/*",
+    "*://fundgz.1234567.com.cn/*"
   ],
   "web_accessible_resources": [
     "static/js/*"

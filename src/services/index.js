@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-24 21:56:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-24 22:22:44
+ * @LastEditTime: 2020-07-28 17:44:47
  * @Description: 插件背景页
  */ 
 
@@ -17,7 +17,7 @@ const RUNTIME_COMMANDS = new Map([
 // 背景页命令中枢
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const { command, data } = message
-  console.log('监听命令', command)
+  console.log('监听命令', command, data)
   RUNTIME_COMMANDS.get(command)(sendResponse, data)
 
   return true

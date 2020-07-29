@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-26 13:01:20
+ * @LastEditTime: 2020-07-28 10:43:19
  * @Description: 重中之重 多功能表格
  */
 
@@ -188,7 +188,7 @@ const FreeTable = () => {
 
 	const ScrollHandler = () => {
 		const rect = TableEL.current.scrollTop;
-		console.log("TableEL", rect);
+		console.log("scrollTop", rect);
 	};
 
 	// 传给子组件
