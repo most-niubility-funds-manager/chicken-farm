@@ -57,14 +57,14 @@ const Content = styled.div.attrs({ className: "search-content" })`
 
 const CloseBtn = styled.i`
 	position: absolute;
-	top: 10px;
-	right: 15px;
+	top: 20px;
+	right: 20px;
 	width: 20px;
 	height: 20px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: ${(props) => props.theme.unfold};
+	color: ${(props) => props.theme.normal};
 	font-size: 20px;
 	cursor: pointer;
 `;
@@ -78,23 +78,33 @@ const Title = styled.div`
 	margin-bottom: 15px;
 `;
 
-const ErrorPanel = styled.div.attrs({ className: 'error-panel' })`
-  width: 100%;
-  padding: 10px;
-  border-radius: 2px;
-  border: 1px solid ${props => props.theme.errorBorder};
-  background-color: ${props => props.theme.errorBg};
-  color: ${props => props.theme.normal};
-  font-size: 14px;
-  line-height: 1.5;
-  margin-bottom: 15px;
-`
+const backgroundAnimate = (beforeColor, afterColor) => keyframes`
+  from {
+    background-color: ${beforeColor};
+  }
+  to {
+    background-color: ${afterColor};
+  }
+`;
+
+const ErrorPanel = styled.div.attrs({ className: "error-panel" })`
+	width: 100%;
+	padding: 5px 10px;
+	border-radius: 2px;
+	border: 1px solid ${(props) => props.theme.errorBorder};
+	color: ${(props) => props.theme.normal};
+	font-size: 12px;
+	line-height: 1.5;
+	margin-bottom: 15px;
+	animation: ${(props) => backgroundAnimate(props.theme.errorBgAnimate, props.theme.errorBg)} 0.2s
+		ease-out forwards;
+`;
 
 const ListWrapper = styled.div.attrs({ className: "list-wrapper" })`
 	max-height: calc(100% - 100px);
 	overflow: overlay;
 	margin-bottom: 15px;
-  font-size: 12px;
+	font-size: 12px;
 `;
 const ListItem = styled.div.attrs({ className: "list-item" })`
 	width: 100%;
@@ -128,11 +138,11 @@ const Btn = styled.button`
 	font-size: 12px;
 	cursor: pointer;
 
-  &.disabled {
-    background-color: ${(props) => props.theme.addBtnDisabled};
-    cursor: not-allowed;
-    pointer-events: none;
-  }
+	&.disabled {
+		background-color: ${(props) => props.theme.addBtnDisabled};
+		cursor: not-allowed;
+		pointer-events: none;
+	}
 `;
 
 const Tips = styled.p.attrs({ className: "tip" })`
@@ -158,8 +168,8 @@ export {
 	Mask,
 	Content,
 	CloseBtn,
-  Title,
-  ErrorPanel,
+	Title,
+	ErrorPanel,
 	ListWrapper,
 	ListItem,
 	BtnBox,

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 12:40:25
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-29 13:55:53
+ * @LastEditTime: 2020-07-29 23:07:18
  * @Description: indexdb数据库操作
  */
 
@@ -117,6 +117,7 @@ const indexedFindSingle = ({ store, table, key: { k, v } }) =>
 			.then((db) => {
 				const transaction = db.transaction([table], "readwrite");
 				const objectStore = transaction.objectStore(table);
+				// console.log('？？？', objectStore, objectStore.index(k))
 				const index = objectStore.index(k);
         const request = index.get(v)
 
@@ -124,7 +125,7 @@ const indexedFindSingle = ({ store, table, key: { k, v } }) =>
 					if (request.result) {
             resolve(request.result);
 					} else {
-						reject()
+						resolve(null)	//	查不到返回null
 					}
 				};
 			})

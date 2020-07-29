@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:52:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-29 14:21:51
+ * @LastEditTime: 2020-07-30 00:13:03
  * @Description: 主题色
  */
 
@@ -32,6 +32,7 @@ export const theme = {
 		searchTip: "#eee",
 		errorBorder: '#e23321',
 		errorBg: 'rgb(255 24 0 / 45%)',
+		errorBgAnimate: 'rgb(255 24 0 / 30%)',
 
 		loading: "#fec54f",
 	},

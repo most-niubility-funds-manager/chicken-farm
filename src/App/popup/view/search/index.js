@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-28 10:47:44
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-29 14:53:39
+ * @LastEditTime: 2020-07-30 00:21:55
  * @Description: 搜索结果页
  */
 
@@ -36,7 +36,7 @@ const SearchPage = (props) => {
 	}, [succ]);
 
 	const addFund = (idx) => {
-		setListData(listData.map((v, i) => ({ ...v, active: i === idx ? !v.active : v.active })));
+		const fundData = { ...listData[idx] };
 		const param = {
 			name: fundData.name,
 			code: fundData.code,
@@ -44,8 +44,9 @@ const SearchPage = (props) => {
 			state: 1,
 			create: Date.now(),
 		};
+
 		addAllFunds([param]);
-		console.log("添加基金");
+		setListData(listData.map((v, i) => ({ ...v, active: i === idx ? !v.active : v.active })));
 	};
 
 	const addAllFundsData = () => {
@@ -55,12 +56,11 @@ const SearchPage = (props) => {
 				name,
 				code,
 				unit: 0,
-				state: true,
+				state: 1,
 				create: Date.now(),
 			}));
 		listData.forEach((v) => (v.active = true));
 		addAllFunds(data).then((_) => closeEvent());
-		console.log("添加所有鸡精");
 	};
 
 	return (
@@ -94,9 +94,11 @@ const SearchPage = (props) => {
 				)}
 				<Tips theme={theme}>
 					注: 已过滤格式错误基金代码
-					<Btn theme={theme} onClick={addAllFundsData}>
-						全部添加
-					</Btn>
+					{listData.length > 1 && (
+						<Btn theme={theme} onClick={addAllFundsData}>
+							全部添加
+						</Btn>
+					)}
 				</Tips>
 			</Content>
 		</Wrapper>

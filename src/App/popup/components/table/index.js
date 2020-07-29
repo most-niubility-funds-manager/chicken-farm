@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-28 10:43:19
+ * @LastEditTime: 2020-07-30 00:03:34
  * @Description: 重中之重 多功能表格
  */
 
@@ -9,12 +9,36 @@ import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Wrapper } from "./index.style";
 import SubTable from "./subTable";
+import { getFundsCode, fetchAllFunds } from "../../services";
+import { requestRecursion } from "../../../../utils";
 
 const FreeTable = () => {
 	const theme = useSelector((state) => state.theme);
 	const TableEL = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [activeCode, setActiveCode] = useState(null)
+	const [activeIndex, setActiveIndex] = useState(null);
+	const [activeCode, setActiveCode] = useState(null);
+	const [tableData, setTableData] = useState([]);
+	const isMarketOpen = useSelector((state) => state.isMarketOpen);
+	const intervalCheck = () => !isMarketOpen;
+
+	// 获取 funds code
+	const getIndexedFunds = () =>
+		new Promise((resolve) => {
+			getFundsCode()
+				.then((codes) => fetchAllFunds(codes))
+				.then((_) => resolve(_));
+		});
+
+	useEffect(() => {
+		requestRecursion(getIndexedFunds, intervalCheck, 1000, (datas) => {
+			const tempTableData = [...tableData];
+			datas.map((v, i) => {
+				v && (tempTableData[i] = Object.assign({}, v));
+			});
+			setTableData(tempTableData);
+		});
+	}, []);
+
 	const config = [
 		{
 			title: "基金名称",
@@ -22,19 +46,20 @@ const FreeTable = () => {
 			key: "name",
 			width: 120,
 			textAlign: "left",
-      fixed: "left",
-      keyword: true,  //  给颜色
+			fixed: "left",
+			keyword: true, //  给颜色
 		},
 		{
 			title: "涨跌幅",
 			dataIndex: "crease",
 			key: "crease",
-			width: 70,
+			width: 90,
 			textAlign: "right",
-			tag: true,  //  给标签
+			tag: true, //  给标签
 		},
 		{ title: "基金代码", dataIndex: "code", key: "code", width: 80, textAlign: "center" },
-		{ title: "估算净值", dataIndex: "worth", key: "worth", width: 80, textAlign: "right" },
+		{ title: "昨日净值", dataIndex: "lastUnit", key: "lastUnit", width: 80, textAlign: "right" },
+		{ title: "估算净值", dataIndex: "currUnit", key: "currUnit", width: 80, textAlign: "right" },
 		{
 			title: "持有份额",
 			dataIndex: "totalShare",
@@ -60,129 +85,6 @@ const FreeTable = () => {
 		// { title: '更多操作', key: 'operation', width:  }
 	];
 
-	const tableData = [
-		{
-			name: "....",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-		{
-			name: "华夏中证5G通信主题ETF联接C",
-			crease: "-5.83%",
-			code: "008087",
-			worth: "1.2439",
-			totalShare: "3000",
-			totalReckon: "3600",
-			incomeReckon: "-380.1",
-			update: "07/24 15:00",
-		},
-	];
-
 	const leftTable = config.filter(({ fixed }) => fixed === "left");
 	const rightTable = config.filter(({ fixed }) => fixed === "right");
 
@@ -195,17 +97,17 @@ const FreeTable = () => {
 	const ListMouseEnterHandler = (index) => {
 		console.log("列表hover", index);
 		setActiveIndex(index);
-  };
-  // hover out
-  const ListMouseLeaveHandler = () => {
-    setActiveIndex(null)
-  }
-  // 点击事件 传基金代码
-  const ListClickHandler = index => {
-    const { code } = tableData[index]
-    console.log('code', code)
-    setActiveCode(code) 
-  }
+	};
+	// hover out
+	const ListMouseLeaveHandler = () => {
+		setActiveIndex(null);
+	};
+	// 点击事件 传基金代码
+	const ListClickHandler = (index) => {
+		const { code } = tableData[index];
+		console.log("code", code);
+		setActiveCode(code);
+	};
 
 	return (
 		<Wrapper ref={TableEL} onScroll={ScrollHandler}>
@@ -214,18 +116,18 @@ const FreeTable = () => {
 				position="left"
 				theme={theme}
 				data={tableData}
-        hoverEvent={ListMouseEnterHandler}
-        leaveEvent={ListMouseLeaveHandler}
-        clickEvent={ListClickHandler}
+				hoverEvent={ListMouseEnterHandler}
+				leaveEvent={ListMouseLeaveHandler}
+				clickEvent={ListClickHandler}
 				activeIndex={activeIndex}
 			/>
 			<SubTable
 				head={config}
 				theme={theme}
 				data={tableData}
-        hoverEvent={ListMouseEnterHandler}
-        leaveEvent={ListMouseLeaveHandler}
-        clickEvent={ListClickHandler}
+				hoverEvent={ListMouseEnterHandler}
+				leaveEvent={ListMouseLeaveHandler}
+				clickEvent={ListClickHandler}
 				activeIndex={activeIndex}
 			/>
 			{!!rightTable.length && (

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-29 14:55:03
+ * @LastEditTime: 2020-07-29 23:58:12
  * @Description: 天天基金api
  */
 
@@ -132,14 +132,8 @@ const fetchSingleFund = async (code) => {
 			obj[k] = v;
 			return obj;
 		}, {});
-		console.log("鸡精数据", resultJson);
 		return resultJson;
 	} catch (error) {
-		console.log(
-			"result.match(jsonp, (match) => match)",
-			result.match(jsonp, (match) => match)
-		);
-		console.log("查询基金代码出错", error);
 		return null;
 	}
 };
@@ -195,8 +189,63 @@ const updateSingleFund = (data) =>
  * @param {Array} data [{ code, name, unit, state, create }]
  * @return: Promise.resolve
  */
-const addAllFunds = (data) =>
-	indexedAdd({ store: Constants.INDEX_STORE, table: Constants.INDEX_FUND, data });
+const addAllFunds = (data) => {
+	Promise.all(data.map(({ code }) => indexedFindSingle({
+		store: Constants.INDEX_STORE,
+		table: Constants.INDEX_FUND,
+		key: { k: "code", v: code },
+	}))).then(res => {
+		const needAddIndex = res.reduce((arr, v, i) => {
+			!v && arr.push(i)
+			return arr
+		}, [])
+		const addList = needAddIndex.map(v => data[v])
+		
+		return indexedAdd({ store: Constants.INDEX_STORE, table: Constants.INDEX_FUND, data: addList });
+	})
+};
+
+/**
+ * @description: 获取funds全部数据 
+ * @return: [{ code, name, unit, state, create }]
+ */
+const getFundsCode = async () => {
+	const funds = await indexedFindAll({ store: Constants.INDEX_STORE, table: Constants.INDEX_FUND })
+	const result = funds.filter(({ state }) => state).map(({ code }) => code)
+	return result
+}
+
+/**
+ * @description: 获取全部funds的数据，整理成tableData格式
+ * @param {Array} codes
+ * @return: [{ name, crease, code, lastUnit, currUnit, totalShare, totalReckon, incomeReckon, update }]
+ */
+const fetchAllFunds = (codes) => {
+	const requestMap = codes.map(v => fetchSingleFund(v))
+	return Promise.all(requestMap).then(res => {
+		const result = res.map(item => {
+			if (!item) {
+				return null
+			}
+			const { fundcode, dwjz, gsz, gszzl, gztime, jzrq, name } = item
+
+			return {
+				name,
+				code: fundcode,
+				lastUnit: dwjz,
+				currUnit: gsz,
+				crease: Number(gszzl) > 0 ? `+${gszzl}%` : `${gszzl}%`,
+				totalShare: '-',
+				totalReckon: '-',
+				incomeReckon: '-',
+				update: formatTime(Date.now())
+			}
+		})
+		
+		return result
+	})
+}
+
 
 export {
 	getLargeCap,
@@ -205,4 +254,6 @@ export {
 	convertCodeFetch,
 	updateSingleFund,
 	addAllFunds,
+	getFundsCode,
+	fetchAllFunds
 };
