@@ -20,7 +20,25 @@ const StateBox = styled.div.attrs({ className: 'state-box' })`
   text-align: center;
   line-height: 2;
   border-radius: 2px;
-  background-color: ${props => props.isOpen ? props.theme.field : props.theme.status}
+  background-color: ${props => props.isOpen ? props.theme.field : props.theme.status};
 `
 
-export { Wrapper, StateBox }
+const NewsBox = styled.a.attrs({ className: 'news-box' })`
+  width: 240px;
+  height: 36px;
+  line-height: 36px;
+  font-size: 12px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: ${props => props.theme.normal};
+  margin-right: auto;
+  margin-left: 20px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
+export { Wrapper, StateBox, NewsBox }

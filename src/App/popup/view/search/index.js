@@ -1,11 +1,11 @@
 /*
  * @Date: 2020-07-28 10:47:44
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-30 00:21:55
+ * @LastEditTime: 2020-07-30 10:43:34
  * @Description: 搜索结果页
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
 	Wrapper,
 	Mask,
@@ -29,11 +29,19 @@ const SearchPage = (props) => {
 	const isLoading = useSelector((state) => state.isSearchLoading);
 	const { succ, fail } = useSelector((state) => state.searchData);
 	const [listData, setListData] = useState([]);
+	const [searchHeight, setSearchHeight] = useState(null);
 	const { closeEvent } = props;
+	const listWrapperRef = useRef(null);
 
 	useEffect(() => {
 		succ && setListData(succ.map((v) => ({ ...v, active: false })));
 	}, [succ]);
+
+	useEffect(() => {
+		if (!isLoading) {
+			calcSearchBoxHeight();
+		}
+	}, [listData]);
 
 	const addFund = (idx) => {
 		const fundData = { ...listData[idx] };
@@ -63,10 +71,16 @@ const SearchPage = (props) => {
 		addAllFunds(data).then((_) => closeEvent());
 	};
 
+  // 计算盒体高度做滚动
+	const calcSearchBoxHeight = () => {
+		const boxHeight = document.querySelector(".search-content").getBoundingClientRect().height;
+		setSearchHeight(boxHeight);
+	};
+
 	return (
 		<Wrapper>
 			<Mask onClick={closeEvent}></Mask>
-			<Content theme={theme}>
+			<Content theme={theme} style={{ height: `${searchHeight}px` }}>
 				<CloseBtn className="iconfont chicken-close" theme={theme} onClick={closeEvent} />
 				<Title theme={theme}>查询结果:</Title>
 				{/* 错误提示❌ */}
@@ -78,7 +92,7 @@ const SearchPage = (props) => {
 						<Loading multi={2} />
 					</LoadingWrapper>
 				) : (
-					<ListWrapper>
+					<ListWrapper ref={listWrapperRef} className={fail.length && "isError"}>
 						{listData.map(({ code, name, active }, i) => (
 							<ListItem theme={theme} key={code}>
 								<span>{code}</span>

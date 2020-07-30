@@ -6,5 +6,22 @@ const Wrapper = styled.div.attrs({ className: 'tabel-wrapper' })`
   position: relative;
   overflow: overlay;
   margin-bottom: 20px;
+
+  &.loading {
+    min-height: 120px;
+  }
 `
-export { Wrapper }
+const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 120px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${props => props.theme.tbodyBg};
+  z-index: 10;
+`
+
+export { Wrapper, LoadingWrapper }

@@ -101,11 +101,16 @@ const ErrorPanel = styled.div.attrs({ className: "error-panel" })`
 `;
 
 const ListWrapper = styled.div.attrs({ className: "list-wrapper" })`
-	max-height: calc(100% - 100px);
+	max-height: calc(100% - 77px);
 	overflow: overlay;
 	margin-bottom: 15px;
 	font-size: 12px;
+
+  &.isError {
+	  max-height: calc(100% - 123px);
+  }
 `;
+
 const ListItem = styled.div.attrs({ className: "list-item" })`
 	width: 100%;
 	height: 50px;

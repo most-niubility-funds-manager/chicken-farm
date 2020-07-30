@@ -1,11 +1,12 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-29 23:58:12
+ * @LastEditTime: 2020-07-30 23:52:16
  * @Description: 天天基金api
  */
 
-import { requestGet } from "./request";
+import cheerio from "cheerio";
+import { requestGet, fetchConvertGBK } from "./request";
 import { indexedAdd, indexedFindAll, indexedFindSingle, indexedUpdate } from "./indexDB";
 import { formatTime } from "../../../utils";
 import Constants from "../../../constants";
@@ -190,30 +191,34 @@ const updateSingleFund = (data) =>
  * @return: Promise.resolve
  */
 const addAllFunds = (data) => {
-	Promise.all(data.map(({ code }) => indexedFindSingle({
-		store: Constants.INDEX_STORE,
-		table: Constants.INDEX_FUND,
-		key: { k: "code", v: code },
-	}))).then(res => {
+	Promise.all(
+		data.map(({ code }) =>
+			indexedFindSingle({
+				store: Constants.INDEX_STORE,
+				table: Constants.INDEX_FUND,
+				key: { k: "code", v: code },
+			})
+		)
+	).then((res) => {
 		const needAddIndex = res.reduce((arr, v, i) => {
-			!v && arr.push(i)
-			return arr
-		}, [])
-		const addList = needAddIndex.map(v => data[v])
-		
+			!v && arr.push(i);
+			return arr;
+		}, []);
+		const addList = needAddIndex.map((v) => data[v]);
+
 		return indexedAdd({ store: Constants.INDEX_STORE, table: Constants.INDEX_FUND, data: addList });
-	})
+	});
 };
 
 /**
- * @description: 获取funds全部数据 
+ * @description: 获取funds全部数据
  * @return: [{ code, name, unit, state, create }]
  */
 const getFundsCode = async () => {
-	const funds = await indexedFindAll({ store: Constants.INDEX_STORE, table: Constants.INDEX_FUND })
-	const result = funds.filter(({ state }) => state).map(({ code }) => code)
-	return result
-}
+	const funds = await indexedFindAll({ store: Constants.INDEX_STORE, table: Constants.INDEX_FUND });
+	const result = funds.filter(({ state }) => state).map(({ code }) => code);
+	return result;
+};
 
 /**
  * @description: 获取全部funds的数据，整理成tableData格式
@@ -221,13 +226,13 @@ const getFundsCode = async () => {
  * @return: [{ name, crease, code, lastUnit, currUnit, totalShare, totalReckon, incomeReckon, update }]
  */
 const fetchAllFunds = (codes) => {
-	const requestMap = codes.map(v => fetchSingleFund(v))
-	return Promise.all(requestMap).then(res => {
-		const result = res.map(item => {
+	const requestMap = codes.map((v) => fetchSingleFund(v));
+	return Promise.all(requestMap).then((res) => {
+		const result = res.map((item) => {
 			if (!item) {
-				return null
+				return null;
 			}
-			const { fundcode, dwjz, gsz, gszzl, gztime, jzrq, name } = item
+			const { fundcode, dwjz, gsz, gszzl, gztime, jzrq, name } = item;
 
 			return {
 				name,
@@ -235,17 +240,47 @@ const fetchAllFunds = (codes) => {
 				lastUnit: dwjz,
 				currUnit: gsz,
 				crease: Number(gszzl) > 0 ? `+${gszzl}%` : `${gszzl}%`,
-				totalShare: '-',
-				totalReckon: '-',
-				incomeReckon: '-',
-				update: formatTime(Date.now())
-			}
-		})
-		
-		return result
-	})
-}
+				totalShare: "-",
+				totalReckon: "-",
+				incomeReckon: "-",
+				update: formatTime(Date.now()),
+			};
+		});
 
+		return result;
+	});
+};
+
+/**
+ * @description: 获取同花顺资讯
+ * @return: [{ url, title }]
+ */
+const fetchNewsInfo = async () => {
+	const url = "http://www.10jqka.com.cn/";
+
+	const originHtml = await fetchConvertGBK(url);
+	const $ = cheerio.load(originHtml);
+	const eachPanel = $('[tpe-plugin="preview_wap_row"]');
+	const dataList = [];
+
+	eachPanel.each(function () {
+		const items = $(this)
+			.find("li a")
+			.filter(function () {
+				return $(this).text().trim().length;
+			})
+			.map(function () {
+				return {
+					title: $(this).text().trim(),
+					url: $(this).attr("href"),
+				};
+			});
+		dataList.push(...Array.from(items));
+	});
+	console.log("data", dataList);
+
+	return dataList;
+};
 
 export {
 	getLargeCap,
@@ -255,5 +290,6 @@ export {
 	updateSingleFund,
 	addAllFunds,
 	getFundsCode,
-	fetchAllFunds
+	fetchAllFunds,
+	fetchNewsInfo,
 };

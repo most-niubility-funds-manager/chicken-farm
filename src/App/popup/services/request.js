@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 23:03:59
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-28 14:46:34
+ * @LastEditTime: 2020-07-30 23:29:56
  * @Description: fetch 调用
  */
 
@@ -30,6 +30,21 @@ const requestGet = ({ url, params, type = 'json' }) => {
 };
 
 /**
+ * @description: fetch转换gbk文本页面
+ * @param {String} url
+ * @return: html text
+ */
+const fetchConvertGBK = url => fetch(url).then(res => res.blob()).then(blob => new Promise(resolve => {
+	const reader = new FileReader()
+	reader.readAsText(blob, "GBK")
+	reader.onload = () => {
+		const html = reader.result
+		resolve(html)
+	}
+}))
+
+
+/**
  * @description: 插件想background请求
  * @param {Object} 参数对象，属性随意
  * @return: who knoe?
@@ -38,4 +53,4 @@ const sendMessage = data => new Promise(resolve => {
   chrome.runtime.sendMessage(data, resolve)
 })
 
-export { requestGet, sendMessage }
+export { requestGet, sendMessage, fetchConvertGBK }

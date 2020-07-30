@@ -1,43 +1,38 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-30 00:03:34
+ * @LastEditTime: 2020-07-30 23:48:03
  * @Description: 重中之重 多功能表格
  */
 
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
-import { Wrapper } from "./index.style";
+import { Wrapper, LoadingWrapper } from "./index.style";
 import SubTable from "./subTable";
 import { getFundsCode, fetchAllFunds } from "../../services";
 import { requestRecursion } from "../../../../utils";
+import Loading from "../loading";
 
 const FreeTable = () => {
 	const theme = useSelector((state) => state.theme);
+	const forceUpdate = useSelector((state) => state.isSearchUpdate);
+	const isMarketOpen = useSelector((state) => state.isMarketOpen);
 	const TableEL = useRef(null);
 	const [activeIndex, setActiveIndex] = useState(null);
 	const [activeCode, setActiveCode] = useState(null);
 	const [tableData, setTableData] = useState([]);
-	const isMarketOpen = useSelector((state) => state.isMarketOpen);
 	const intervalCheck = () => !isMarketOpen;
 
-	// 获取 funds code
-	const getIndexedFunds = () =>
-		new Promise((resolve) => {
-			getFundsCode()
-				.then((codes) => fetchAllFunds(codes))
-				.then((_) => resolve(_));
-		});
-
 	useEffect(() => {
-		requestRecursion(getIndexedFunds, intervalCheck, 1000, (datas) => {
+		requestRecursion(getIndexedFunds, intervalCheck, 5000, (datas) => {
 			const tempTableData = [...tableData];
 			datas.map((v, i) => {
 				v && (tempTableData[i] = Object.assign({}, v));
 			});
 			setTableData(tempTableData);
+			console.log("更新");
 		});
-	}, []);
+	}, [isMarketOpen, forceUpdate]);
 
 	const config = [
 		{
@@ -85,8 +80,10 @@ const FreeTable = () => {
 		// { title: '更多操作', key: 'operation', width:  }
 	];
 
+	// 获取 funds code 并获取数据
+	const getIndexedFunds = async () => getFundsCode().then((codes) => fetchAllFunds(codes));
+
 	const leftTable = config.filter(({ fixed }) => fixed === "left");
-	const rightTable = config.filter(({ fixed }) => fixed === "right");
 
 	const ScrollHandler = () => {
 		const rect = TableEL.current.scrollTop;
@@ -110,7 +107,12 @@ const FreeTable = () => {
 	};
 
 	return (
-		<Wrapper ref={TableEL} onScroll={ScrollHandler}>
+		<Wrapper ref={TableEL} onScroll={ScrollHandler} className={ !tableData.length && 'loading' }>
+			{!tableData.length && (
+				<LoadingWrapper theme={theme}>
+					<Loading multi={3} />
+				</LoadingWrapper>
+			)}
 			<SubTable
 				head={leftTable}
 				position="left"
@@ -130,14 +132,6 @@ const FreeTable = () => {
 				clickEvent={ListClickHandler}
 				activeIndex={activeIndex}
 			/>
-			{!!rightTable.length && (
-				<SubTable
-					head={rightTable}
-					position="right"
-					theme={theme}
-					hoverEvent={ListMouseEnterHandler}
-				/>
-			)}
 		</Wrapper>
 	);
 };

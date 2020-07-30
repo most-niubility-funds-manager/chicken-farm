@@ -6,6 +6,7 @@ import {
 	CHANGE_SEARCH_STATE,
 	SET_SEARCH_LOADING,
 	SET_SEARCH_RESULT,
+	UPDATE_FROCE
 } from "../actionTypes";
 
 const changeTheme = (theme) => ({
@@ -43,6 +44,11 @@ const setSearchResult = (data) => ({
 	data,
 });
 
+const updateForce = (state) => ({
+	type: UPDATE_FORCE,
+	state
+})
+
 export {
 	changeTheme,
 	setMarketState,
@@ -50,4 +56,5 @@ export {
 	changeSearchState,
 	setSearchLoading,
 	setSearchResult,
+	updateForce
 };

@@ -46,10 +46,6 @@ const SubTable = (props) => {
 
   const checkCrease = (str) => str.includes("-");
 
-	useEffect(() => {
-		console.log("渲染 你妈的");
-	});
-
 	return (
 		<Wrapper
 			theme={theme}

@@ -1,13 +1,13 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-28 15:00:51
+ * @LastEditTime: 2020-07-30 11:15:48
  * @Description: 主页面
  */
 
 import React, { useState, useEffect, version } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CHANGE_THEME, CHANGE_SEARCH_STATE } from "../../redux/actionTypes";
+import { CHANGE_THEME, CHANGE_SEARCH_STATE, UPDATE_FORCE } from "../../redux/actionTypes";
 import { Wrapper, Content } from "./index.style";
 import { theme } from "../../../styles";
 import Constant from "../../../../constants";
@@ -23,9 +23,9 @@ const Home = () => {
 	const holiday_table = { year: false, data: false };
 	const funds_table = { code: false, name: false, unit: false, state: false, create: false };
 	const trade_table = { code: false, name: false, unit: false, state: false, time: false };
-	const tables = {};
-	const dispatch = useDispatch();
 	const isSearch = useSelector(state => state.isSearch)	//	是否在查询结果
+	const dispatch = useDispatch();
+	const tables = {};
 
 	dispatch({ type: CHANGE_THEME, theme: userTheme });
 
@@ -38,7 +38,11 @@ const Home = () => {
 		tables,
 	});
 
-	const closeSearchPage = () => dispatch({ type: CHANGE_SEARCH_STATE, state: false })
+	// 关闭搜索框后更新tableData, 清空search
+	const closeSearchPage = () => {
+		dispatch({ type: CHANGE_SEARCH_STATE, state: false })
+		dispatch({ type: UPDATE_FORCE, state: true })
+	}
 
 	return (
 		<Wrapper theme={userTheme}>
