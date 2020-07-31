@@ -7,6 +7,10 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
   padding-top: 20px;
   position: relative;
   overflow: hidden;
+
+  &.heightLimit {
+    min-height: 500px;
+  }
 `
 
 const Content = styled.div.attrs({ className:'content' })`

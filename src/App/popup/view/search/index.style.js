@@ -6,7 +6,7 @@ const Wrapper = styled.div.attrs({ className: "search-wrapper" })`
 	left: 0;
 	width: 100%;
 	height: 100%;
-	z-index: 1;
+	z-index: 10;
 `;
 
 const fadeAnimate = keyframes`
@@ -44,7 +44,7 @@ const Content = styled.div.attrs({ className: "search-content" })`
 	left: 0;
 	transform: translateY(100%);
 	width: 100%;
-	max-height: 100%;
+	height: 500px;
 	padding: 20px;
 	border-radius: 5px 0 0 5px;
 	background-color: ${(props) => props.theme.searchPageBg};

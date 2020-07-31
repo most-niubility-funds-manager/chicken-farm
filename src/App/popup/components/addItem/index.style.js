@@ -12,7 +12,7 @@ const Input = styled.input`
   height: 100%;
   border-radius: 4px 0 0 4px;
   background-color: ${props => props.theme.searchBg};
-  text-indent: 2em;
+  padding: 0 1.5em;
   caret-color: ${props => props.theme.normal};
   color: ${props => props.theme.normal};
 `

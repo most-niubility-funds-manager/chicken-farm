@@ -9,6 +9,7 @@ const Wrapper = styled.div.attrs({ className: 'tabel-wrapper' })`
 
   &.loading {
     min-height: 120px;
+    overflow: hidden;
   }
 `
 const LoadingWrapper = styled.div`
@@ -21,7 +22,22 @@ const LoadingWrapper = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${props => props.theme.tbodyBg};
-  z-index: 10;
+  z-index: 5;
 `
 
-export { Wrapper, LoadingWrapper }
+const EmptyFund = styled.p`
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 120px;
+  color: ${props => props.theme.normal};
+  background-color: ${props => props.theme.tbodyBg};
+  font-size: 14px;
+  z-index: 5;
+`
+
+export { Wrapper, LoadingWrapper, EmptyFund }

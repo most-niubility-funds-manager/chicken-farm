@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-30 23:52:16
+ * @LastEditTime: 2020-07-31 13:59:58
  * @Description: 天天基金api
  */
 
@@ -277,8 +277,6 @@ const fetchNewsInfo = async () => {
 			});
 		dataList.push(...Array.from(items));
 	});
-	console.log("data", dataList);
-
 	return dataList;
 };
 

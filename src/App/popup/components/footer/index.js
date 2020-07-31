@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-30 16:40:07
+ * @LastEditTime: 2020-07-31 15:11:27
  * @Description: my footer
  */
 
@@ -52,7 +52,9 @@ const FooterBox = () => {
 			<StateBox theme={theme} isOpen={statusText === Constants.MARKET_OPEN}>
 				{statusText}
 			</StateBox>
-			<NewsBox target="_blank" href={currNews.url} theme={theme}>{currNews.title}</NewsBox>
+			<NewsBox target="_blank" href={currNews.url} theme={theme} title={currNews.title}>
+				{currNews.title}
+			</NewsBox>
 		</Wrapper>
 	);
 };

@@ -1,19 +1,24 @@
 /*
  * @Date: 2020-07-22 15:02:57
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-29 12:13:58
+ * @LastEditTime: 2020-07-31 14:03:14
  * @Description: 添加鸡精
  */ 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Wrapper, Input, Button } from './index.style'
 import { convertCodeFetch } from '../../services'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { CHANGE_SEARCH_STATE, SET_SEARCH_LOADING, SET_SEARCH_RESULT } from '../../redux/actionTypes'
 
 const AddFundItem = props => {
   const { theme } = props
   const input = useRef(null)
   const dispatch = useDispatch()
+  const forceUpdate = useSelector((state) => state.isSearchUpdate);
+
+  useEffect(() => {
+    input.current.value = ''
+  }, [forceUpdate])
   
   const keyDownHandler = (e) => {
     const { keyCode } = e

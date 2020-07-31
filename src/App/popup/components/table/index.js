@@ -1,27 +1,29 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-30 23:48:03
+ * @LastEditTime: 2020-07-31 14:40:51
  * @Description: 重中之重 多功能表格
  */
 
 import React, { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
-import { Wrapper, LoadingWrapper } from "./index.style";
-import SubTable from "./subTable";
+import { useSelector, useDispatch } from "react-redux";
+import { SET_ACTIVE_TR } from '../../redux/actionTypes'
+import { Wrapper, LoadingWrapper, EmptyFund } from "./index.style";
 import { getFundsCode, fetchAllFunds } from "../../services";
 import { requestRecursion } from "../../../../utils";
+import SubTable from "./subTable";
 import Loading from "../loading";
 
 const FreeTable = () => {
 	const theme = useSelector((state) => state.theme);
 	const forceUpdate = useSelector((state) => state.isSearchUpdate);
 	const isMarketOpen = useSelector((state) => state.isMarketOpen);
+	const dispatch = useDispatch()
 	const TableEL = useRef(null);
 	const [activeIndex, setActiveIndex] = useState(null);
-	const [activeCode, setActiveCode] = useState(null);
 	const [tableData, setTableData] = useState([]);
-	const intervalCheck = () => !isMarketOpen;
+	const [isEmpty, setIsEmpty] = useState(false);
+	const intervalCheck = () => !isMarketOpen || isEmpty;
 
 	useEffect(() => {
 		requestRecursion(getIndexedFunds, intervalCheck, 5000, (datas) => {
@@ -30,7 +32,7 @@ const FreeTable = () => {
 				v && (tempTableData[i] = Object.assign({}, v));
 			});
 			setTableData(tempTableData);
-			console.log("更新");
+			console.log("更新", tempTableData);
 		});
 	}, [isMarketOpen, forceUpdate]);
 
@@ -81,7 +83,16 @@ const FreeTable = () => {
 	];
 
 	// 获取 funds code 并获取数据
-	const getIndexedFunds = async () => getFundsCode().then((codes) => fetchAllFunds(codes));
+	const getIndexedFunds = async () =>
+		getFundsCode().then((codes) => {
+			if (codes.length) {
+				setIsEmpty(false);
+				return fetchAllFunds(codes);
+			} else {
+				setIsEmpty(true);
+				return [];
+			}
+		});
 
 	const leftTable = config.filter(({ fixed }) => fixed === "left");
 
@@ -103,16 +114,17 @@ const FreeTable = () => {
 	const ListClickHandler = (index) => {
 		const { code } = tableData[index];
 		console.log("code", code);
-		setActiveCode(code);
+		dispatch({ type: SET_ACTIVE_TR, code })
 	};
 
 	return (
-		<Wrapper ref={TableEL} onScroll={ScrollHandler} className={ !tableData.length && 'loading' }>
-			{!tableData.length && (
+		<Wrapper ref={TableEL} onScroll={ScrollHandler} className={!tableData.length && "loading"}>
+			{!tableData.length && !isEmpty && (
 				<LoadingWrapper theme={theme}>
 					<Loading multi={3} />
 				</LoadingWrapper>
 			)}
+			{isEmpty && <EmptyFund theme={theme}>您的基金列表空空如也</EmptyFund>}
 			<SubTable
 				head={leftTable}
 				position="left"

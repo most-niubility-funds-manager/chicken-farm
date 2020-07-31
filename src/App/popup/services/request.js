@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 23:03:59
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-30 23:29:56
+ * @LastEditTime: 2020-07-31 13:54:48
  * @Description: fetch 调用
  */
 
@@ -11,7 +11,7 @@
  * @return: response
  */
 
-const requestGet = ({ url, params, type = 'json' }) => {
+const requestGet = ({ url, params, type = "json" }) => {
 	const stringify = params
 		? Object.keys(params).reduce((str, curr) => {
 				str = str + `${curr}=${params[curr]}&`;
@@ -20,11 +20,11 @@ const requestGet = ({ url, params, type = 'json' }) => {
 		: "";
 
 	const link = url + stringify;
-	
+
 	switch (type) {
-		case 'json':
+		case "json":
 			return fetch(link).then((_) => _.json());
-		case 'text':
+		case "text":
 			return fetch(link).then((_) => _.text());
 	}
 };
@@ -34,23 +34,29 @@ const requestGet = ({ url, params, type = 'json' }) => {
  * @param {String} url
  * @return: html text
  */
-const fetchConvertGBK = url => fetch(url).then(res => res.blob()).then(blob => new Promise(resolve => {
-	const reader = new FileReader()
-	reader.readAsText(blob, "GBK")
-	reader.onload = () => {
-		const html = reader.result
-		resolve(html)
-	}
-}))
-
+const fetchConvertGBK = (url) =>
+	fetch(url)
+		.then((res) => res.blob())
+		.then(
+			(blob) =>
+				new Promise((resolve) => {
+					const reader = new FileReader();
+					reader.readAsText(blob, "GBK");
+					reader.onload = () => {
+						const html = reader.result;
+						resolve(html);
+					};
+				})
+		);
 
 /**
  * @description: 插件想background请求
  * @param {Object} 参数对象，属性随意
  * @return: who knoe?
  */
-const sendMessage = data => new Promise(resolve => {
-  chrome.runtime.sendMessage(data, resolve)
-})
+const sendMessage = (data) =>
+	new Promise((resolve) => {
+		chrome.runtime.sendMessage(data, resolve);
+	});
 
-export { requestGet, sendMessage, fetchConvertGBK }
+export { requestGet, sendMessage, fetchConvertGBK };

@@ -24,9 +24,9 @@ const setMarketStateText = (text) => ({
 	text,
 });
 
-const setActiveTr = (index) => ({
+const setActiveTr = (code) => ({
 	type: SET_ACTIVE_TR,
-	index,
+	code,
 });
 
 const changeSearchState = (state) => ({
@@ -56,5 +56,6 @@ export {
 	changeSearchState,
 	setSearchLoading,
 	setSearchResult,
-	updateForce
+	updateForce,
+	setActiveTr
 };
