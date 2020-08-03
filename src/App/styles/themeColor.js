@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:52:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-30 00:13:03
+ * @LastEditTime: 2020-08-01 15:38:57
  * @Description: 主题色
  */
 
@@ -9,7 +9,7 @@ export const theme = {
 	light: {},
 	dark: {
 		increase: "#e23321",
-		decrease: "rgb(69 189 5)",
+		decrease: "#45bd05",
 		field: "#4295EF",
 		button: "#61afef",
 		border: "#1f3648",
@@ -33,6 +33,13 @@ export const theme = {
 		errorBorder: '#e23321',
 		errorBg: 'rgb(255 24 0 / 45%)',
 		errorBgAnimate: 'rgb(255 24 0 / 30%)',
+
+		tabNavBorder: "#037cff",
+		tabNavBg: "#3e4858",
+		cellColor: "#1fffec",
+		cellBorder: "#6e8190",
+		increaseBg: "#ff1800b5",
+		decreaseBg: '#45bd059e',
 
 		loading: "#fec54f",
 	},

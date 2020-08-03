@@ -9,7 +9,7 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
   overflow: hidden;
 
   &.heightLimit {
-    min-height: 500px;
+    min-height: 700px;
   }
 `
 

@@ -1,14 +1,14 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-31 13:59:58
+ * @LastEditTime: 2020-08-02 11:09:51
  * @Description: 天天基金api
  */
 
 import cheerio from "cheerio";
 import { requestGet, fetchConvertGBK } from "./request";
 import { indexedAdd, indexedFindAll, indexedFindSingle, indexedUpdate } from "./indexDB";
-import { formatTime } from "../../../utils";
+import { formatTime, calcDataPercent } from "../../../utils";
 import Constants from "../../../constants";
 
 /**
@@ -280,6 +280,130 @@ const fetchNewsInfo = async () => {
 	return dataList;
 };
 
+/**
+ * @description: 基金经理信息
+ * @param {String} code
+ * @return: Array
+ */
+const fetchFundManager = async (code) => {
+	const params = {
+		url: `http://fundf10.eastmoney.com/jjjl_${code}.html`,
+		type: "text",
+	};
+
+	const originHtml = await requestGet(params);
+	const $ = cheerio.load(originHtml);
+	const intro = Array.from(
+		$(".jl_intro")
+			.find(".text p")
+			.map(function () {
+				return $(this).text();
+			})
+	).slice(0, 3);
+
+	return intro;
+};
+
+/**
+ * @description: 基金公告信息
+ * @param {String} code
+ * @return: [{ title, url, data, type }]
+ */
+const fetchFundNews = async (code) => {
+	const params = {
+		url: `http://api.fund.eastmoney.com/f10/JJGG?fundcode=${code}&pageIndex=1&pageSize=10&type=0&_=${Date.now()}`,
+		type: 'text'
+	}
+	
+	const originData = await requestGet(params)
+	console.log('基金公告有问题', originData)
+
+	return []
+}
+
+/**
+ * @description: 获取单个基金详细信息
+ * @param {String} code
+ * @return: { holdShares: { head, body }, pastUnit: { head, body }, manager: [], newsList: [{ url, title, date }] }
+ */
+const fetchFundDetail = async (code) => {
+	const params = {
+		url: `http://fund.eastmoney.com/${code}.html?spm=search`,
+		type: "text",
+	};
+
+	const originHtml = await requestGet(params);
+	const manager = await fetchFundManager(code);
+	const newsList = await fetchFundNews(code)
+	const $ = cheerio.load(originHtml);
+	// 持仓分布
+	const holdShares = [];
+	$("#position_shares")
+		.find("tr")
+		.each(function () {
+			const itemData = $(this)
+				.find("td,th")
+				.map(function () {
+					return $(this).text().trim();
+				});
+			holdShares.push(Array.from(itemData).slice(0, 3));
+		});
+	// 往日净值
+	const pastUnit = [];
+	$("#Li1")
+		.find("tr")
+		.map(function () {
+			const itemData = $(this)
+				.find("td,th")
+				.map(function () {
+					return $(this).text().trim();
+				});
+			itemData.splice(1, 2);
+			pastUnit.push(Array.from(itemData));
+		});
+
+	// 俩数据涨跌对应的比例
+	const holdSharesPercent = calcDataPercent(holdShares.slice(1).map((v) => v[2]));
+	const pastUnitPercent = calcDataPercent(pastUnit.slice(1).map((v) => v[1]));
+
+	const result = {
+		holdShares: {
+			head: holdShares[0],
+			body: holdShares
+				.slice(1)
+				.map((v, i) => [
+					...v,
+					{ value: holdSharesPercent[i].value, type: holdSharesPercent[i].type },
+				]),
+		},
+		pastUnit: {
+			head: pastUnit[0],
+			body: pastUnit
+				.slice(1)
+				.map((v, i) => [...v, { value: pastUnitPercent[i].value, type: pastUnitPercent[i].type }]),
+		},
+		manager,
+		newsList,
+	};
+
+	return result;
+};
+
+/**
+ * @description: 从数据库获取单支基金信息
+ * @param {String} code
+ * @return: {  }
+ */
+const getUserSingleFundData = async (code) => {
+	const data = await indexedFindSingle({
+		store: Constants.INDEX_STORE,
+		table: Constants.INDEX_FUND,
+		key: { k: "code", v: code },
+	});
+
+	return data;
+};
+
 export {
 	getLargeCap,
 	getAllYearholiday,
@@ -290,4 +414,6 @@ export {
 	getFundsCode,
 	fetchAllFunds,
 	fetchNewsInfo,
+	fetchFundDetail,
+	getUserSingleFundData,
 };

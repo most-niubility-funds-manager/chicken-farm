@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-31 15:02:14
+ * @LastEditTime: 2020-08-01 09:33:38
  * @Description: 主页面
  */
 
@@ -64,8 +64,7 @@ const Home = () => {
 			}
 			{/* 基金详情页 */}
 			{
-				// activeFundCode && 
-				<OperationPage closeEvent={closeOperationPage} />
+				activeFundCode && <OperationPage closeEvent={closeOperationPage} />
 			}
 		</Wrapper>
 	);

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 12:40:25
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-29 23:07:18
+ * @LastEditTime: 2020-08-01 09:49:44
  * @Description: indexdb数据库操作
  */
 
@@ -109,7 +109,7 @@ const indexedFindAll = ({ store, table }) =>
 /**
  * @description: 查询指定索引 的 限定值 数据 eg: { code: 2020 }的对应数据
  * @param {Object} { store, table, key: { k, v } }
- * @return: dataList []
+ * @return: { code, name, unit, state }
  */
 const indexedFindSingle = ({ store, table, key: { k, v } }) =>
 	new Promise((resolve, reject) => {
@@ -117,7 +117,6 @@ const indexedFindSingle = ({ store, table, key: { k, v } }) =>
 			.then((db) => {
 				const transaction = db.transaction([table], "readwrite");
 				const objectStore = transaction.objectStore(table);
-				// console.log('？？？', objectStore, objectStore.index(k))
 				const index = objectStore.index(k);
         const request = index.get(v)
 

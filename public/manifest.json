@@ -23,7 +23,9 @@
     "notifications",
     "*://*.baidu.com/*",
     "*://*.10jqka.com.cn/*",
-    "*://fundgz.1234567.com.cn/*"
+    "*://fundgz.1234567.com.cn/*",
+    "*://*.eastmoney.com/*",
+    "*://api.fund.eastmoney.com/*"
   ],
   "web_accessible_resources": [
     "static/js/*"

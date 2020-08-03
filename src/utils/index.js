@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 13:50:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-30 17:07:33
+ * @LastEditTime: 2020-08-01 10:05:52
  * @Description: 小工具
  */
 
@@ -129,4 +129,20 @@ const shuffleData = (data) => {
 	return data;
 };
 
-export { requestRecursion, checkFundOpen, isMarketOpen, formatTime, shuffleData };
+/**
+ * @description: 算出一组数值的占比，及涨跌
+ * @param {Array} data
+ * @return: [{ value, type }] false - true +
+ */
+const calcDataPercent = (data) => {
+	const pureData = data.map(v => v.replace('%', '').replace('--', 0))
+	const MAX_NUMBER = pureData.map((v) => Math.abs(v)).sort((a, b) => b - a)[0];
+	const result = pureData.map((v) => ({
+		value: Math.abs(v / MAX_NUMBER).toFixed(2) * 100,
+		type: !/-/.test(v),
+	}));
+
+	return result;
+};
+
+export { requestRecursion, checkFundOpen, isMarketOpen, formatTime, shuffleData, calcDataPercent };
