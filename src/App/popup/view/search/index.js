@@ -80,7 +80,7 @@ const SearchPage = (props) => {
 	return (
 		<Wrapper>
 			<Mask onClick={closeEvent}></Mask>
-			<Content theme={theme} style={{ height: `${searchHeight}px` }}>
+			<Content theme={theme}>
 				<CloseBtn className="iconfont chicken-close" theme={theme} onClick={closeEvent} />
 				<Title theme={theme}>查询结果:</Title>
 				{/* 错误提示❌ */}

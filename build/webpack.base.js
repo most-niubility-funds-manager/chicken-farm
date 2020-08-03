@@ -6,7 +6,7 @@
  */
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 const entryList = require("./entryList.js");
 const MergeLocale = require("./mergeLocale.js");
@@ -94,12 +94,6 @@ module.exports = {
 	},
 	plugins: [
 		...templateList,
-		new UglifyJsPlugin({
-			test: /\.(ts|tsx|js|jsx)?$/,
-			exclude: /node_modules/,
-			parallel: true,
-			sourceMap: true,
-    }),
     // CopyWebpackPlugin这玩意更新好快啊
 		new CopyWebpackPlugin({
 			patterns: [

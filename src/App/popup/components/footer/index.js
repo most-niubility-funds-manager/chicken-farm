@@ -9,7 +9,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_MARKET_STATE, SET_MARKET_STATE_TEXT } from "../../redux/actionTypes";
 import Constants from "../../../../constants";
-import { Wrapper, StateBox, NewsBox } from "./index.style";
+import { Wrapper, StateBox, NewsBox, Toolbar } from "./index.style";
 import { checkFundOpen, requestRecursion, isMarketOpen, shuffleData } from "../../../../utils";
 import { fetchNewsInfo } from "../../services";
 
@@ -28,9 +28,7 @@ const FooterBox = () => {
 			dispatch({ type: SET_MARKET_STATE, state });
 			setOpen(text);
 		});
-	}, []);
 
-	useEffect(() => {
 		fetchNewsInfo()
 			.then((news) => shuffleData(news))
 			.then((news) => setNewsList(news));
@@ -55,6 +53,9 @@ const FooterBox = () => {
 			<NewsBox target="_blank" href={currNews.url} theme={theme} title={currNews.title}>
 				{currNews.title}
 			</NewsBox>
+			<Toolbar>
+				<a onClick={() => chrome.tabs.create({url: location.href})}>popup</a>
+			</Toolbar>
 		</Wrapper>
 	);
 };

@@ -4,7 +4,7 @@ const Section = styled.div.attrs({ className: 'section-item' })`
   width: 100px;
   height: 80px;
   border-radius: 5px;
-  background-color: ${props => props.theme.background};
+  border: 1px solid ${props => props.theme.background};
   color: ${props => props.theme.color};
   display: flex;
   align-items: center;
@@ -14,7 +14,7 @@ const Section = styled.div.attrs({ className: 'section-item' })`
 `
 
 const Name = styled.p.attrs({ className: 'item-name' })`
-  font-size: 14px;
+  font-size: 12px;
 `
 
 const Number = styled.p.attrs({ className: 'item-number' })`

@@ -21,7 +21,7 @@ export const theme = {
 		tbodyBg: '#1A1B1F',
 		tableFixShadow: '#333',
 		tabelCellHover: "#2e4466",
-		background: "#30343a",
+		background: "#121212",
 		status: "#e2a229",
 
 		searchPageBg: '#2b323e',

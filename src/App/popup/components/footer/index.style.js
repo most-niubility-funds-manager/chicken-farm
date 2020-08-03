@@ -3,6 +3,8 @@ import styled from "styled-components";
 const Wrapper = styled.div.attrs({ className: 'footer' })`
   width: 100%;
   height: 36px;
+  position: absolute;
+  bottom: 0;
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -10,6 +12,7 @@ const Wrapper = styled.div.attrs({ className: 'footer' })`
   font-size: 12px;
   background-color: ${props => props.theme.footer};
   color: ${props => props.theme.normal};
+  
 `
 
 const StateBox = styled.div.attrs({ className: 'state-box' })`
@@ -41,4 +44,9 @@ const NewsBox = styled.a.attrs({ className: 'news-box' })`
   }
 `
 
-export { Wrapper, StateBox, NewsBox }
+const Toolbar = styled.div`
+  margin-left: auto;
+  flex-shrink: 0;
+`;
+
+export { Wrapper, StateBox, NewsBox, Toolbar }

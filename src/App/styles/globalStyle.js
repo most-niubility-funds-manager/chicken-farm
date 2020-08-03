@@ -72,4 +72,7 @@ export const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar-thumb {
     background-color: #1d5490;
   }
+  body {
+    background-color: rgb(18, 18, 18);
+  }
 `;

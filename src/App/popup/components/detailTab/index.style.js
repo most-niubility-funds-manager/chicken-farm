@@ -8,7 +8,7 @@ const Wrapper = styled.div.attrs({ className: 'tab-wrapepr' })`
 const Content = styled.div.attrs({ className: 'tab-content' })`
   width: 100%;
   height: calc(100% - 60px);
-  background-color: ${props => props.theme.tabNavBg};
+  //background-color: ${props => props.theme.tabNavBg};
 `
 
 export { Wrapper, Content }

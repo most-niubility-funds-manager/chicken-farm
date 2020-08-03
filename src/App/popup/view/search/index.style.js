@@ -44,7 +44,8 @@ const Content = styled.div.attrs({ className: "search-content" })`
 	left: 0;
 	transform: translateY(100%);
 	width: 100%;
-	height: 500px;
+	height: fit-content;
+	max-height: 100%;
 	padding: 20px;
 	border-radius: 5px 0 0 5px;
 	background-color: ${(props) => props.theme.searchPageBg};
@@ -102,6 +103,7 @@ const ErrorPanel = styled.div.attrs({ className: "error-panel" })`
 
 const ListWrapper = styled.div.attrs({ className: "list-wrapper" })`
 	max-height: calc(100% - 77px);
+	height: 375px;
 	overflow: overlay;
 	margin-bottom: 15px;
 	font-size: 12px;

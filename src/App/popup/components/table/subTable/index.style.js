@@ -62,10 +62,15 @@ const Td = styled.td`
 
 const Tr = styled.tr`
 	border-bottom: 1px solid ${(props) => props.theme.border};
+	
+	&:last-of-type {
+	  border-bottom: none;
+	}
 
 	&.active {
 		td {
-			background-color: ${(props) => props.theme.tabelCellHover};
+			// background-color: ${(props) => props.theme.tabelCellHover};
+			background-color: #111;
 			cursor: pointer;
 		}
 	}

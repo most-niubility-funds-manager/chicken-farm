@@ -141,7 +141,7 @@ const FreeTable = () => {
 				data={tableData}
 				hoverEvent={ListMouseEnterHandler}
 				leaveEvent={ListMouseLeaveHandler}
-				clickEvent={ListClickHandler}
+				// clickEvent={ListClickHandler}
 				activeIndex={activeIndex}
 			/>
 		</Wrapper>

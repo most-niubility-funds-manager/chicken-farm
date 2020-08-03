@@ -3,9 +3,10 @@ import styled from "styled-components";
 const Wrapper = styled.div.attrs({ className: 'tabel-wrapper' })`
   width: 100%;
   max-height: 360px;
+  height: 293px;
   position: relative;
   overflow: overlay;
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
 
   &.loading {
     min-height: 120px;

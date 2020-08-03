@@ -25,8 +25,10 @@ const Mask = styled.div.attrs({ className: "operation-mask" })`
 	left: 0;
 	width: 100%;
 	height: 100%;
-	backdrop-filter: blur(2px);
-	animation: ${fadeAnimate} 0.2s ease-out forwards;
+	//backdrop-filter: blur(2px);
+  background-color: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(12px);
+  opacity: 1;
 `;
 
 const slideUpAnimate = keyframes`
@@ -44,11 +46,11 @@ const Content = styled.div.attrs({ className: "operation-content" })`
 	left: 0;
 	transform: translateY(100%);
 	width: 100%;
-	height: 700px;
+	height: 500px;
 	padding: 20px;
 	border-radius: 5px 0 0 5px;
-	background-color: ${(props) => props.theme.searchPageBg};
-	box-shadow: ${(props) => props.theme.searchShadow} 0 -4px 10px 0;
+	// background-color: ${(props) => props.theme.searchPageBg};
+	// box-shadow: ${(props) => props.theme.searchShadow} 0 -4px 10px 0;
 	will-change: transform, height;
 	backface-visibility: hidden;
 	transition: all 0.2s ease-out;

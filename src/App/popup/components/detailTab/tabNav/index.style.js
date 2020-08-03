@@ -18,7 +18,9 @@ const GridItem = styled.li.attrs({ className: 'tab-nav-item' })`
   color: ${props => props.theme.normal};
   cursor: pointer;
   position: relative;
-  background-color: ${props => props.theme.tabNavBg};
+  background-color: rgb(0 0 0 / 25%);
+  backdrop-filter: blur(5px);
+  // background-color: ${props => props.theme.tabNavBg};
   
   &:hover {
     &::before {
