@@ -5,7 +5,7 @@ const Section = styled.div.attrs({ className: 'section-item' })`
   height: 80px;
   border-radius: 5px;
   border: 1px solid ${props => props.theme.background};
-  color: ${props => props.theme.color};
+  color: ${props => props.theme.background};
   display: flex;
   align-items: center;
   flex-direction: column;

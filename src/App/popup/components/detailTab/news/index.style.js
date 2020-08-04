@@ -11,8 +11,21 @@ const Wrapper = styled.div.attrs({ className: 'news-wrapper' })`
 `
 
 const Item = styled.a`
-  background-color: #000;
-  color: #fff;
+  background-color: ${props => props.theme.tabNewsBg};
+  color: ${props => props.theme.tabNewsText};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 10px;
+
+  p {
+    width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   &:hover {
     text-decoration: underline;
   }

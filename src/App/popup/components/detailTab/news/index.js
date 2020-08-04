@@ -6,11 +6,11 @@ const News = (props) => {
 
 	return (
 		<Wrapper>
-			{data.map(({ url, title, type, date }, i) => (
-				<Item href={url} target="_blank" key={i} theme={theme}>
+			{data.map(({ url, title, type, time }, i) => (
+				<Item href={url} target="_blank" key={i} theme={theme} title={title}>
 					<p>{title}</p>
           <span>{type}</span>
-					{date}
+					{time}
 				</Item>
 			))}
 		</Wrapper>

@@ -14,7 +14,7 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
 `
 
 const Content = styled.div.attrs({ className:'content' })`
-  //padding: 0 20px;
+  /* //padding: 0 20px; */
   height: calc(100% - 36px);
 `
 

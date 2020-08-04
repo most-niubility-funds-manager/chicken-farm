@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-02 11:09:51
+ * @LastEditTime: 2020-08-04 10:44:33
  * @Description: 天天基金api
  */
 
@@ -311,15 +311,33 @@ const fetchFundManager = async (code) => {
  */
 const fetchFundNews = async (code) => {
 	const params = {
-		url: `http://api.fund.eastmoney.com/f10/JJGG?fundcode=${code}&pageIndex=1&pageSize=10&type=0&_=${Date.now()}`,
-		type: 'text'
-	}
-	
-	const originData = await requestGet(params)
-	console.log('基金公告有问题', originData)
+		url: `http://api.fund.eastmoney.com/f10/JJGG?fundcode=${code}&pageIndex=1&pageSize=10&type=0&_=${Date.now()}&chicken-farm=true`,
+	};
+	const typeMap = new Map([
+		[1, "发行运作"],
+		[6, "其他公告"],
+		[3, "定期报告"],
+		[4, "人事调整"],
+		[5, "基金销售"],
+		[6, "其他公告"],
+	]);
+	let result = [];
 
-	return []
-}
+	try {
+		const { Data } = await requestGet(params);
+		console.log("Data", Data);
+		result = Data.map(({ PUBLISHDATEDesc, TITLE, ID, NEWCATEGORY }) => ({
+			title: TITLE,
+			url: `http://fund.eastmoney.com/gonggao/${code},${ID}.html`,
+			type: typeMap.get(NEWCATEGORY),
+			time: PUBLISHDATEDesc,
+		}));
+	} catch (error) {
+		console.log("基金公告有问题", error);
+	}
+
+	return result;
+};
 
 /**
  * @description: 获取单个基金详细信息
@@ -334,7 +352,7 @@ const fetchFundDetail = async (code) => {
 
 	const originHtml = await requestGet(params);
 	const manager = await fetchFundManager(code);
-	const newsList = await fetchFundNews(code)
+	const newsList = await fetchFundNews(code);
 	const $ = cheerio.load(originHtml);
 	// 持仓分布
 	const holdShares = [];

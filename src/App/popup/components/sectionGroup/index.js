@@ -17,7 +17,6 @@ const SectionGroup = () => {
         ...v,
         theme: {
           background: v.count > 0 ? theme.increase : theme.decrease,
-          color: theme.normal,
         },
       }));
   
