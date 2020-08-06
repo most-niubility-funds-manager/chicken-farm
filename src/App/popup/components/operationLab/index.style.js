@@ -6,6 +6,7 @@ const Wrapper = styled.div.attrs({ className: 'operation-wrapper' })`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 15px;
+  padding: 0 10px;
 `
 
 export { Wrapper }

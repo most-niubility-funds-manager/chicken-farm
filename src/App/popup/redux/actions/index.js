@@ -6,7 +6,7 @@ import {
 	CHANGE_SEARCH_STATE,
 	SET_SEARCH_LOADING,
 	SET_SEARCH_RESULT,
-	UPDATE_FROCE
+	UPDATE_FORCE
 } from "../actionTypes";
 
 const changeTheme = (theme) => ({

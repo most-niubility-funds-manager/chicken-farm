@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-08-04 11:07:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-04 11:39:28
+ * @LastEditTime: 2020-08-06 17:00:59
  * @Description: 色谱
  */ 
 export default {
@@ -24,6 +24,8 @@ export default {
   'color-blue-5': "#2e4466",
   'color-blue-6': "#2b323e",
   'color-blue-7': "#1f3648",
+  'color-blue-8': "#076ddc",
+  'color-blue-9': '#3c4154',
   'color-black-1': '#000',
   'color-black-2': '#1A1B1F',
   'color-black-3': '#121212',
@@ -31,6 +33,6 @@ export default {
   'color-black-5': '#333',
   'color-black-6': '#0000004d',
   'color-black-7': '#999',
-  'color-black-8': "#3e4858",
+  'color-black-8': "#11111142",
   'color-black-9': '#6e8190',
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-31 14:08:49
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-01 13:57:49
+ * @LastEditTime: 2020-08-06 18:02:25
  * @Description: 每支基金的操作和基本信息面板
  */
 
@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Wrapper, Mask, Content, CloseBtn, Title } from "./index.styled";
 import { fetchFundDetail, getUserSingleFundData } from "../../services";
 import Tab from '../../components/detailTab'
+import UnitForm from '../../components/changeUnit'
 
 const Operation = (props) => {
 	const { closeEvent } = props;
@@ -36,6 +37,7 @@ const Operation = (props) => {
 				<CloseBtn className="iconfont chicken-close" theme={theme} onClick={closeEvent} />
         <Title theme={theme}>{userFundDetail.name}-{activeCode}</Title>
         <Tab theme={theme} fundIntro={fundIntro} />
+				<UnitForm theme={theme} />
 			</Content>
 		</Wrapper>
 	);

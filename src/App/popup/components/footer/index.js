@@ -1,13 +1,13 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-31 15:11:27
+ * @LastEditTime: 2020-08-05 16:47:45
  * @Description: my footer
  */
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_MARKET_STATE, SET_MARKET_STATE_TEXT } from "../../redux/actionTypes";
+import { setMarketState, setMarketStateText } from '../../redux/actions'
 import Constants from "../../../../constants";
 import { Wrapper, StateBox, NewsBox, Toolbar } from "./index.style";
 import { checkFundOpen, requestRecursion, isMarketOpen, shuffleData } from "../../../../utils";
@@ -24,8 +24,8 @@ const FooterBox = () => {
 
 	useEffect(() => {
 		requestRecursion([checkFundOpen, isMarketOpen], intervalCheck, 1000, ([text, state]) => {
-			dispatch({ type: SET_MARKET_STATE_TEXT, text }); //	状态文本
-			dispatch({ type: SET_MARKET_STATE, state });
+			dispatch(setMarketState(state)); //	状态文本
+			dispatch(setMarketStateText(text));
 			setOpen(text);
 		});
 

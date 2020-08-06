@@ -6,7 +6,7 @@ import {
 	CHANGE_SEARCH_STATE,
 	SET_SEARCH_LOADING,
 	SET_SEARCH_RESULT,
-	UPDATE_FORCE
+	UPDATE_FORCE,
 } from "../actionTypes";
 
 // 默认全部状态
@@ -17,8 +17,11 @@ const defaultState = {
 	activeFundCode: 0, //  点击的基金code
 	isSearch: false, //	搜索结果页
 	isSearchLoading: false, //	搜索结果loading
-	searchData: {}, //	搜索结果
-	isSearchUpdate: false,	//	搜索完更新列表数据
+	searchData: {
+		succ: [],
+		fail: [],
+	}, //	搜索结果
+	isSearchUpdate: false, //	搜索完更新列表数据
 };
 
 export default (state = defaultState, action) => {
@@ -45,8 +48,8 @@ export default (state = defaultState, action) => {
 		case SET_SEARCH_RESULT:
 			return Object.assign({}, state, { searchData: action.data });
 		case UPDATE_FORCE:
-			state.isSearchUpdate = action.state
-			return state
+			state.isSearchUpdate = action.state;
+			return state;
 		default:
 			return state;
 	}

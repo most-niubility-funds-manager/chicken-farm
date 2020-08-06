@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Color from 'color'
 
 const Section = styled.div.attrs({ className: 'section-item' })`
   width: 100px;
@@ -11,10 +12,18 @@ const Section = styled.div.attrs({ className: 'section-item' })`
   flex-direction: column;
   justify-content: space-between;
   padding: 8px 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-image: linear-gradient(to bottom, transparent, ${props => Color(props.theme.background).alpha(0.2)});
+
+  &:hover {
+    box-shadow: ${props => props.theme.background} 0 2px 10px 0;
+  }
 `
 
 const Name = styled.p.attrs({ className: 'item-name' })`
   font-size: 12px;
+  color: ${props => props.theme.color};
 `
 
 const Number = styled.p.attrs({ className: 'item-number' })`

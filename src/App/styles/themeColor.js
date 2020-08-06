@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:52:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-04 11:51:57
+ * @LastEditTime: 2020-08-06 17:01:07
  * @Description: 主题色
  */
 import C from "./chromatography";
@@ -24,6 +24,9 @@ export const theme = {
 		tabelCellHover: C['color-blue-5'],
 		background: C['color-black-3'],
 		status: C['color-yellow-2'],
+		toolBtn: C['color-blue-1'],
+		toolBtnHover: C['color-blue-8'],
+		incomeBg: C['color-blue-7'],
 
 		searchPageBg: C['color-blue-6'],
 		searchShadow: C['color-black-6'],
@@ -37,12 +40,17 @@ export const theme = {
 
 		tabNavBorder: C["color-blue-3"],
 		tabNavBg: C['color-black-8'],
+		tabNavColor: C['color-white-3'],
 		cellColor: C['color-green-3'],
 		cellBorder: C['color-black-9'],
 		increaseBg: C['color-red-2'],
 		decreaseBg: C['color-green-2'],
-		tabNewsText: C['color-white-1'],
+		tabNewsText: C['color-white-3'],
 		tabNewsBg: C['color-black-1'],
+		tabNewHover: C['color-black-4'],
+		tabNewBorder: C['color-black-5'],
+		formInputBg: C['color-blue-9'],
+		formInputReadonly: C['color-black-2'],
 
 		loading: C['color-yellow-1'],
 	},

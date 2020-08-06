@@ -5,9 +5,6 @@ const Wrapper = styled.div.attrs({ className: 'news-wrapper' })`
   height: 100%;
   overflow: overlay;
   padding: 10px;
-  display: grid;
-  grid-template-rows: repeat(5, 1fr);
-  grid-row-gap: 10px;
 `
 
 const Item = styled.a`
@@ -16,18 +13,20 @@ const Item = styled.a`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 40px;
-  padding: 0 10px;
+  height: auto;
+  padding: 10px;
+  box-sizing: content-box;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid ${props => props.theme.tabNewBorder};
 
   p {
     width: 260px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: pre-wrap;
+    line-height: 1.5;
   }
 
   &:hover {
-    text-decoration: underline;
+    background-color: ${props => props.theme.tabNewHover};
   }
 `
 
