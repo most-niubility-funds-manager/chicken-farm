@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-24 22:06:02
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-28 17:45:36
+ * @LastEditTime: 2020-08-03 22:39:09
  * @Description: 应用层方法
  */ 
 
@@ -15,7 +15,6 @@ const requestGet = ({ url, params, type = 'json' }) => {
 
 	const link = url + stringify;
 
-	console.log('type', type)
 	switch (type) {
 		case 'json':
 			return fetch(link).then((_) => _.json());

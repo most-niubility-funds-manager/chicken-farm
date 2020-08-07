@@ -1,13 +1,12 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-31 14:40:51
+ * @LastEditTime: 2020-08-05 16:51:05
  * @Description: 重中之重 多功能表格
  */
-
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { SET_ACTIVE_TR } from '../../redux/actionTypes'
+import { setActiveTr } from '../../redux/actions'
 import { Wrapper, LoadingWrapper, EmptyFund } from "./index.style";
 import { getFundsCode, fetchAllFunds } from "../../services";
 import { requestRecursion } from "../../../../utils";
@@ -32,7 +31,6 @@ const FreeTable = () => {
 				v && (tempTableData[i] = Object.assign({}, v));
 			});
 			setTableData(tempTableData);
-			console.log("更新", tempTableData);
 		});
 	}, [isMarketOpen, forceUpdate]);
 
@@ -98,12 +96,10 @@ const FreeTable = () => {
 
 	const ScrollHandler = () => {
 		const rect = TableEL.current.scrollTop;
-		console.log("scrollTop", rect);
 	};
 
 	// 传给子组件
 	const ListMouseEnterHandler = (index) => {
-		console.log("列表hover", index);
 		setActiveIndex(index);
 	};
 	// hover out
@@ -113,8 +109,7 @@ const FreeTable = () => {
 	// 点击事件 传基金代码
 	const ListClickHandler = (index) => {
 		const { code } = tableData[index];
-		console.log("code", code);
-		dispatch({ type: SET_ACTIVE_TR, code })
+		dispatch(setActiveTr(code))
 	};
 
 	return (
@@ -141,7 +136,6 @@ const FreeTable = () => {
 				data={tableData}
 				hoverEvent={ListMouseEnterHandler}
 				leaveEvent={ListMouseLeaveHandler}
-				// clickEvent={ListClickHandler}
 				activeIndex={activeIndex}
 			/>
 		</Wrapper>

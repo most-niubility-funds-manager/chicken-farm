@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 const Paragraph = styled.p`
   font-size: 14px;
   line-height: 1.5;
-  color: ${props => props.theme.normal};
+  color: ${props => props.theme.tabNewsText};
   margin-bottom: 10px;
 `
 

@@ -5,16 +5,28 @@ const Wrapper = styled.div.attrs({ className: 'news-wrapper' })`
   height: 100%;
   overflow: overlay;
   padding: 10px;
-  display: grid;
-  grid-template-rows: repeat(5, 1fr);
-  grid-row-gap: 10px;
 `
 
 const Item = styled.a`
-  background-color: #000;
-  color: #fff;
+  background-color: ${props => props.theme.tabNewsBg};
+  color: ${props => props.theme.tabNewsText};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: auto;
+  padding: 10px;
+  box-sizing: content-box;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid ${props => props.theme.tabNewBorder};
+
+  p {
+    width: 260px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+
   &:hover {
-    text-decoration: underline;
+    background-color: ${props => props.theme.tabNewHover};
   }
 `
 

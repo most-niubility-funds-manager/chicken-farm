@@ -24,6 +24,7 @@
   "permissions": [
     "tabs",
     "webRequest",
+    "webRequestBlocking",
     "notifications",
     "*://*.baidu.com/*",
     "*://*.10jqka.com.cn/*",

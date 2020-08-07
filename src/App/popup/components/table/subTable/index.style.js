@@ -58,6 +58,10 @@ const Td = styled.td`
 	text-overflow: ellipsis;
 	padding: 0 10px;
 	transition: background 0.2s ease-out;
+
+	&:first-of-type:hover {
+		text-decoration: underline;
+	}
 `;
 
 const Tr = styled.tr`

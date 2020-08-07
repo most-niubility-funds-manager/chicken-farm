@@ -44,8 +44,7 @@ const Content = styled.div.attrs({ className: "search-content" })`
 	left: 0;
 	transform: translateY(100%);
 	width: 100%;
-	height: fit-content;
-	max-height: 100%;
+	height: 100%;
 	padding: 20px;
 	border-radius: 5px 0 0 5px;
 	background-color: ${(props) => props.theme.searchPageBg};
@@ -96,20 +95,19 @@ const ErrorPanel = styled.div.attrs({ className: "error-panel" })`
 	color: ${(props) => props.theme.normal};
 	font-size: 12px;
 	line-height: 1.5;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 	animation: ${(props) => backgroundAnimate(props.theme.errorBgAnimate, props.theme.errorBg)} 0.2s
 		ease-out forwards;
 `;
 
 const ListWrapper = styled.div.attrs({ className: "list-wrapper" })`
-	max-height: calc(100% - 77px);
-	height: 375px;
+	height: calc(100% - 70px);
 	overflow: overlay;
 	margin-bottom: 15px;
 	font-size: 12px;
 
   &.isError {
-	  max-height: calc(100% - 123px);
+	  height: calc(100% - 110px);
   }
 `;
 
@@ -164,10 +162,15 @@ const Tips = styled.p.attrs({ className: "tip" })`
 
 const LoadingWrapper = styled.div.attrs({ className: "loading-wrapper" })`
 	width: 100%;
-	height: 100px;
+	height: calc(100% - 110px);
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	color: ${props => props.theme.normal};
+
+	&.isError {
+		height: calc(100% - 110px);
+	}
 `;
 
 export {

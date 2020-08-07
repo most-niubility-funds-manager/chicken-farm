@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-27 22:52:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-26 11:20:21
+ * @LastEditTime: 2020-08-06 17:59:06
  * @Description: 全局样式
  */
 
@@ -57,6 +57,11 @@ export const GlobalStyle = createGlobalStyle`
     outline: none;
     padding: 0;
     margin: 0;
+  }
+
+  input::-webkit-inner-spin-button,
+  input::-webkit-outer-spin-button{
+    appearance: none;
   }
 
   ::-webkit-scrollbar {

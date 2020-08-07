@@ -44,7 +44,7 @@ const SubTable = (props) => {
 		return resData;
 	});
 
-  const checkCrease = (str) => str.includes("-");
+	const checkCrease = (str) => str.includes("-");
 
 	return (
 		<Wrapper
@@ -70,8 +70,8 @@ const SubTable = (props) => {
 							theme={theme}
 							className={active && "active"}
 							onMouseEnter={() => hoverEvent(i)}
-              onMouseLeave={leaveEvent}
-              onClick={() => clickEvent(i)}
+							onMouseLeave={leaveEvent}
+							onClick={() => clickEvent(i)}
 						>
 							{list.map(({ field, textAlign, tag, keyword }, idx) => (
 								<Td theme={theme} key={idx} style={{ textAlign }} keyword={keyword}>

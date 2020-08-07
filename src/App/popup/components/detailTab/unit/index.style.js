@@ -1,4 +1,13 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const animateWidth = width => keyframes`
+	from {
+		width: 0;
+	}
+	to {
+		width: ${width}%;
+	}
+`
 
 const Wrapper = styled.div.attrs({ className: "unit-wrapper" })`
 	width: 100%;
@@ -19,9 +28,9 @@ const BoxBg = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
-  width: ${props => props.width}%;
 	height: 40px;
 	background-color: ${(props) => (props.type ? props.theme.increaseBg : props.theme.decreaseBg)};
+	animation: ${props => animateWidth(props.width)} 0.5s ease-out forwards;
 `;
 
 const BoxContent = styled.div`

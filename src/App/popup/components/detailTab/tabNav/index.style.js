@@ -5,7 +5,7 @@ const Wrapper = styled.ul.attrs({ className: 'tab-nav' })`
   height: 50px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `
 
 const GridItem = styled.li.attrs({ className: 'tab-nav-item' })`
@@ -15,12 +15,11 @@ const GridItem = styled.li.attrs({ className: 'tab-nav-item' })`
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  color: ${props => props.theme.normal};
+  color: ${props => props.theme.tabNavColor};
   cursor: pointer;
   position: relative;
-  background-color: rgb(0 0 0 / 25%);
+  background-color: ${props => props.theme.tabNavBg};
   backdrop-filter: blur(5px);
-  // background-color: ${props => props.theme.tabNavBg};
   
   &:hover {
     &::before {

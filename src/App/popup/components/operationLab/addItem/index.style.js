@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div.attrs({ className: 'additem-wrapper' })`
-  width: 340px;
+  width: 280px;
   height: 36px;
   display: flex;
   align-items: center;
 `
 
 const Input = styled.input`
-  width: calc(100% - 80px);
+  width: calc(100% - 36px);
   height: 100%;
   border-radius: 4px 0 0 4px;
   background-color: ${props => props.theme.searchBg};
@@ -18,7 +18,7 @@ const Input = styled.input`
 `
 
 const Button = styled.a`
-  width: 80px;
+  width: 36px;
   height: 100%;
   display: flex;
   align-items: center;
@@ -26,7 +26,7 @@ const Button = styled.a`
   border-radius: 0 4px 4px 0;
   background-color: ${props => props.theme.searchBtn};
   color: ${props => props.theme.normal};
-  font-size: 12px;
+  font-size: 18px;
   cursor: pointer;
 `
 
