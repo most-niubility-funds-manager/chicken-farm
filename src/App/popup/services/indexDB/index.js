@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 12:40:25
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-01 09:49:44
+ * @LastEditTime: 2020-08-09 15:21:56
  * @Description: indexdb数据库操作
  */
 
@@ -18,30 +18,30 @@
 const createDB = ({ store, tables, keyPath = "id" }, version = 1) =>
 	new Promise((resolve, reject) => {
 		const request = window.indexedDB.open(store, version);
-    // 更新
+		// 更新
 		request.onupgradeneeded = ({ target }) => {
-      const db = target.result;
+			const db = target.result;
 			const tableNames = Object.keys(tables); //  展开表字段
 			let objectStore;
 
-			tableNames.map(name => {
+			tableNames.map((name) => {
 				// 判断当前表是否存在
 				if (!db.objectStoreNames.contains(name)) {
 					// keyPath为id时 自增
 					objectStore = db.createObjectStore(name, { keyPath, autoIncrement: keyPath === "id" });
 					// 获取表名对应的表结构对象的键值组
-					const structure = Object.keys(tables[name])
-	
+					const structure = Object.keys(tables[name]);
+
 					// 创建表中属性对应索引
 					structure.forEach((key) => {
 						objectStore.createIndex(key, key, { unique: tables[name][key] });
 					});
 				}
-			})
+			});
 		};
 
 		// 打开
-		request.onsuccess = ({ target: { result } }) => resolve(result)
+		request.onsuccess = ({ target: { result } }) => resolve(result);
 		//  失败
 		request.onerror = (e) => reject(e);
 	});
@@ -70,13 +70,11 @@ const indexedAdd = ({ store, table, data }) =>
 	new Promise((resolve, reject) => {
 		openDB(store)
 			.then((db) => {
-				const result = db
-					.transaction([table], "readwrite")
-					.objectStore(table)
-        //  指定表对应的事务状态 '读写'
-        data.forEach(item => result.add(item))
-        
-        resolve()
+				const result = db.transaction([table], "readwrite").objectStore(table);
+				//  指定表对应的事务状态 '读写'
+				data.forEach((item) => result.add(item));
+
+				resolve();
 			})
 			.catch((e) => reject(e));
 	});
@@ -118,13 +116,13 @@ const indexedFindSingle = ({ store, table, key: { k, v } }) =>
 				const transaction = db.transaction([table], "readwrite");
 				const objectStore = transaction.objectStore(table);
 				const index = objectStore.index(k);
-        const request = index.get(v)
+				const request = index.get(v);
 
 				request.onsuccess = () => {
 					if (request.result) {
-            resolve(request.result);
+						resolve(request.result);
 					} else {
-						resolve(null)	//	查不到返回null
+						resolve(null); //	查不到返回null
 					}
 				};
 			})
@@ -133,7 +131,7 @@ const indexedFindSingle = ({ store, table, key: { k, v } }) =>
 
 /**
  * @description: 修改已有数据 | 插入新数据
- * @param {Object} { store, table, data: 单条数据对象 }
+ * @param {Object} { store, table, data: 单条数据对象(包含主键id) }
  * @return: Promise.resolve
  */
 const indexedUpdate = ({ store, table, data }) =>
@@ -142,7 +140,7 @@ const indexedUpdate = ({ store, table, data }) =>
 			.then((db) => {
 				const request = db.transaction([table], "readwrite").objectStore(table).put(data);
 
-				request.onsuccess = (e) => resolve(e);
+				request.onsuccess = () => resolve();
 			})
 			.catch((e) => reject(e));
 	});
@@ -156,9 +154,20 @@ const indexedDelete = ({ store, table, key: { k, v } }) =>
 	new Promise((resolve, reject) => {
 		openDB(store)
 			.then((db) => {
-				const request = db.transaction([table], "readwrite").objectStore(table).index(k).delete(v);
+				const request = db.transaction([table], "readwrite").objectStore(table).openCursor();
 
-				request.onsuccess = (e) => resolve(e);
+				request.onsuccess = ({ target }) => {
+					const { result: cursor } = target;
+
+					if (cursor == null) reject();
+
+					if (cursor.value[k] === v) {
+						const result = cursor.delete();
+						result.onsuccess = () => resolve();
+					} else {
+						cursor.continue();
+					}
+				};
 			})
 			.catch((e) => reject(e));
 	});

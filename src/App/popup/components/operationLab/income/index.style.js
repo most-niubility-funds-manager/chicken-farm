@@ -19,9 +19,13 @@ const Tag = styled.span`
   border-radius: 4px;
   font-size: 12px;
   color: ${props => props.theme.normal};
-  background-color: ${props => props.theme.bg};
+  background-color: ${props => props.theme.increase};
   margin-left: 10px;
   text-align: right;
+
+  &.bad {
+    background-color: ${props => props.theme.decrease};
+  }
 `
 
 export { Wrapper, Tag }

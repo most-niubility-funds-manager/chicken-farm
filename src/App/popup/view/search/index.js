@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-28 10:47:44
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-06 16:11:47
+ * @LastEditTime: 2020-08-09 16:48:27
  * @Description: 搜索结果页
  */
 
@@ -29,7 +29,7 @@ const SearchPage = (props) => {
 	const isLoading = useSelector((state) => state.isSearchLoading);
 	const { succ, fail } = useSelector((state) => state.searchData);
 	const [listData, setListData] = useState([]);
-	const { closeEvent } = props;
+	const { closeEvent, active } = props;
 	const listWrapperRef = useRef(null);
 
 	useEffect(() => {
@@ -66,8 +66,8 @@ const SearchPage = (props) => {
 
 	return (
 		<Wrapper>
-			<Mask onClick={closeEvent}></Mask>
-			<Content theme={theme}>
+			<Mask onClick={closeEvent} className={!active && "cancel"}></Mask>
+			<Content theme={theme} className={!active && "cancel"}>
 				<CloseBtn className="iconfont chicken-close" theme={theme} onClick={closeEvent} />
 				<Title theme={theme}>基金搜索:</Title>
 				{/* 错误提示❌ */}

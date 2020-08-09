@@ -1,8 +1,20 @@
 import React, { useEffect } from "react";
-import { Wrapper, Table, Tr, Td, Th, Tag } from "./index.style";
+import { Wrapper, Table, Tr, Th } from "./index.style";
+import Cell from "../cell";
 
 const SubTable = (props) => {
-	const { head, position, data, theme, hoverEvent, leaveEvent, clickEvent, activeIndex } = props;
+	const {
+		head,
+		position,
+		data,
+		theme,
+		hoverEvent,
+		leaveEvent,
+		clickEvent,
+		blurEvent,
+		delEvent,
+		activeIndex,
+	} = props;
 	const isFixClass = position ? position : "";
 
 	let blankOffsetLeft = 0;
@@ -18,20 +30,24 @@ const SubTable = (props) => {
 	// 生成表的数据
 	const headData = isFixClass ? head : head.filter(({ position }) => !position);
 	const totalWidth = headData.reduce((sum, { width }) => sum + width, 0); //  计算总宽度
-	const fieldData = headData.map(({ dataIndex, textAlign, tag, keyword }) => ({
+	const fieldData = headData.map(({ dataIndex, textAlign, tag, input, keyword, btn }) => ({
 		dataIndex,
 		textAlign,
 		tag,
+		input,
 		keyword,
+		btn,
 	}));
 	// 遍历出当前表所需数据 [{ active, list:[] }]
 	const bodyData = data.map((item, idx) => {
-		const resList = fieldData.reduce((arr, { dataIndex, textAlign, tag, keyword }) => {
+		const resList = fieldData.reduce((arr, { dataIndex, textAlign, tag, input, keyword, btn }) => {
 			const tdConfig = {
 				field: item[dataIndex],
 				textAlign,
 				tag,
+				input,
 				keyword,
+				btn,
 			};
 			arr.push(tdConfig);
 			return arr;
@@ -43,8 +59,6 @@ const SubTable = (props) => {
 
 		return resData;
 	});
-
-	const checkCrease = (str) => str.includes("-");
 
 	return (
 		<Wrapper
@@ -73,16 +87,20 @@ const SubTable = (props) => {
 							onMouseLeave={leaveEvent}
 							onClick={() => clickEvent(i)}
 						>
-							{list.map(({ field, textAlign, tag, keyword }, idx) => (
-								<Td theme={theme} key={idx} style={{ textAlign }} keyword={keyword}>
-									{tag ? (
-										<Tag className={checkCrease(field) ? "decrease" : "increase"} theme={theme}>
-											{field}
-										</Tag>
-									) : (
-										field
-									)}
-								</Td>
+							{list.map(({ field, textAlign, tag, input, keyword, btn }, idx) => (
+								<Cell
+									tag={tag}
+									input={input}
+									theme={theme}
+									field={field}
+									key={idx}
+									textAlign={textAlign}
+									keyword={keyword}
+									btn={btn}
+									rowIndex={i}
+									blurEvent={blurEvent}
+									delEvent={() => delEvent(i)}
+								/>
 							))}
 						</Tr>
 					))}

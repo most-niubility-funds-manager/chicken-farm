@@ -1,14 +1,20 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-05 16:51:05
+ * @LastEditTime: 2020-08-09 17:27:32
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setActiveTr } from '../../redux/actions'
+import {
+	setActiveTr,
+	changeDeleteState,
+	setDeleteCode,
+	updateForce,
+	setTotalIncome,
+} from "../../redux/actions";
 import { Wrapper, LoadingWrapper, EmptyFund } from "./index.style";
-import { getFundsCode, fetchAllFunds } from "../../services";
+import { getFundsCode, fetchAllFunds, updateSingleFund } from "../../services";
 import { requestRecursion } from "../../../../utils";
 import SubTable from "./subTable";
 import Loading from "../loading";
@@ -17,7 +23,7 @@ const FreeTable = () => {
 	const theme = useSelector((state) => state.theme);
 	const forceUpdate = useSelector((state) => state.isSearchUpdate);
 	const isMarketOpen = useSelector((state) => state.isMarketOpen);
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
 	const TableEL = useRef(null);
 	const [activeIndex, setActiveIndex] = useState(null);
 	const [tableData, setTableData] = useState([]);
@@ -26,11 +32,18 @@ const FreeTable = () => {
 
 	useEffect(() => {
 		requestRecursion(getIndexedFunds, intervalCheck, 5000, (datas) => {
-			const tempTableData = [...tableData];
+			const tempTableData = [];
 			datas.map((v, i) => {
-				v && (tempTableData[i] = Object.assign({}, v));
+				if (v.name) {
+					return (tempTableData[i] = Object.assign({}, v));
+				} else {
+					const { code } = v;
+					const lastValueIndex = tableData.findIndex((v) => v.code === code);
+					return (tempTableData[i] = Object.assign({}, tableData[lastValueIndex]));
+				}
 			});
 			setTableData(tempTableData);
+			calcTotalIncome(tempTableData);
 		});
 	}, [isMarketOpen, forceUpdate]);
 
@@ -50,39 +63,51 @@ const FreeTable = () => {
 			key: "crease",
 			width: 90,
 			textAlign: "right",
+			fixed: "left",
 			tag: true, //  给标签
 		},
-		{ title: "基金代码", dataIndex: "code", key: "code", width: 80, textAlign: "center" },
+		// { title: "基金代码", dataIndex: "code", key: "code", width: 80, textAlign: "center" },
 		{ title: "昨日净值", dataIndex: "lastUnit", key: "lastUnit", width: 80, textAlign: "right" },
 		{ title: "估算净值", dataIndex: "currUnit", key: "currUnit", width: 80, textAlign: "right" },
 		{
 			title: "持有份额",
 			dataIndex: "totalShare",
 			key: "totalShare",
-			width: 80,
-			textAlign: "right",
-		},
-		{
-			title: "总仓估算",
-			dataIndex: "totalReckon",
-			key: "totalReckon",
 			width: 100,
 			textAlign: "right",
+			input: true,
 		},
+		// {
+		// 	title: "总仓估算",
+		// 	dataIndex: "totalReckon",
+		// 	key: "totalReckon",
+		// 	width: 100,
+		// 	textAlign: "right",
+		// },
 		{
 			title: "收益估算",
 			dataIndex: "incomeReckon",
 			key: "incomeReckon",
 			width: 100,
 			textAlign: "right",
+			tag: true,
 		},
 		{ title: "更新时间", dataIndex: "update", key: "update", width: 100, textAlign: "right" },
-		// { title: '更多操作', key: 'operation', width:  }
+		{
+			title: "删除",
+			dataIndex: "delete",
+			key: "delete",
+			width: 60,
+			textAlign: "center",
+			btn: "删除",
+		},
 	];
 
-	// 获取 funds code 并获取数据
+	// 获取 funds { code, unit } 后获取数据并格式化
+	// 之后再加上排序
 	const getIndexedFunds = async () =>
 		getFundsCode().then((codes) => {
+			console.log("获取基金数据", codes, isEmpty);
 			if (codes.length) {
 				setIsEmpty(false);
 				return fetchAllFunds(codes);
@@ -106,10 +131,35 @@ const FreeTable = () => {
 	const ListMouseLeaveHandler = () => {
 		setActiveIndex(null);
 	};
-	// 点击事件 传基金代码
-	const ListClickHandler = (index) => {
+	// 点击事件 传基金代码 展示基金详情
+	const openDetailClickHandler = (index) => {
 		const { code } = tableData[index];
-		dispatch(setActiveTr(code))
+		dispatch(setActiveTr(code));
+	};
+	const modifyUnitClickHandler = (index) => {
+		console.log("无用点击", index);
+	};
+	const modifyUnitBlurHandler = (index, unit) => {
+		const { code } = tableData[index];
+		updateSingleFund({ unit }, { k: "code", v: code });
+	};
+	const deleteClickHandler = (index) => {
+		const { code } = tableData[index];
+		console.log("点击调用删除弹窗", code);
+		dispatch(setDeleteCode(code));
+		dispatch(changeDeleteState(true));
+		dispatch(updateForce(false));
+	};
+	// 总收益
+	const calcTotalIncome = (data) => {
+		const total = data.reduce((total, { crease, totalShare, lastUnit }) => {
+			const currIncome = totalShare
+				? ((crease.replace("%", "") * totalShare * lastUnit) / 100).toFixed(2)
+				: 0.0;
+			total = total + Number(currIncome);
+			return total;
+		}, 0);
+		dispatch(setTotalIncome(total));
 	};
 
 	return (
@@ -127,7 +177,7 @@ const FreeTable = () => {
 				data={tableData}
 				hoverEvent={ListMouseEnterHandler}
 				leaveEvent={ListMouseLeaveHandler}
-				clickEvent={ListClickHandler}
+				clickEvent={openDetailClickHandler}
 				activeIndex={activeIndex}
 			/>
 			<SubTable
@@ -136,6 +186,9 @@ const FreeTable = () => {
 				data={tableData}
 				hoverEvent={ListMouseEnterHandler}
 				leaveEvent={ListMouseLeaveHandler}
+				clickEvent={modifyUnitClickHandler}
+				blurEvent={modifyUnitBlurHandler}
+				delEvent={deleteClickHandler}
 				activeIndex={activeIndex}
 			/>
 		</Wrapper>

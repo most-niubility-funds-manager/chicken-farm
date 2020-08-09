@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:52:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-06 17:01:07
+ * @LastEditTime: 2020-08-09 17:07:07
  * @Description: 主题色
  */
 import C from "./chromatography";
@@ -27,6 +27,10 @@ export const theme = {
 		toolBtn: C['color-blue-1'],
 		toolBtnHover: C['color-blue-8'],
 		incomeBg: C['color-blue-7'],
+		tableDeleteBtn: C["color-blue-2"],
+		tableInput: C["color-blue-11"],
+		tableInputFocus: C['color-blue-10'],
+		tableInputFocusBg: C['color-blue-12'],
 
 		searchPageBg: C['color-blue-6'],
 		searchShadow: C['color-black-6'],
@@ -51,6 +55,12 @@ export const theme = {
 		tabNewBorder: C['color-black-5'],
 		formInputBg: C['color-blue-9'],
 		formInputReadonly: C['color-black-2'],
+
+		deleteDescCode: C['color-yellow-3'],
+		deleteDoneBg: C['color-blue-2'],
+		deleteDoneColor: C['color-white-1'],
+		deleteCancelBg: C['color-white-3'],
+		deleteCancelColor: C['color-black-1'],
 
 		loading: C['color-yellow-1'],
 	},
