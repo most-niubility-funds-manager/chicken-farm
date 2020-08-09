@@ -31,6 +31,7 @@ const Tag = styled.span`
 const Input = styled.input`
 	width: 80px;
 	height: 24px;
+	padding: 0 6px;
 	border-radius: 4px;
 	text-align: right;
 	font-size: 12px;
