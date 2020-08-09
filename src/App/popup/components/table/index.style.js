@@ -32,7 +32,7 @@ const EmptyFund = styled.p`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 120px;
+  height: 293px;
   color: ${props => props.theme.normal};
   background-color: ${props => props.theme.tbodyBg};
   font-size: 14px;

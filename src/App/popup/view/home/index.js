@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-09 16:42:11
+ * @LastEditTime: 2020-08-09 17:29:12
  * @Description: 主页面
  */
 
@@ -68,9 +68,9 @@ const Home = () => {
 	// 关闭搜索框后更新tableData, 清空search
 	const closeSearchPage = () => {
 		dispatch(changeSearchState(false));
-		dispatch(updateForce(true));
 		dispatch(setSearchResult({ succ: [], fail: [] }));
 		setTimeout(() => {
+			dispatch(updateForce(true));
 			setSearchOpen(false);
 		}, 200);
 	};

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-09 15:45:42
+ * @LastEditTime: 2020-08-09 17:27:32
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef } from "react";
@@ -43,7 +43,7 @@ const FreeTable = () => {
 				}
 			});
 			setTableData(tempTableData);
-			calcTotalIncome(tempTableData)
+			calcTotalIncome(tempTableData);
 		});
 	}, [isMarketOpen, forceUpdate]);
 
@@ -107,6 +107,7 @@ const FreeTable = () => {
 	// 之后再加上排序
 	const getIndexedFunds = async () =>
 		getFundsCode().then((codes) => {
+			console.log("获取基金数据", codes, isEmpty);
 			if (codes.length) {
 				setIsEmpty(false);
 				return fetchAllFunds(codes);
@@ -152,7 +153,9 @@ const FreeTable = () => {
 	// 总收益
 	const calcTotalIncome = (data) => {
 		const total = data.reduce((total, { crease, totalShare, lastUnit }) => {
-			const currIncome = totalShare ? ((crease.replace('%', '') * totalShare * lastUnit) / 100).toFixed(2) : 0.0;
+			const currIncome = totalShare
+				? ((crease.replace("%", "") * totalShare * lastUnit) / 100).toFixed(2)
+				: 0.0;
 			total = total + Number(currIncome);
 			return total;
 		}, 0);
