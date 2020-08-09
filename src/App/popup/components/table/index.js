@@ -154,10 +154,9 @@ const FreeTable = () => {
 	const calcTotalIncome = (data) => {
 		const total = data.reduce((total, { crease, totalShare, lastUnit }) => {
 			const currIncome = totalShare
-				? ((crease.replace("%", "") * totalShare * lastUnit) / 100).toFixed(2)
-				: 0.0;
+				? ((crease.replace("%", "") * totalShare * lastUnit) / 100) : 0.0;
 			total = total + Number(currIncome);
-			return total;
+			return !isNaN(total) && (total = total.toFixed(2)), +total;
 		}, 0);
 		dispatch(setTotalIncome(total));
 	};

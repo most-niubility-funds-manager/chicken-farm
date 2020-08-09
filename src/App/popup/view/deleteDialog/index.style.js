@@ -67,7 +67,6 @@ const Content = styled.div`
 	width: 100%;
 	height: 160px;
 	padding: 20px;
-	border-radius: 5px 0 0 5px;
 	background-color: ${(props) => props.theme.searchPageBg};
 	box-shadow: ${(props) => props.theme.searchShadow} 0 -4px 10px 0;
 	will-change: transform, height;

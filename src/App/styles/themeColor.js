@@ -47,7 +47,7 @@ export const theme = {
 		tabNavColor: C['color-white-3'],
 		cellColor: C['color-green-3'],
 		cellBorder: C['color-black-9'],
-		increaseBg: C['color-red-2'],
+		increaseBg: C['color-red-1'],
 		decreaseBg: C['color-green-2'],
 		tabNewsText: C['color-white-3'],
 		tabNewsBg: C['color-black-1'],
@@ -57,7 +57,7 @@ export const theme = {
 		formInputReadonly: C['color-black-2'],
 
 		deleteDescCode: C['color-yellow-3'],
-		deleteDoneBg: C['color-blue-2'],
+		deleteDoneBg: C['color-red-2'],
 		deleteDoneColor: C['color-white-1'],
 		deleteCancelBg: C['color-white-3'],
 		deleteCancelColor: C['color-black-1'],

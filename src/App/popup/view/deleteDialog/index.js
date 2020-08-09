@@ -34,10 +34,10 @@ const DelDialog = (props) => {
 					基金吗?
 				</Description>
 				<Group theme={theme}>
-					<button onClick={deleteFund}>确定</button>
 					<button className="cancel" onClick={closeEvent}>
 						取消
 					</button>
+					<button onClick={deleteFund}>删除</button>
 				</Group>
 			</Content>
 		</Wrapper>
