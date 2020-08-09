@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div.attrs({ className: 'tab-wrapepr' })`
   width: 100%;
-  height: calc(100% - 200px);
+  height: calc(100% - 50px);
   margin-bottom: 20px;
 `
 

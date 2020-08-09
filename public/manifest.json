@@ -2,7 +2,7 @@
   "version": "0.0.0",
   "manifest_version": 2,
   "minimum_chrome_version": "56.0.0",
-  "name": "养基场-基金管理助手",
+  "name": "基金管理助手",
   "short_name": "基金管理助手",
   "description": "基金管理助手",
   "offline_enabled": true,

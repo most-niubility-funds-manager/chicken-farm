@@ -1,24 +1,25 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-05 16:47:45
+ * @LastEditTime: 2020-08-09 17:19:13
  * @Description: my footer
  */
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setMarketState, setMarketStateText } from '../../redux/actions'
+import { setMarketState, setMarketStateText } from "../../redux/actions";
 import Constants from "../../../../constants";
 import { Wrapper, StateBox, NewsBox, Toolbar } from "./index.style";
 import { checkFundOpen, requestRecursion, isMarketOpen, shuffleData } from "../../../../utils";
 import { fetchNewsInfo } from "../../services";
+import ExtConfig from "../../../../config.json";
 
 const FooterBox = () => {
 	const theme = useSelector((state) => state.theme);
 	const [statusText, setOpen] = useState("");
 	const [newsList, setNewsList] = useState([]);
 	const [activeIdx, setActiveIdx] = useState(0);
-	const [currNews, setCurrNew] = useState({});
+	const [currNews, setCurrNew] = useState({ title: "财经资讯加载中..." });
 	const dispatch = useDispatch();
 	const intervalCheck = () => false;
 
@@ -54,7 +55,9 @@ const FooterBox = () => {
 				{currNews.title}
 			</NewsBox>
 			<Toolbar>
-				<a onClick={() => chrome.tabs.create({url: location.href})}>popup</a>
+				<a>
+					{ExtConfig.name}-{ExtConfig.version}
+				</a>
 			</Toolbar>
 		</Wrapper>
 	);

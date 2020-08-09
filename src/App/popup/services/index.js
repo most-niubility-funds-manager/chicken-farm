@@ -1,13 +1,19 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-04 10:44:33
+ * @LastEditTime: 2020-08-09 16:47:37
  * @Description: 天天基金api
  */
 
 import cheerio from "cheerio";
 import { requestGet, fetchConvertGBK } from "./request";
-import { indexedAdd, indexedFindAll, indexedFindSingle, indexedUpdate } from "./indexDB";
+import {
+	indexedAdd,
+	indexedFindAll,
+	indexedFindSingle,
+	indexedUpdate,
+	indexedDelete,
+} from "./indexDB";
 import { formatTime, calcDataPercent } from "../../../utils";
 import Constants from "../../../constants";
 
@@ -178,19 +184,29 @@ const convertCodeFetch = (codes) =>
  * @param {Object} data { code, name, unit, state, create }
  * @return: Promise
  */
-const updateSingleFund = (data) =>
-	indexedUpdate({
+const updateSingleFund = async (data, key) => {
+	// 先获取此记录全部数据 再更新(需包含主键id)
+	console.log("data key", data, key);
+	indexedFindSingle({
 		store: Constants.INDEX_STORE,
 		table: Constants.INDEX_FUND,
 		data,
-	});
+		key,
+	}).then(({ id, name, code, state, unit }) =>
+		indexedUpdate({
+			store: Constants.INDEX_STORE,
+			table: Constants.INDEX_FUND,
+			data: { name, code, state, id, unit, ...data },
+		})
+	);
+};
 
 /**
  * @description: 添加多个基金
  * @param {Array} data [{ code, name, unit, state, create }]
  * @return: Promise.resolve
  */
-const addAllFunds = (data) => {
+const addAllFunds = async (data) => {
 	Promise.all(
 		data.map(({ code }) =>
 			indexedFindSingle({
@@ -216,7 +232,7 @@ const addAllFunds = (data) => {
  */
 const getFundsCode = async () => {
 	const funds = await indexedFindAll({ store: Constants.INDEX_STORE, table: Constants.INDEX_FUND });
-	const result = funds.filter(({ state }) => state).map(({ code }) => code);
+	const result = funds.filter(({ state }) => state).map(({ code, unit }) => ({ code, unit }));
 	return result;
 };
 
@@ -226,13 +242,15 @@ const getFundsCode = async () => {
  * @return: [{ name, crease, code, lastUnit, currUnit, totalShare, totalReckon, incomeReckon, update }]
  */
 const fetchAllFunds = (codes) => {
-	const requestMap = codes.map((v) => fetchSingleFund(v));
+	const requestMap = codes.map(({ code }) => fetchSingleFund(code));
 	return Promise.all(requestMap).then((res) => {
-		const result = res.map((item) => {
+		const result = res.map((item, i) => {
 			if (!item) {
-				return null;
+				return { code: codes[i] };
 			}
 			const { fundcode, dwjz, gsz, gszzl, gztime, jzrq, name } = item;
+			const totalShare = codes.filter(({ code }) => fundcode === code)[0].unit;
+			const incomeReckon = totalShare ? ((dwjz * totalShare * gszzl) / 100).toFixed(2) : "0.00";
 
 			return {
 				name,
@@ -240,9 +258,9 @@ const fetchAllFunds = (codes) => {
 				lastUnit: dwjz,
 				currUnit: gsz,
 				crease: Number(gszzl) > 0 ? `+${gszzl}%` : `${gszzl}%`,
-				totalShare: "-",
+				totalShare: totalShare || 0.0,
 				totalReckon: "-",
-				incomeReckon: "-",
+				incomeReckon: incomeReckon,
 				update: formatTime(Date.now()),
 			};
 		});
@@ -422,6 +440,16 @@ const getUserSingleFundData = async (code) => {
 	return data;
 };
 
+const deleteSingleFund = async (code) => {
+	const result = await indexedDelete({
+		store: Constants.INDEX_STORE,
+		table: Constants.INDEX_FUND,
+		key: { k: "code", v: code },
+	});
+
+	return result
+};
+
 export {
 	getLargeCap,
 	getAllYearholiday,
@@ -434,4 +462,5 @@ export {
 	fetchNewsInfo,
 	fetchFundDetail,
 	getUserSingleFundData,
+	deleteSingleFund
 };

@@ -5,6 +5,7 @@ const Wrapper = styled.div.attrs({ className: 'additem-wrapper' })`
   height: 36px;
   display: flex;
   align-items: center;
+  margin-right: 35px;
 `
 
 const Input = styled.input`

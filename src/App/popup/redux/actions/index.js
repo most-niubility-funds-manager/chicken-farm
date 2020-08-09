@@ -6,7 +6,10 @@ import {
 	CHANGE_SEARCH_STATE,
 	SET_SEARCH_LOADING,
 	SET_SEARCH_RESULT,
-	UPDATE_FORCE
+	UPDATE_FORCE,
+	CHANGE_DELETE_STATE,
+	SET_DELETE_CODE,
+	SET_TOTAL_INCOME,
 } from "../actionTypes";
 
 const changeTheme = (theme) => ({
@@ -46,8 +49,23 @@ const setSearchResult = (data) => ({
 
 const updateForce = (state) => ({
 	type: UPDATE_FORCE,
-	state
-})
+	state,
+});
+
+const changeDeleteState = (state) => ({
+	type: CHANGE_DELETE_STATE,
+	state,
+});
+
+const setDeleteCode = (code) => ({
+	type: SET_DELETE_CODE,
+	code,
+});
+
+const setTotalIncome = (total) => ({
+	type: SET_TOTAL_INCOME,
+	total,
+});
 
 export {
 	changeTheme,
@@ -57,5 +75,8 @@ export {
 	setSearchLoading,
 	setSearchResult,
 	updateForce,
-	setActiveTr
+	setActiveTr,
+	changeDeleteState,
+	setDeleteCode,
+	setTotalIncome
 };

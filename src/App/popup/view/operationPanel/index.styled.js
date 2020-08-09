@@ -9,15 +9,6 @@ const Wrapper = styled.div.attrs({ className: "operation-wrapper" })`
 	z-index: 10;
 `;
 
-const fadeAnimate = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1
-  }
-`;
-
 const Mask = styled.div.attrs({ className: "operation-mask" })`
 	opacity: 0;
 	position: absolute;
@@ -25,19 +16,27 @@ const Mask = styled.div.attrs({ className: "operation-mask" })`
 	left: 0;
 	width: 100%;
 	height: 100%;
-	//backdrop-filter: blur(2px);
   background-color: rgb(0 0 0 / 0.5);
   backdrop-filter: blur(12px);
   opacity: 1;
 `;
 
-const slideUpAnimate = keyframes`
+const slideUp = keyframes`
   from {
     transform: translateY(100%);
   }
   to {
     transform: translateY(0)
   }
+`;
+
+const slideOut = keyframes`
+	from {
+		transform: translateY(0)
+	}
+	to {
+		transform: translateY(100%);
+	}
 `;
 
 const Content = styled.div.attrs({ className: "operation-content" })`
@@ -49,12 +48,14 @@ const Content = styled.div.attrs({ className: "operation-content" })`
 	height: 500px;
 	padding: 20px;
 	border-radius: 5px 0 0 5px;
-	// background-color: ${(props) => props.theme.searchPageBg};
-	// box-shadow: ${(props) => props.theme.searchShadow} 0 -4px 10px 0;
 	will-change: transform, height;
 	backface-visibility: hidden;
 	transition: all 0.2s ease-out;
-	animation: ${slideUpAnimate} 0.2s ease-out forwards;
+	animation: ${slideUp} 0.2s ease-out forwards;
+
+	&.cancel {
+		animation: ${slideOut} 0.2s ease-in forwards;
+	}
 `;
 
 const CloseBtn = styled.i`

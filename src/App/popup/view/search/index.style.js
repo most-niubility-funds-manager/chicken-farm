@@ -9,13 +9,22 @@ const Wrapper = styled.div.attrs({ className: "search-wrapper" })`
 	z-index: 10;
 `;
 
-const fadeAnimate = keyframes`
+const fadeIn = keyframes`
   from {
     opacity: 0;
   }
   to {
     opacity: 1
   }
+`;
+
+const fadeOut = keyframes`
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
 `;
 
 const Mask = styled.div.attrs({ className: "search-mask" })`
@@ -26,16 +35,28 @@ const Mask = styled.div.attrs({ className: "search-mask" })`
 	width: 100%;
 	height: 100%;
 	backdrop-filter: blur(2px);
-	animation: ${fadeAnimate} 0.2s ease-out forwards;
+	animation: ${fadeIn} 0.2s ease-out forwards;
+
+	&.cancel {
+		animation: ${fadeOut} 0.2s ease-in forwards;
+	}
 `;
 
-const slideUpAnimate = keyframes`
+const slideUp = keyframes`
   from {
     transform: translateY(100%);
   }
   to {
     transform: translateY(0)
   }
+`;
+const slideDown = keyframes`
+	from {
+		transform: translateY(0)
+	}
+	to {
+		transform: translateY(100%);
+	}
 `;
 
 const Content = styled.div.attrs({ className: "search-content" })`
@@ -52,7 +73,11 @@ const Content = styled.div.attrs({ className: "search-content" })`
 	will-change: transform, height;
 	backface-visibility: hidden;
 	transition: all 0.2s ease-out;
-	animation: ${slideUpAnimate} 0.2s ease-out forwards;
+	animation: ${slideUp} 0.2s ease-out forwards;
+
+	&.cancel {
+		animation: ${slideDown} 0.2s ease-out forwards;
+	}
 `;
 
 const CloseBtn = styled.i`
@@ -101,13 +126,13 @@ const ErrorPanel = styled.div.attrs({ className: "error-panel" })`
 `;
 
 const ListWrapper = styled.div.attrs({ className: "list-wrapper" })`
-	height: calc(100% - 70px);
+	height: calc(100% - 90px);
 	overflow: overlay;
 	margin-bottom: 15px;
 	font-size: 12px;
 
   &.isError {
-	  height: calc(100% - 110px);
+	  height: calc(100% - 130px);
   }
 `;
 

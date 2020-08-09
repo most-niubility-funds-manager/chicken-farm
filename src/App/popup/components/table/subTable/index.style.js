@@ -49,21 +49,6 @@ const Th = styled.th`
 	padding: 0 10px;
 `;
 
-const Td = styled.td`
-	height: 40px;
-	background-color: ${(props) => props.theme.tbodyBg};
-	color: ${(props) => (props.keyword ? props.theme.field : props.theme.normal)};
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	padding: 0 10px;
-	transition: background 0.2s ease-out;
-
-	&:first-of-type:hover {
-		text-decoration: underline;
-	}
-`;
-
 const Tr = styled.tr`
 	border-bottom: 1px solid ${(props) => props.theme.border};
 	
@@ -80,17 +65,4 @@ const Tr = styled.tr`
 	}
 `;
 
-const Tag = styled.span`
-	padding: 4px;
-	box-sizing: content-box;
-	border-radius: 2px;
-
-  &.decrease {
-    background-color: ${props => props.theme.decrease}
-  }
-  &.increase {
-    background-color: ${props => props.theme.increase}
-  }
-`;
-
-export { Wrapper, Table, Tr, Td, Th, Tag };
+export { Wrapper, Table, Tr, Th };
