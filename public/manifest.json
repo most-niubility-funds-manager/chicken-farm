@@ -4,7 +4,7 @@
   "minimum_chrome_version": "56.0.0",
   "name": "基金管理助手",
   "short_name": "基金管理助手",
-  "description": "基金管理助手",
+  "description": "自选基金管理助手，获取基金实时信息。",
   "offline_enabled": true,
   "default_locale": "zh_CN",
   "icons": {
@@ -19,7 +19,7 @@
   "browser_action": {
     "default_icon": {},
     "default_popup": "popup.html",
-    "default_title": "downloader"
+    "default_title": "Funds Manager"
   },
   "permissions": [
     "tabs",
