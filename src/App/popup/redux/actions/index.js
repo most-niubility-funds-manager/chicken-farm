@@ -7,8 +7,6 @@ import {
 	SET_SEARCH_LOADING,
 	SET_SEARCH_RESULT,
 	UPDATE_FORCE,
-	CHANGE_DELETE_STATE,
-	SET_DELETE_CODE,
 	SET_TOTAL_INCOME,
 } from "../actionTypes";
 
@@ -52,16 +50,6 @@ const updateForce = (state) => ({
 	state,
 });
 
-const changeDeleteState = (state) => ({
-	type: CHANGE_DELETE_STATE,
-	state,
-});
-
-const setDeleteCode = (code) => ({
-	type: SET_DELETE_CODE,
-	code,
-});
-
 const setTotalIncome = (total) => ({
 	type: SET_TOTAL_INCOME,
 	total,
@@ -76,7 +64,5 @@ export {
 	setSearchResult,
 	updateForce,
 	setActiveTr,
-	changeDeleteState,
-	setDeleteCode,
 	setTotalIncome
 };

@@ -31,9 +31,17 @@ const Cell = (props) => {
 		dispatch(setMarketState(true));
 	};
 
-	const changeHandler = () => {
+	const changeHandler = (e) => {
 		setUnitValue(inputEl.current.value);
 	};
+
+	const keyDownHandler = (e) => {
+		const {keyCode} = e
+		if (keyCode === 13) {
+			inputEl.current.blur()
+			e.preventDefault();
+		}
+	}
 
 	const checkCrease = (str) => str.includes("-");
 
@@ -56,6 +64,7 @@ const Cell = (props) => {
 					onBlur={blurHandler}
 					onFocus={focusHandler}
 					onChange={changeHandler}
+					onKeyDown={keyDownHandler}
 					className={active && "hover"}
 				/>
 			</Td>

@@ -9,6 +9,3 @@ export const CHANGE_SEARCH_STATE = "CHANGE_SEARCH_STATE"; //  搜索状态a
 export const SET_SEARCH_LOADING = "SET_SEARCH_LOADING"; //  搜索的loading
 export const SET_SEARCH_RESULT = "SET_SEARCH_RESULT"; //  搜索结果
 export const UPDATE_FORCE = "UPDATE_FORCE"; //  搜索完成后更新数据
-
-export const CHANGE_DELETE_STATE = "CHANGE_DELETE_STATE"; //  删除面板状态
-export const SET_DELETE_CODE = "SET_DELETE_CODE"; // 设置删除的code

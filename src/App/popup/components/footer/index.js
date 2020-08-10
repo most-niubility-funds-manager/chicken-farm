@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 13:34:26
+ * @LastEditTime: 2020-08-10 15:20:58
  * @Description: my footer
  */
 
@@ -17,9 +17,7 @@ import ExtConfig from "../../../../config.json";
 const FooterBox = () => {
 	const theme = useSelector((state) => state.theme);
 	const [statusText, setOpen] = useState("");
-	const [newsList, setNewsList] = useState([]);
-	const [activeIdx, setActiveIdx] = useState(0);
-	const [currNews, setCurrNew] = useState({ title: "财经资讯加载中..." });
+	const [currNews, setCurrNew] = useState({});
 	const dispatch = useDispatch();
 	const intervalCheck = () => false;
 
@@ -32,19 +30,18 @@ const FooterBox = () => {
 
 		fetchNewsInfo()
 			.then((news) => shuffleData(news))
-			.then((news) => setNewsList(news));
+			.then((news) => poll(news));
 	}, []);
 
-	useEffect(() => {
-		let idx = 0;
-		if (activeIdx !== newsList.length - 1) {
-			idx = activeIdx + 1;
-		}
+	const poll = (newsList, i = 0) => {
+		let idx = i !== newsList.length ? i : 0
+		idx++
+
+		setCurrNew(Object.assign({}, newsList[idx]));
 		setTimeout(() => {
-			setActiveIdx(idx);
-			setCurrNew(Object.assign({}, newsList[idx]));
-		}, 5000);
-	}, [newsList, activeIdx]);
+			poll(newsList, idx)
+		}, 5000)
+	}
 
 	return (
 		<Wrapper theme={theme}>

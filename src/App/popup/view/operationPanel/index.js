@@ -1,14 +1,14 @@
 /*
  * @Date: 2020-07-31 14:08:49
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-09 16:51:06
+ * @LastEditTime: 2020-08-10 14:57:29
  * @Description: 每支基金的操作和基本信息面板
  */
 
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Wrapper, Mask, Content, CloseBtn, Title } from "./index.styled";
-import { fetchFundDetail, getUserSingleFundData } from "../../services";
+import { Wrapper, Mask, Content, CloseBtn, Title, DelBtn } from "./index.styled";
+import { fetchFundDetail, getUserSingleFundData, deleteSingleFund } from "../../services";
 import Tab from "../../components/detailTab";
 
 const Operation = (props) => {
@@ -29,6 +29,10 @@ const Operation = (props) => {
 		});
 	}, [activeCode]);
 
+	const deleteClickHandler = () => {
+		deleteSingleFund(activeCode).then(() => closeEvent());
+	};
+
 	return (
 		<Wrapper>
 			<Mask />
@@ -36,6 +40,7 @@ const Operation = (props) => {
 				<CloseBtn className="iconfont chicken-close" theme={theme} onClick={closeEvent} />
 				<Title theme={theme}>
 					{userFundDetail.name}-{activeCode}
+					<DelBtn theme={theme} onClick={deleteClickHandler}>删除</DelBtn>
 				</Title>
 				<Tab theme={theme} fundIntro={fundIntro} />
 			</Content>

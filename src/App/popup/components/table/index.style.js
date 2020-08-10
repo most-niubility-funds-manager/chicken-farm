@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 const Wrapper = styled.div.attrs({ className: 'tabel-wrapper' })`
   width: 100%;
-  height: 293px;
+  height: 301px;
   position: relative;
-  overflow: overlay;
+  overflow: auto;
 
   &.loading {
     min-height: 120px;

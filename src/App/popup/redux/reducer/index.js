@@ -7,11 +7,8 @@ import {
 	SET_SEARCH_LOADING,
 	SET_SEARCH_RESULT,
 	UPDATE_FORCE,
-	CHANGE_DELETE_STATE,
-	SET_DELETE_CODE,
 	SET_TOTAL_INCOME
 } from "../actionTypes";
-import { requestGet } from "../../services/request";
 
 // 默认全部状态
 const defaultState = {
@@ -26,8 +23,6 @@ const defaultState = {
 		fail: [],
 	}, //	搜索结果
 	isSearchUpdate: false, //	搜索完更新列表数据
-	isDelete: false, //	删除面板
-	deleteCode: 0, //	删除基金code
 	totalIncome: 0,	//	当日总收益
 };
 
@@ -56,12 +51,6 @@ export default (state = defaultState, action) => {
 			return Object.assign({}, state, { searchData: action.data });
 		case UPDATE_FORCE:
 			state.isSearchUpdate = action.state;
-			return state;
-		case CHANGE_DELETE_STATE:
-			state.isDelete = action.state;
-			return state;
-		case SET_DELETE_CODE:
-			state.deleteCode = action.code;
 			return state;
 		case SET_TOTAL_INCOME:
 			state.totalIncome = action.total
