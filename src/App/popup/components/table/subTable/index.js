@@ -93,6 +93,7 @@ const SubTable = (props) => {
 									input={input}
 									theme={theme}
 									field={field}
+									active={active}
 									key={idx}
 									textAlign={textAlign}
 									keyword={keyword}

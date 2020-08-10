@@ -37,8 +37,12 @@ const Input = styled.input`
 	font-size: 12px;
 	color: ${props => props.theme.normal};
 	background-color: transparent;
-	border: 1px solid ${props => props.theme.tableInput};
 	transition: all 0.15s ease-out;
+	border: 1px solid transparent;
+
+	&.hover {
+		border: 1px solid ${props => props.theme.tableInput};
+	}
 
 	&:focus {
 		border: 1px solid ${props => props.theme.tableInputFocus};

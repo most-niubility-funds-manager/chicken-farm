@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-23 10:08:17
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-06 15:06:05
+ * @LastEditTime: 2020-08-10 10:12:42
  * @Description: 操作栏
  */ 
 import React from 'react'
@@ -15,8 +15,8 @@ const OperationLab = () => {
 
   return (
     <Wrapper>
-      <AddItem theme={theme} />
       <Income theme={theme} />
+      <AddItem theme={theme} />
     </Wrapper>
   )
 }

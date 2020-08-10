@@ -58,7 +58,6 @@ const Tr = styled.tr`
 
 	&.active {
 		td {
-			// background-color: ${(props) => props.theme.tabelCellHover};
 			background-color: #111;
 			cursor: pointer;
 		}

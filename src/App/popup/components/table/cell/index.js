@@ -9,6 +9,7 @@ const Cell = (props) => {
 		field,
 		theme,
 		input,
+		active,
 		keyword,
 		btn,
 		rowIndex,
@@ -55,6 +56,7 @@ const Cell = (props) => {
 					onBlur={blurHandler}
 					onFocus={focusHandler}
 					onChange={changeHandler}
+					className={active && "hover"}
 				/>
 			</Td>
 		);
