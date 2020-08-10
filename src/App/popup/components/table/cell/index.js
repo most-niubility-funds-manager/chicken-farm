@@ -43,7 +43,7 @@ const Cell = (props) => {
 		}
 	}
 
-	const checkCrease = (str) => str.includes("-");
+	const checkCrease = (str) => str.includes("-")
 
 	if (tag) {
 		return (

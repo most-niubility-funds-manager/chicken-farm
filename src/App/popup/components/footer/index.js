@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 15:20:58
+ * @LastEditTime: 2020-08-10 16:07:12
  * @Description: my footer
  */
 
@@ -34,7 +34,7 @@ const FooterBox = () => {
 	}, []);
 
 	const poll = (newsList, i = 0) => {
-		let idx = i !== newsList.length ? i : 0
+		let idx = i !== newsList.length - 1 ? i : 0
 		idx++
 
 		setCurrNew(Object.assign({}, newsList[idx]));
