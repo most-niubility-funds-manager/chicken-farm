@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 18:04:39
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-26 22:07:09
+ * @LastEditTime: 2020-08-10 13:29:57
  * @Description: 静态常量
  */ 
 
@@ -17,5 +17,6 @@ export default {
   INDEX_STORE: 'chicken-farm',
   INDEX_HOLIDAY: 'holiday',
   INDEX_FUND: 'funds',
-  INDEX_TRADE: 'trade'
+  INDEX_TRADE: 'trade',
+  INDEX_CONFIG: 'config'
 }

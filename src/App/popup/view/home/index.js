@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-09 17:29:12
+ * @LastEditTime: 2020-08-10 11:22:03
  * @Description: 主页面
  */
 
@@ -33,6 +33,7 @@ const Home = () => {
 	const holiday_table = { year: false, data: false };
 	const funds_table = { code: false, name: false, unit: false, state: false, create: false };
 	const trade_table = { code: false, name: false, unit: false, state: false, time: false };
+	const config_table = { hide: false, sort: false, theme: false, notifiy: false, other: false };
 	const isSearch = useSelector((state) => state.isSearch); //	是否在查询结果
 	const activeFundCode = useSelector((state) => state.activeFundCode); //	是否激活详情面板
 	const isDelete = useSelector((state) => state.isDelete); //	是否激活删除面板
@@ -43,27 +44,28 @@ const Home = () => {
 	const [deleteClose, setDeleteOpen] = useState(false);
 
 	useEffect(() => {
-		isSearch && setSearchOpen(true)
-	}, [isSearch])
+		isSearch && setSearchOpen(true);
+	}, [isSearch]);
 
 	useEffect(() => {
-		activeFundCode && setDetailOpen(true)
-	}, [activeFundCode])
+		activeFundCode && setDetailOpen(true);
+	}, [activeFundCode]);
 
 	useEffect(() => {
-		isDelete && setDeleteOpen(true)
-	}, [isDelete])
+		isDelete && setDeleteOpen(true);
+	}, [isDelete]);
 
 	dispatch(changeTheme(userTheme));
 
-		tables[Constant.INDEX_HOLIDAY] = holiday_table;
-		tables[Constant.INDEX_FUND] = funds_table;
-		tables[Constant.INDEX_TRADE] = trade_table;
-		// 创建节假日表
-		createDB({
-			store: Constant.INDEX_STORE,
-			tables,
-		});
+	tables[Constant.INDEX_HOLIDAY] = holiday_table;
+	tables[Constant.INDEX_FUND] = funds_table;
+	tables[Constant.INDEX_TRADE] = trade_table;
+	
+	// 创建节假日表
+	createDB({
+		store: Constant.INDEX_STORE,
+		tables,
+	});
 
 	// 关闭搜索框后更新tableData, 清空search
 	const closeSearchPage = () => {

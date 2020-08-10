@@ -12,7 +12,7 @@ const SectionGroup = () => {
   const intervalCheck = () => !isMarketOpen
 
   useEffect(() => {
-    requestRecursion(getLargeCap, intervalCheck, 1000, (originData) => {
+    requestRecursion(getLargeCap, intervalCheck, 3000, (originData) => {
       const formatData = originData.map((v) => ({
         ...v,
         theme: {

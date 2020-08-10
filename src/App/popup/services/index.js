@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-09 16:47:37
+ * @LastEditTime: 2020-08-10 10:36:41
  * @Description: 天天基金api
  */
 
@@ -186,7 +186,6 @@ const convertCodeFetch = (codes) =>
  */
 const updateSingleFund = async (data, key) => {
 	// 先获取此记录全部数据 再更新(需包含主键id)
-	console.log("data key", data, key);
 	indexedFindSingle({
 		store: Constants.INDEX_STORE,
 		table: Constants.INDEX_FUND,
@@ -281,19 +280,21 @@ const fetchNewsInfo = async () => {
 	const eachPanel = $('[tpe-plugin="preview_wap_row"]');
 	const dataList = [];
 
-	eachPanel.each(function () {
-		const items = $(this)
-			.find("li a")
-			.filter(function () {
-				return $(this).text().trim().length;
-			})
-			.map(function () {
-				return {
-					title: $(this).text().trim(),
-					url: $(this).attr("href"),
-				};
-			});
-		dataList.push(...Array.from(items));
+	eachPanel.each(function (idx) {
+		if (idx === 4) {
+			const items = $(this)
+				.find("li a")
+				.filter(function () {
+					return $(this).text().trim().length;
+				})
+				.map(function () {
+					return {
+						title: $(this).text().trim(),
+						url: `http:${$(this).attr("href")}`,
+					};
+				});
+			dataList.push(...Array.from(items));
+		}
 	});
 	return dataList;
 };
