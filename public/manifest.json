@@ -8,16 +8,20 @@
   "offline_enabled": true,
   "default_locale": "zh_CN",
   "icons": {
-    "16": "static/icons/logo.png",
-    "32": "static/icons/logo.png",
-    "128": "static/icons/logo.png"
+    "16": "static/icons/logo16.png",
+    "48": "static/icons/logo48.png",
+    "128": "static/icons/logo128.png"
   },
   "background": {
     "page": "background.html",
     "persistent": true
   },
   "browser_action": {
-    "default_icon": {},
+    "default_icon": {
+      "16": "static/icons/logo16.png",
+      "48": "static/icons/logo48.png",
+      "128": "static/icons/logo128.png"
+    },
     "default_popup": "popup.html",
     "default_title": "Funds Manager"
   },
