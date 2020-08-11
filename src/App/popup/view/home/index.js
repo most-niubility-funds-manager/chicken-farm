@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 11:22:03
+ * @LastEditTime: 2020-08-10 16:44:41
  * @Description: 主页面
  */
 
@@ -13,8 +13,6 @@ import {
 	updateForce,
 	setActiveTr,
 	setSearchResult,
-	setDeleteCode,
-	changeDeleteState,
 } from "../../redux/actions";
 import { Wrapper, Content } from "./index.style";
 import { theme } from "../../../styles";
@@ -25,7 +23,6 @@ import FreeTable from "../../components/table";
 import FooterBox from "../../components/footer";
 import SearchPage from "../search";
 import OperationPage from "../operationPanel";
-import DelDialog from "../deleteDialog";
 import { createDB } from "../../services/indexDB";
 
 const Home = () => {
@@ -33,15 +30,12 @@ const Home = () => {
 	const holiday_table = { year: false, data: false };
 	const funds_table = { code: false, name: false, unit: false, state: false, create: false };
 	const trade_table = { code: false, name: false, unit: false, state: false, time: false };
-	const config_table = { hide: false, sort: false, theme: false, notifiy: false, other: false };
 	const isSearch = useSelector((state) => state.isSearch); //	是否在查询结果
 	const activeFundCode = useSelector((state) => state.activeFundCode); //	是否激活详情面板
-	const isDelete = useSelector((state) => state.isDelete); //	是否激活删除面板
 	const dispatch = useDispatch();
 	const tables = {};
 	const [searchClose, setSearchOpen] = useState(false);
 	const [detailClose, setDetailOpen] = useState(false);
-	const [deleteClose, setDeleteOpen] = useState(false);
 
 	useEffect(() => {
 		isSearch && setSearchOpen(true);
@@ -51,16 +45,11 @@ const Home = () => {
 		activeFundCode && setDetailOpen(true);
 	}, [activeFundCode]);
 
-	useEffect(() => {
-		isDelete && setDeleteOpen(true);
-	}, [isDelete]);
-
 	dispatch(changeTheme(userTheme));
 
 	tables[Constant.INDEX_HOLIDAY] = holiday_table;
 	tables[Constant.INDEX_FUND] = funds_table;
 	tables[Constant.INDEX_TRADE] = trade_table;
-	
 	// 创建节假日表
 	createDB({
 		store: Constant.INDEX_STORE,
@@ -84,15 +73,6 @@ const Home = () => {
 		}, 200);
 	};
 
-	const closeDeleteDialog = () => {
-		dispatch(changeDeleteState(false));
-		dispatch(setDeleteCode(0));
-		dispatch(updateForce(true));
-		setTimeout(() => {
-			setDeleteOpen(false);
-		}, 200);
-	};
-
 	return (
 		<Wrapper theme={userTheme}>
 			<Content>
@@ -105,8 +85,6 @@ const Home = () => {
 			{searchClose && <SearchPage active={isSearch} closeEvent={closeSearchPage} />}
 			{/* 基金详情页 */}
 			{detailClose && <OperationPage active={activeFundCode} closeEvent={closeOperationPage} />}
-			{/* 删除页 */}
-			{deleteClose && <DelDialog active={isDelete} closeEvent={closeDeleteDialog} />}
 		</Wrapper>
 	);
 };

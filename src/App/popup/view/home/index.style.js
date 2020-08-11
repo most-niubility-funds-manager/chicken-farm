@@ -4,7 +4,7 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
   width: 500px;
   height: 500px;
   background-color: ${props => props.theme.background};
-  padding-top: 20px;
+  padding-top: 12px;
   position: relative;
   overflow: hidden;
 
@@ -14,7 +14,6 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
 `
 
 const Content = styled.div.attrs({ className:'content' })`
-  /* //padding: 0 20px; */
   height: calc(100% - 36px);
 `
 

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 10:36:41
+ * @LastEditTime: 2020-08-10 14:54:26
  * @Description: 天天基金api
  */
 
@@ -441,6 +441,10 @@ const getUserSingleFundData = async (code) => {
 	return data;
 };
 
+/**
+ * @description: 删除基金
+ * @param {String} code
+ */
 const deleteSingleFund = async (code) => {
 	const result = await indexedDelete({
 		store: Constants.INDEX_STORE,

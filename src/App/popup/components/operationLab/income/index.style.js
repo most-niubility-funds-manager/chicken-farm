@@ -12,8 +12,8 @@ const Wrapper = styled.div.attrs({ className: 'income-box' })`
 const Tag = styled.span`
   width: auto;
   min-width: 28px;
-  height: 30px;
-  line-height: 30px;
+  height: 24px;
+  line-height: 24px;
   box-sizing: content-box;
   padding: 0 4px;
   border-radius: 4px;

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 12:40:25
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 11:20:57
+ * @LastEditTime: 2020-08-10 17:30:39
  * @Description: indexdb数据库操作
  */
 
@@ -10,7 +10,6 @@
 // holiday 今年所有节假日 | year | data
 // funds  用户添加过的基金 | code | name | unit 份额 | state 当前是否在用
 // trade  交易记录 | code | name | unit 买卖 | state | time 交易状态
-// config  用户配置 | hide 隐藏总收益 | sort {key: 0 无 1 降序 2 升序} | theme | notifiy | other
 /**
  * @description: 打开/创建数据库
  * @param {Object} { store:数据库名, tables: { name: structure } 表名和表结构, keyPath: 主键(默认id) }
@@ -24,7 +23,6 @@ const createDB = ({ store, tables, keyPath = "id" }, version = 1) =>
 			const db = target.result;
 			const tableNames = Object.keys(tables); //  展开表字段
 			let objectStore;
-
 			tableNames.map((name) => {
 				// 判断当前表是否存在
 				if (!db.objectStoreNames.contains(name)) {

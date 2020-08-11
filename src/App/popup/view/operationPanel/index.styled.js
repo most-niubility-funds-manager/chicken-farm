@@ -81,4 +81,18 @@ const Title = styled.div`
 	margin-bottom: 15px;
 `;
 
-export { Wrapper, Mask, Content, CloseBtn, Title };
+const DelBtn = styled.span.attrs({ className: 'delete-btn' })`
+	display: inline-block;
+	height: 20px;
+	padding: 0 4px;
+	box-sizing: content-box;
+	border: 1px solid ${props => props.theme.deleteDoneBg};
+	color: ${props => props.theme.deleteDoneBg};
+	font-size: 12px;
+	line-height: 20px;
+	border-radius: 2px;
+	cursor: pointer;
+	margin-left: 20px;
+`
+
+export { Wrapper, Mask, Content, CloseBtn, Title, DelBtn };

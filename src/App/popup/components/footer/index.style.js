@@ -5,7 +5,7 @@ const Wrapper = styled.div.attrs({ className: 'footer' })`
   height: 36px;
   position: absolute;
   bottom: 0;
-  padding: 0 20px;
+  padding: 0 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;

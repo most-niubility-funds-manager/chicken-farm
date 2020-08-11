@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-09 17:27:32
+ * @LastEditTime: 2020-08-10 14:09:57
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef } from "react";
@@ -93,14 +93,6 @@ const FreeTable = () => {
 			tag: true,
 		},
 		{ title: "更新时间", dataIndex: "update", key: "update", width: 100, textAlign: "right" },
-		{
-			title: "删除",
-			dataIndex: "delete",
-			key: "delete",
-			width: 60,
-			textAlign: "center",
-			btn: "删除",
-		},
 	];
 
 	// 获取 funds { code, unit } 后获取数据并格式化
@@ -143,13 +135,6 @@ const FreeTable = () => {
 		const { code } = tableData[index];
 		updateSingleFund({ unit }, { k: "code", v: code });
 	};
-	const deleteClickHandler = (index) => {
-		const { code } = tableData[index];
-		console.log("点击调用删除弹窗", code);
-		dispatch(setDeleteCode(code));
-		dispatch(changeDeleteState(true));
-		dispatch(updateForce(false));
-	};
 	// 总收益
 	const calcTotalIncome = (data) => {
 		const total = data.reduce((total, { crease, totalShare, lastUnit }) => {
@@ -187,7 +172,6 @@ const FreeTable = () => {
 				leaveEvent={ListMouseLeaveHandler}
 				clickEvent={modifyUnitClickHandler}
 				blurEvent={modifyUnitBlurHandler}
-				delEvent={deleteClickHandler}
 				activeIndex={activeIndex}
 			/>
 		</Wrapper>
