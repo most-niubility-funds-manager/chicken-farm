@@ -5,7 +5,7 @@
   "name": "基金管理助手",
   "short_name": "基金管理助手",
   "description": "自选基金管理助手，获取基金实时信息。",
-  "offline_enabled": true,
+  "offline_enabled": false,
   "default_locale": "zh_CN",
   "icons": {
     "16": "static/icons/logo16.png",
