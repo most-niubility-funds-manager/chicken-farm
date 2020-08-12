@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-08-04 11:07:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-09 17:06:54
+ * @LastEditTime: 2020-08-11 17:57:19
  * @Description: 色谱
  */
 
@@ -17,7 +17,7 @@ export default {
 	"color-yellow-1": "#fec54f",
 	"color-yellow-2": "#e2a229",
 	"color-yellow-3": "#ffbf2a",
-	"color-green-1": "#45bd05",
+	"color-green-1": "#379504",
 	"color-green-2": "#45bd059e",
 	"color-green-3": "#1fffec",
 	"color-blue-1": "#037cff",

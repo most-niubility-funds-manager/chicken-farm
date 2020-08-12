@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 14:09:57
+ * @LastEditTime: 2020-08-11 18:14:59
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef } from "react";
@@ -52,7 +52,7 @@ const FreeTable = () => {
 			title: "基金名称",
 			dataIndex: "name",
 			key: "name",
-			width: 120,
+			width: 130,
 			textAlign: "left",
 			fixed: "left",
 			keyword: true, //  给颜色
@@ -61,7 +61,7 @@ const FreeTable = () => {
 			title: "涨跌幅",
 			dataIndex: "crease",
 			key: "crease",
-			width: 90,
+			width: 80,
 			textAlign: "right",
 			fixed: "left",
 			tag: true, //  给标签
@@ -99,7 +99,6 @@ const FreeTable = () => {
 	// 之后再加上排序
 	const getIndexedFunds = async () =>
 		getFundsCode().then((codes) => {
-			console.log("获取基金数据", codes, isEmpty);
 			if (codes.length) {
 				setIsEmpty(false);
 				return fetchAllFunds(codes);

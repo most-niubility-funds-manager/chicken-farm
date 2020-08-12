@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 13:50:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 13:35:24
+ * @LastEditTime: 2020-08-11 16:20:46
  * @Description: 小工具
  */
 
@@ -11,7 +11,7 @@ import { getAllYearholiday } from "../App/popup/services";
 /**
  * @description: 递归请求，获取到结果后继续请求
  * @param {String || Array} fns 请求方法名,或不同方法列表  single || multi
- * @param {String} check 中断方法 返回布尔值（目前只支持多方法使用一种判断）
+ * @param {Function} check 中断方法 返回布尔值（目前只支持多方法使用一种判断）
  * @param {Number} time 请求时间间隔
  * @param {Function} callback any
  * @return: void
@@ -100,6 +100,29 @@ const isMarketOpen = async () => {
 };
 
 /**
+ * @description: 到点提醒
+ * @param {String} hour
+ * @param {String} minute
+ * @return {Boolean}
+ */
+const arrivalRemind = async (hour = 14, minute = 55) => {
+	const SETTING_TIME = getPreciseTime(hour, minute);
+	const TODAY = getPreciseTime();
+	const MINUTE = 1000 * 60;
+	const CURRENT_TIME = Date.now();
+	const DIFF = Math.abs(CURRENT_TIME - SETTING_TIME);
+	const weekend = [0, 6]; //	周末的getDay
+
+	const holidays = await getAllYearholiday();
+	const isHoliday = holidays.includes(TODAY) || weekend.includes(new Date().getDay());
+
+	if (isHoliday || DIFF > MINUTE) {
+		return false;
+	}
+	return true;
+};
+
+/**
  * @description: 时间格式转换(死板)，传入正常的时间数据就行
  * @param {String|Number} param
  * @return: eg: 07-28 00:00
@@ -135,7 +158,7 @@ const shuffleData = (data) => {
  * @return: [{ value, type }] false - true +
  */
 const calcDataPercent = (data) => {
-	const pureData = data.map(v => v.replace('%', '').replace('--', 0))
+	const pureData = data.map((v) => v.replace("%", "").replace("--", 0));
 	const MAX_NUMBER = pureData.map((v) => Math.abs(v)).sort((a, b) => b - a)[0];
 	const result = pureData.map((v) => ({
 		value: Math.abs(v / MAX_NUMBER).toFixed(2) * 100,
@@ -145,4 +168,12 @@ const calcDataPercent = (data) => {
 	return result;
 };
 
-export { requestRecursion, checkFundOpen, isMarketOpen, formatTime, shuffleData, calcDataPercent };
+export {
+	requestRecursion,
+	checkFundOpen,
+	isMarketOpen,
+	formatTime,
+	shuffleData,
+	calcDataPercent,
+	arrivalRemind,
+};

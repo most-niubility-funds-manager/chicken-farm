@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 18:04:39
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 17:36:22
+ * @LastEditTime: 2020-08-11 16:18:44
  * @Description: 静态常量
  */
 
@@ -21,4 +21,6 @@ export default {
 	INDEX_CONFIG: "config",
 	// local config
 	LOCAL_CONFIG: "fund-manager-config",
+	// 通知ID
+	REMIND_MARKET_CLOSE: `REMIND_MARKET_CLOSE_${new Date().toDateString()}`,
 };

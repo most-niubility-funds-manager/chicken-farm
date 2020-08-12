@@ -1,13 +1,14 @@
 /*
  * @Date: 2020-07-24 21:56:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-06 10:52:43
+ * @LastEditTime: 2020-08-11 15:36:20
  * @Description: 插件背景页
  */
 
 import { fetchData } from "./services";
 import Constants from "../constants";
 import './webRequest'
+import './notifiy'
 
 const { COMMANDS } = Constants;
 

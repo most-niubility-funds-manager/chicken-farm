@@ -12,11 +12,10 @@ const Wrapper = styled.div.attrs({ className: 'income-box' })`
 const Tag = styled.span`
   width: auto;
   min-width: 28px;
-  height: 24px;
-  line-height: 24px;
-  box-sizing: content-box;
+  height: 22px;
+  line-height: 22px;
   padding: 0 4px;
-  border-radius: 4px;
+  border-radius: 2px;
   font-size: 12px;
   color: ${props => props.theme.normal};
   background-color: ${props => props.theme.increase};

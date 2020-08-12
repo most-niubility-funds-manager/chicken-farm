@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 14:54:26
+ * @LastEditTime: 2020-08-11 18:17:09
  * @Description: 天天基金api
  */
 
@@ -249,7 +249,8 @@ const fetchAllFunds = (codes) => {
 			}
 			const { fundcode, dwjz, gsz, gszzl, gztime, jzrq, name } = item;
 			const totalShare = codes.filter(({ code }) => fundcode === code)[0].unit;
-			const incomeReckon = totalShare ? ((dwjz * totalShare * gszzl) / 100).toFixed(2) : "0.00";
+			const incomeCalc = ((dwjz * totalShare * gszzl) / 100).toFixed(2);
+			const incomeReckon = totalShare ? (incomeCalc > 0 ? `+${incomeCalc}` : incomeCalc) : "0.00";
 
 			return {
 				name,
@@ -452,7 +453,7 @@ const deleteSingleFund = async (code) => {
 		key: { k: "code", v: code },
 	});
 
-	return result
+	return result;
 };
 
 export {
@@ -467,5 +468,5 @@ export {
 	fetchNewsInfo,
 	fetchFundDetail,
 	getUserSingleFundData,
-	deleteSingleFund
+	deleteSingleFund,
 };
