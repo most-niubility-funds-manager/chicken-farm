@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 13:50:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-11 16:20:46
+ * @LastEditTime: 2020-08-21 10:24:34
  * @Description: 小工具
  */
 
@@ -16,7 +16,7 @@ import { getAllYearholiday } from "../App/popup/services";
  * @param {Function} callback any
  * @return: void
  */
-const requestRecursion = async (fns, check, time = 1000, callback) => {
+const requestRecursion = async ({fns, check, time = 1000, callback}) => {
 	const isArray = Array.isArray(fns); //  判断是否是方法列表
 	let result;
 	if (isArray) {
@@ -38,7 +38,7 @@ const requestRecursion = async (fns, check, time = 1000, callback) => {
 		}
 
 		setTimeout(() => {
-			return requestRecursion(fns, check, time, callback);
+			return requestRecursion({ fns, check, time, callback });
 		}, time);
 	}
 };
@@ -168,6 +168,40 @@ const calcDataPercent = (data) => {
 	return result;
 };
 
+/**
+ * @description: 排序函数
+ * @param {Array} data 元数据
+ * @param {String} datakey key_type
+ * @return {Array} 怎么来 怎么回
+ */
+const sortData = (data, datakey) => {
+	const [key, type] = datakey.split("_");
+	if (type * 1 === 0) {
+		return data;
+	}
+
+	const tempData = data.sort((a, b) => {
+		if (key === "name") {
+			return a[key].localeCompare(b[key], "zh-Hans-CN", { sensitivity: "base" });
+		} else if (key === "crease") {
+			const aValue = a[key] && a[key].replace(/[+|-|%]/g, "") * 1;
+			const bValue = b[key] && b[key].replace(/[+|-|%]/g, "") * 1;
+			return bValue - aValue
+		} else if (key === "incomeReckon") {
+			const aValue = a[key] * 1;
+			const bValue = b[key] * 1;
+			return bValue - aValue;
+		}
+	});
+
+	return type * 1 === 1
+		? tempData
+		: tempData.reduce((arr, cur) => {
+				arr.unshift(cur);
+				return arr;
+		  }, []);
+};
+
 export {
 	requestRecursion,
 	checkFundOpen,
@@ -176,4 +210,5 @@ export {
 	shuffleData,
 	calcDataPercent,
 	arrivalRemind,
+	sortData,
 };

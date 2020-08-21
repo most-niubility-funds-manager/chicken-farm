@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 23:03:59
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-31 13:54:48
+ * @LastEditTime: 2020-08-20 15:15:48
  * @Description: fetch 调用
  */
 
@@ -51,7 +51,7 @@ const fetchConvertGBK = (url) =>
 
 /**
  * @description: 插件想background请求
- * @param {Object} 参数对象，属性随意
+ * @param {Object} 参数对象，属性随意 { command, data }
  * @return: who knoe?
  */
 const sendMessage = (data) =>

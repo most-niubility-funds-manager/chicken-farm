@@ -8,6 +8,7 @@ import {
 	SET_SEARCH_RESULT,
 	UPDATE_FORCE,
 	SET_TOTAL_INCOME,
+	SET_SORT_KEY
 } from "../actionTypes";
 
 const changeTheme = (theme) => ({
@@ -55,6 +56,11 @@ const setTotalIncome = (total) => ({
 	total,
 });
 
+const setSortKey = (key) => ({
+	type: SET_SORT_KEY,
+	key
+})
+
 export {
 	changeTheme,
 	setMarketState,
@@ -64,5 +70,6 @@ export {
 	setSearchResult,
 	updateForce,
 	setActiveTr,
-	setTotalIncome
+	setTotalIncome,
+	setSortKey
 };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-24 21:58:11
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-11 15:46:38
+ * @LastEditTime: 2020-08-20 14:48:27
  * @Description: 封装原生chrome api
  */
 
@@ -42,4 +42,35 @@ const createNotifiy = (id, options) =>
  */
 const getURL = (path) => chrome.runtime.getURL(path);
 
-export { sendMessage, createNotifiy, getURL };
+/**
+ * @description:  插件存储云同步 get
+ * @param {String} key 键名
+ * @return {Promise} 
+ */
+const syncGet = (key) =>
+	new Promise((resolve, reject) => {
+		try {
+			chrome.storage.sync.get([key], (result) => resolve(result));
+		} catch (error) {
+			console.log("[Chrome Storage Error]", error);
+			reject();
+		}
+	});
+
+/**
+ * @description: 插件数据同步存入
+ * @param {Object} options 存入数据 {k : v}
+ * @return {Promise} 
+ */
+const syncSet = (options) =>
+	new Promise((resolve, reject) => {
+		try {
+			chrome.storage.sync.set(options);
+			resolve();
+		} catch (error) {
+			console.log("[Chrome Storage Error]", error);
+			reject();
+		}
+	});
+
+export { sendMessage, createNotifiy, getURL, syncGet, syncSet };

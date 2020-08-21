@@ -47,6 +47,7 @@ const Th = styled.th`
 	background-color: ${(props) => props.theme.theadBg};
 	color: ${(props) => props.theme.normal};
 	padding: 0 10px;
+  cursor: pointer;
 `;
 
 const Tr = styled.tr`

@@ -1,13 +1,13 @@
 /*
  * @Date: 2020-07-22 15:02:57
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-06 16:13:42
+ * @LastEditTime: 2020-08-20 17:27:24
  * @Description: 添加鸡精
  */
 
 import React, { useState, useRef, useEffect } from "react";
 import { Wrapper, Input, Button } from "./index.style";
-import { convertCodeFetch } from "../../../services";
+import { convertCodeFetch, syncFundsActively } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	setSearchLoading,
@@ -24,6 +24,7 @@ const AddFundItem = (props) => {
 
 	useEffect(() => {
 		input.current.value = "";
+		syncFundsActively()
 	}, [forceUpdate]);
 
 	const keyDownHandler = (e) => {

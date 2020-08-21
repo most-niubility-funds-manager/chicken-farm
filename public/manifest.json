@@ -27,6 +27,7 @@
   },
   "permissions": [
     "tabs",
+    "storage",
     "webRequest",
     "webRequestBlocking",
     "notifications",

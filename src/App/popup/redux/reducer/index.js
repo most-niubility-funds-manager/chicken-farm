@@ -7,7 +7,8 @@ import {
 	SET_SEARCH_LOADING,
 	SET_SEARCH_RESULT,
 	UPDATE_FORCE,
-	SET_TOTAL_INCOME
+	SET_TOTAL_INCOME,
+	SET_SORT_KEY,
 } from "../actionTypes";
 
 // 默认全部状态
@@ -23,7 +24,8 @@ const defaultState = {
 		fail: [],
 	}, //	搜索结果
 	isSearchUpdate: false, //	搜索完更新列表数据
-	totalIncome: 0,	//	当日总收益
+	totalIncome: 0, //	当日总收益
+	sortKey: "name_0", //	key _ type
 };
 
 export default (state = defaultState, action) => {
@@ -53,8 +55,11 @@ export default (state = defaultState, action) => {
 			state.isSearchUpdate = action.state;
 			return state;
 		case SET_TOTAL_INCOME:
-			state.totalIncome = action.total
-			return state
+			state.totalIncome = action.total;
+			return state;
+		case SET_SORT_KEY:
+			state.sortKey = action.key;
+			return state;
 		default:
 			return state;
 	}

@@ -1,21 +1,15 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-11 18:14:59
+ * @LastEditTime: 2020-08-20 17:36:27
  * @Description: 重中之重 多功能表格
  */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-	setActiveTr,
-	changeDeleteState,
-	setDeleteCode,
-	updateForce,
-	setTotalIncome,
-} from "../../redux/actions";
+import { setActiveTr, updateForce, setTotalIncome } from "../../redux/actions";
 import { Wrapper, LoadingWrapper, EmptyFund } from "./index.style";
-import { getFundsCode, fetchAllFunds, updateSingleFund } from "../../services";
-import { requestRecursion } from "../../../../utils";
+import { getFundsCode, fetchAllFunds, updateSingleFund, syncFundsActively } from "../../services";
+import { requestRecursion, sortData } from "../../../../utils";
 import SubTable from "./subTable";
 import Loading from "../loading";
 
@@ -23,29 +17,15 @@ const FreeTable = () => {
 	const theme = useSelector((state) => state.theme);
 	const forceUpdate = useSelector((state) => state.isSearchUpdate);
 	const isMarketOpen = useSelector((state) => state.isMarketOpen);
+	const currentSort = useSelector((state) => state.sortKey); //	当前排序方式
 	const dispatch = useDispatch();
 	const TableEL = useRef(null);
 	const [activeIndex, setActiveIndex] = useState(null);
 	const [tableData, setTableData] = useState([]);
 	const [isEmpty, setIsEmpty] = useState(false);
-	const intervalCheck = () => !isMarketOpen || isEmpty;
+	const [requestTimer, setRequestTimer] = useState(null);
 
-	useEffect(() => {
-		requestRecursion(getIndexedFunds, intervalCheck, 5000, (datas) => {
-			const tempTableData = [];
-			datas.map((v, i) => {
-				if (v.name) {
-					return (tempTableData[i] = Object.assign({}, v));
-				} else {
-					const { code } = v;
-					const lastValueIndex = tableData.findIndex((v) => v.code === code);
-					return (tempTableData[i] = Object.assign({}, tableData[lastValueIndex]));
-				}
-			});
-			setTableData(tempTableData);
-			calcTotalIncome(tempTableData);
-		});
-	}, [isMarketOpen, forceUpdate]);
+	const intervalCheck = () => !isMarketOpen || isEmpty;
 
 	const config = [
 		{
@@ -56,6 +36,7 @@ const FreeTable = () => {
 			textAlign: "left",
 			fixed: "left",
 			keyword: true, //  给颜色
+			sort: true, //	排序
 		},
 		{
 			title: "涨跌幅",
@@ -65,6 +46,7 @@ const FreeTable = () => {
 			textAlign: "right",
 			fixed: "left",
 			tag: true, //  给标签
+			sort: true,
 		},
 		// { title: "基金代码", dataIndex: "code", key: "code", width: 80, textAlign: "center" },
 		{ title: "昨日净值", dataIndex: "lastUnit", key: "lastUnit", width: 80, textAlign: "right" },
@@ -91,22 +73,65 @@ const FreeTable = () => {
 			width: 100,
 			textAlign: "right",
 			tag: true,
+			sort: true,
 		},
 		{ title: "更新时间", dataIndex: "update", key: "update", width: 100, textAlign: "right" },
 	];
 
+	const poll = async (fn, cb) => {
+		const result = await fn();
+
+		if (Object.prototype.toString.call(result) !== "[object Promise]") {
+			if (intervalCheck()) {
+				clearTimeout(requestTimer);
+				cb(result);
+				return
+			} else {
+				const timer = setTimeout(() => {
+					poll(fn, cb);
+				}, 3000);
+				cb(result);
+				setRequestTimer(timer);
+			}
+		}
+	};
+
 	// 获取 funds { code, unit } 后获取数据并格式化
 	// 之后再加上排序
 	const getIndexedFunds = async () =>
-		getFundsCode().then((codes) => {
-			if (codes.length) {
-				setIsEmpty(false);
-				return fetchAllFunds(codes);
-			} else {
-				setIsEmpty(true);
-				return [];
-			}
+		getFundsCode()
+			.then((codes) => {
+				if (codes.length) {
+					setIsEmpty(false);
+					return fetchAllFunds(codes);
+				} else {
+					setIsEmpty(true);
+					return [];
+				}
+			})
+			.then((data) => sortData(data, currentSort));
+
+	useEffect(() => {
+		clearTimeout(requestTimer);
+	}, [currentSort]);
+
+	useEffect(() => {
+		poll(getIndexedFunds, (data) => {
+			const tempTableData = [];
+			data.map((v, i) => {
+				if (v.name) {
+					return (tempTableData[i] = Object.assign({}, v));
+				} else {
+					const { code } = v;
+					const lastValueIndex = tableData.findIndex((v) => v.code === code);
+					return (tempTableData[i] = Object.assign({}, tableData[lastValueIndex]));
+				}
+			});
+			setTableData(tempTableData);
+			calcTotalIncome(tempTableData);
+
 		});
+	}, [isMarketOpen, forceUpdate, currentSort]);
 
 	const leftTable = config.filter(({ fixed }) => fixed === "left");
 
@@ -132,13 +157,12 @@ const FreeTable = () => {
 	};
 	const modifyUnitBlurHandler = (index, unit) => {
 		const { code } = tableData[index];
-		updateSingleFund({ unit }, { k: "code", v: code });
+		updateSingleFund({ unit }, { k: "code", v: code }).then((_) => syncFundsActively());
 	};
 	// 总收益
 	const calcTotalIncome = (data) => {
 		const total = data.reduce((total, { crease, totalShare, lastUnit }) => {
-			const currIncome = totalShare
-				? ((crease.replace("%", "") * totalShare * lastUnit) / 100) : 0.0;
+			const currIncome = totalShare ? (crease.replace("%", "") * totalShare * lastUnit) / 100 : 0.0;
 			total = total + Number(currIncome);
 			return !isNaN(total) && (total = total.toFixed(2)), +total;
 		}, 0);

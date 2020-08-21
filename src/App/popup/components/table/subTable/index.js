@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Wrapper, Table, Tr, Th } from "./index.style";
 import Cell from "../cell";
+import SortIcon from "../sort";
 
 const SubTable = (props) => {
 	const {
@@ -30,22 +31,25 @@ const SubTable = (props) => {
 	// 生成表的数据
 	const headData = isFixClass ? head : head.filter(({ position }) => !position);
 	const totalWidth = headData.reduce((sum, { width }) => sum + width, 0); //  计算总宽度
-	const fieldData = headData.map(({ dataIndex, textAlign, tag, input, keyword }) => ({
+	const fieldData = headData.map(({ dataIndex, textAlign, tag, input, keyword, sort }) => ({
 		dataIndex,
 		textAlign,
 		tag,
 		input,
 		keyword,
+		sort,
 	}));
+
 	// 遍历出当前表所需数据 [{ active, list:[] }]
 	const bodyData = data.map((item, idx) => {
-		const resList = fieldData.reduce((arr, { dataIndex, textAlign, tag, input, keyword }) => {
+		const resList = fieldData.reduce((arr, { dataIndex, textAlign, tag, input, keyword, sort }) => {
 			const tdConfig = {
 				field: item[dataIndex],
 				textAlign,
 				tag,
 				input,
 				keyword,
+				sort,
 			};
 			arr.push(tdConfig);
 			return arr;
@@ -68,9 +72,10 @@ const SubTable = (props) => {
 			<Table style={{ width: `${totalWidth}px` }} theme={theme} className="rightBorder">
 				<thead>
 					<Tr theme={theme}>
-						{headData.map(({ title, key, width, textAlign }) => (
+						{headData.map(({ title, key, width, textAlign, sort }) => (
 							<Th theme={theme} key={key} style={{ width: `${width}px`, textAlign }}>
 								{title}
+								{sort && <SortIcon theme={theme} dataKey={key} />}
 							</Th>
 						))}
 					</Tr>
@@ -78,7 +83,7 @@ const SubTable = (props) => {
 				<tbody>
 					{bodyData.map(({ list, active }, i) => (
 						<Tr
-							key={i}
+							key={list}
 							theme={theme}
 							className={active && "active"}
 							onMouseEnter={() => hoverEvent(i)}

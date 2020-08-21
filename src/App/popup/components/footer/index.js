@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 16:07:12
+ * @LastEditTime: 2020-08-20 12:03:19
  * @Description: my footer
  */
 
@@ -22,10 +22,15 @@ const FooterBox = () => {
 	const intervalCheck = () => false;
 
 	useEffect(() => {
-		requestRecursion([checkFundOpen, isMarketOpen], intervalCheck, 1000, ([text, state]) => {
-			dispatch(setMarketState(state)); //	状态文本
-			dispatch(setMarketStateText(text));
-			setOpen(text);
+		requestRecursion({
+			fns: [checkFundOpen, isMarketOpen],
+			check: intervalCheck,
+			time: 1000, 
+			callback: ([text, state]) => {
+				dispatch(setMarketState(state)); //	状态文本
+				dispatch(setMarketStateText(text));
+				setOpen(text);
+			}
 		});
 
 		fetchNewsInfo()

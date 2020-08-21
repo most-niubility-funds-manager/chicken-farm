@@ -1,12 +1,12 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-11 18:17:09
+ * @LastEditTime: 2020-08-20 17:46:30
  * @Description: 天天基金api
  */
 
 import cheerio from "cheerio";
-import { requestGet, fetchConvertGBK } from "./request";
+import { requestGet, fetchConvertGBK, sendMessage } from "./request";
 import {
 	indexedAdd,
 	indexedFindAll,
@@ -186,7 +186,7 @@ const convertCodeFetch = (codes) =>
  */
 const updateSingleFund = async (data, key) => {
 	// 先获取此记录全部数据 再更新(需包含主键id)
-	indexedFindSingle({
+	return indexedFindSingle({
 		store: Constants.INDEX_STORE,
 		table: Constants.INDEX_FUND,
 		data,
@@ -456,6 +456,31 @@ const deleteSingleFund = async (code) => {
 	return result;
 };
 
+/**
+ * @description: 获取用户云端配置
+ * @param { String } key 键名
+ * @return {Promise<Object>} 键值
+ */
+const getSyncStorage = async (key) =>
+	sendMessage({ command: Constants.COMMANDS.SYNC_GET, data: key });
+
+/**
+ * @description:  设置云端配置
+ * @param {Object} { k: v }
+ */
+const setSyncStorage = async (data) => sendMessage({ command: Constants.COMMANDS.SYNC_SET, data });
+
+/**
+ * @description: 同步基金数据啊，在数据发生变化的事件中加入
+ */
+const syncFundsActively = async () => {
+	const funds = await getFundsCode();
+	const result = {};
+	result[Constants.SYNC_FUNDS] = funds;
+
+	setSyncStorage(result);
+};
+
 export {
 	getLargeCap,
 	getAllYearholiday,
@@ -469,4 +494,7 @@ export {
 	fetchFundDetail,
 	getUserSingleFundData,
 	deleteSingleFund,
+	getSyncStorage,
+	setSyncStorage,
+	syncFundsActively,
 };

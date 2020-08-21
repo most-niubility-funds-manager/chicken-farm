@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setMarketState } from "../../../redux/actions";
 import { Td, Tag, Input, Btn } from "./index.style";
@@ -19,7 +19,12 @@ const Cell = (props) => {
 	} = props;
 	const inputEl = useRef(null);
 	const dispatch = useDispatch();
-	const [unitValue, setUnitValue] = useState(field);
+	const [unitValue, setUnitValue] = useState(null);
+
+	// 更新单元格数据
+	useEffect(() => {
+		setUnitValue(field)
+	}, [field])
 
 	// focus时暂停数据更新
 	const focusHandler = () => {

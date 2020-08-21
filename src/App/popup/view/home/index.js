@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 16:44:41
+ * @LastEditTime: 2020-08-20 17:59:48
  * @Description: 主页面
  */
 
@@ -13,10 +13,13 @@ import {
 	updateForce,
 	setActiveTr,
 	setSearchResult,
+	setSortKey,
 } from "../../redux/actions";
 import { Wrapper, Content } from "./index.style";
 import { theme } from "../../../styles";
 import Constant from "../../../../constants";
+import { getLocal } from "../../services/localStorage";
+import { addAllFunds, updateSingleFund, convertCodeFetch, getSyncStorage } from "../../services";
 import SectionGroup from "../../components/sectionGroup";
 import OperationLab from "../../components/operationLab";
 import FreeTable from "../../components/table";
@@ -36,6 +39,8 @@ const Home = () => {
 	const tables = {};
 	const [searchClose, setSearchOpen] = useState(false);
 	const [detailClose, setDetailOpen] = useState(false);
+	const localConfig = getLocal(Constant.LOCAL_CONFIG);
+	const localSort = localConfig.sort || "name_0";
 
 	useEffect(() => {
 		isSearch && setSearchOpen(true);
@@ -45,16 +50,17 @@ const Home = () => {
 		activeFundCode && setDetailOpen(true);
 	}, [activeFundCode]);
 
+	dispatch(setSortKey(localSort));
 	dispatch(changeTheme(userTheme));
 
 	tables[Constant.INDEX_HOLIDAY] = holiday_table;
 	tables[Constant.INDEX_FUND] = funds_table;
 	tables[Constant.INDEX_TRADE] = trade_table;
-	// 创建节假日表
+	// 创建节假日表、基金表、交易表
 	createDB({
 		store: Constant.INDEX_STORE,
 		tables,
-	});
+	}).then((_) => syncCloudFunds());
 
 	// 关闭搜索框后更新tableData, 清空search
 	const closeSearchPage = () => {
@@ -71,6 +77,34 @@ const Home = () => {
 		setTimeout(() => {
 			setDetailOpen(false);
 		}, 200);
+	};
+
+	// 同步云端数据
+	// funds [{ code, unit }]
+	const syncCloudFunds = async () => {
+		const funds = await getSyncStorage(Constant.SYNC_FUNDS);
+		if (!funds) {
+			return;
+		}
+
+		const { succ } = await convertCodeFetch(funds.map(({ code }) => code));
+		const fundData = succ.map(({ code, name }) => {
+			const { unit } = funds.find(({ code: c }) => code === c);
+			return {
+				code,
+				unit,
+				name,
+				state: 1,
+				create: Date.now(),
+			};
+		});
+
+		// 若有新增基金，加入表同时改变了份额；再逐个更新一遍数据
+		addAllFunds(fundData).then((_) =>
+			Promise.all(
+				fundData.map(({ unit, code }) => updateSingleFund({ unit }, { k: "code", v: code }))
+			)
+		);
 	};
 
 	return (
