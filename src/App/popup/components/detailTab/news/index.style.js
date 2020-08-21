@@ -8,7 +8,7 @@ const Wrapper = styled.div.attrs({ className: 'news-wrapper' })`
 `
 
 const Item = styled.a`
-  background-color: ${props => props.theme.tabNewsBg};
+  background-color: transparent;
   color: ${props => props.theme.tabNewsText};
   display: flex;
   align-items: center;

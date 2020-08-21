@@ -12,6 +12,8 @@ const Cell = (props) => {
 		active,
 		keyword,
 		btn,
+		code,
+		dataKey,
 		rowIndex,
 		textAlign,
 		blurEvent,
@@ -23,8 +25,8 @@ const Cell = (props) => {
 
 	// 更新单元格数据
 	useEffect(() => {
-		setUnitValue(field)
-	}, [field])
+		setUnitValue(field);
+	}, [field]);
 
 	// focus时暂停数据更新
 	const focusHandler = () => {
@@ -41,14 +43,14 @@ const Cell = (props) => {
 	};
 
 	const keyDownHandler = (e) => {
-		const {keyCode} = e
+		const { keyCode } = e;
 		if (keyCode === 13) {
-			inputEl.current.blur()
+			inputEl.current.blur();
 			e.preventDefault();
 		}
-	}
+	};
 
-	const checkCrease = (str) => str.includes("-")
+	const checkCrease = (str) => str.includes("-");
 
 	if (tag) {
 		return (
@@ -80,6 +82,13 @@ const Cell = (props) => {
 				<Btn theme={theme} onClick={delEvent}>
 					{btn}
 				</Btn>
+			</Td>
+		);
+	} else if (dataKey === "name") {
+		return (
+			<Td keyword={keyword} theme={theme} style={{ textAlign }}>
+				<p className="item-name">{field}</p>
+				<p className="item-code">{code}</p>
 			</Td>
 		);
 	} else {

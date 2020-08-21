@@ -44,6 +44,7 @@ const SubTable = (props) => {
 	const bodyData = data.map((item, idx) => {
 		const resList = fieldData.reduce((arr, { dataIndex, textAlign, tag, input, keyword, sort }) => {
 			const tdConfig = {
+				key: dataIndex,
 				field: item[dataIndex],
 				textAlign,
 				tag,
@@ -90,14 +91,16 @@ const SubTable = (props) => {
 							onMouseLeave={leaveEvent}
 							onClick={() => clickEvent(i)}
 						>
-							{list.map(({ field, textAlign, tag, input, keyword }, idx) => (
+							{list.map(({ field, textAlign, tag, input, keyword, key }) => (
 								<Cell
 									tag={tag}
 									input={input}
 									theme={theme}
 									field={field}
 									active={active}
-									key={idx}
+									key={key}
+									code={list.find(({ key }) => key === "code")}
+									dataKey={key}
 									textAlign={textAlign}
 									keyword={keyword}
 									rowIndex={i}

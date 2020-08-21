@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-20 17:36:27
+ * @LastEditTime: 2020-08-21 10:55:27
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef, useCallback } from "react";
@@ -49,8 +49,8 @@ const FreeTable = () => {
 			sort: true,
 		},
 		// { title: "基金代码", dataIndex: "code", key: "code", width: 80, textAlign: "center" },
-		{ title: "昨日净值", dataIndex: "lastUnit", key: "lastUnit", width: 80, textAlign: "right" },
-		{ title: "估算净值", dataIndex: "currUnit", key: "currUnit", width: 80, textAlign: "right" },
+		{ title: "净值", dataIndex: "lastUnit", key: "lastUnit", width: 80, textAlign: "right" },
+		{ title: "估值", dataIndex: "currUnit", key: "currUnit", width: 80, textAlign: "right" },
 		{
 			title: "持有份额",
 			dataIndex: "totalShare",

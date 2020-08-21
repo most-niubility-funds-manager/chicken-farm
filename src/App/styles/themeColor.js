@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:52:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-17 17:17:37
+ * @LastEditTime: 2020-08-21 11:03:27
  * @Description: 主题色
  */
 import C from "./chromatography";
@@ -33,6 +33,7 @@ export const theme = {
 		tableInputFocusBg: C["color-blue-12"],
 		tableSortDefault: C["color-black-10"],
 		tableSortActive: C["color-yellow-4"],
+		tableCodeColor: C["color-white-3"],
 
 		searchPageBg: C["color-blue-6"],
 		searchShadow: C["color-black-6"],

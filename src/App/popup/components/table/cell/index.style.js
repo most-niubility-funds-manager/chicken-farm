@@ -1,17 +1,24 @@
 import styled from 'styled-components'
 
 const Td = styled.td`
-	height: 40px;
+	box-sizing: content-box;
 	background-color: ${(props) => props.theme.tbodyBg};
 	color: ${(props) => (props.keyword ? props.theme.field : props.theme.normal)};
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	padding: 0 10px;
+	padding: 10px 10px;
 	transition: background 0.2s ease-out;
 
 	&:first-of-type:hover {
 		text-decoration: underline;
+	}
+
+	.item-name {
+		min-height: 24px;
+		white-space: pre-wrap;
+		line-height: 1.2;
+	}
+
+	.item-code {
+		color: ${props => props.theme.tableCodeColor};
 	}
 `;
 
