@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-27 22:52:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-06 17:59:06
+ * @LastEditTime: 2020-08-26 11:26:02
  * @Description: 全局样式
  */
 
@@ -38,6 +38,7 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     scroll-behavior: smooth;
     font-size: 12px;
+    user-select:none;
   }
 
   ul,
@@ -79,5 +80,6 @@ export const GlobalStyle = createGlobalStyle`
   }
   body {
     background-color: rgb(18, 18, 18);
+    font-family: SanFrancisco, DIN;
   }
 `;

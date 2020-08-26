@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div.attrs({ className: 'tabel-wrapper' })`
   width: 100%;
-  height: 301px;
+  height: 392px;
   position: relative;
   overflow: auto;
 

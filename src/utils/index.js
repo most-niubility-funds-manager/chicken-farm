@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 13:50:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-21 10:24:34
+ * @LastEditTime: 2020-08-26 14:03:27
  * @Description: 小工具
  */
 
@@ -16,7 +16,7 @@ import { getAllYearholiday } from "../App/popup/services";
  * @param {Function} callback any
  * @return: void
  */
-const requestRecursion = async ({fns, check, time = 1000, callback}) => {
+const requestRecursion = async ({ fns, check, time = 1000, callback }) => {
 	const isArray = Array.isArray(fns); //  判断是否是方法列表
 	let result;
 	if (isArray) {
@@ -159,7 +159,7 @@ const shuffleData = (data) => {
  */
 const calcDataPercent = (data) => {
 	const pureData = data.map((v) => v.replace("%", "").replace("--", 0));
-	const MAX_NUMBER = pureData.map((v) => Math.abs(v)).sort((a, b) => b - a)[0];
+	const MAX_NUMBER = pureData.map((v) => Math.abs(v)).sort((a, b) => b - a)[0] || 1;
 	const result = pureData.map((v) => ({
 		value: Math.abs(v / MAX_NUMBER).toFixed(2) * 100,
 		type: !/-/.test(v),
@@ -186,7 +186,7 @@ const sortData = (data, datakey) => {
 		} else if (key === "crease") {
 			const aValue = a[key] && a[key].replace(/[+|-|%]/g, "") * 1;
 			const bValue = b[key] && b[key].replace(/[+|-|%]/g, "") * 1;
-			return bValue - aValue
+			return bValue - aValue;
 		} else if (key === "incomeReckon") {
 			const aValue = a[key] * 1;
 			const bValue = b[key] * 1;
@@ -202,6 +202,28 @@ const sortData = (data, datakey) => {
 		  }, []);
 };
 
+/**
+ * @description: 生成txt文件
+ * @param {String} title 文件名
+ * @param {String} content 文件内容
+ */
+const exportTxt = (title, content) => {
+	const aEl = document.createElement("a");
+	aEl.setAttribute(
+		"href",
+		`data:text/plain;charset=utf-8,${encodeURIComponent(
+			content + "   全选复制所有数据，粘贴至 右下角菜单 -> 导入数据 中"
+		)}`
+	);
+	aEl.setAttribute("download", `${title}${new Date().toLocaleDateString().replace(/\//g, "_")}`);
+
+	aEl.style.display = "none";
+	document.body.appendChild(aEl);
+
+	aEl.click();
+	document.body.removeChild(aEl);
+};
+
 export {
 	requestRecursion,
 	checkFundOpen,
@@ -211,4 +233,5 @@ export {
 	calcDataPercent,
 	arrivalRemind,
 	sortData,
+	exportTxt,
 };

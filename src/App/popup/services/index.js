@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-20 17:46:30
+ * @LastEditTime: 2020-08-26 14:05:35
  * @Description: 天天基金api
  */
 
@@ -148,7 +148,7 @@ const fetchSingleFund = async (code) => {
 /**
  * @description: UI层传入解析后的数组，统一进行请求，给出code对应数据，及请求失败的code对应原因
  * @param {Array} codes
- * @return: { succ: [{ name, code, lastUnit, currUnit, range, time }], fail: [code] }
+ * @return: { succ: [{ name, code, lastUnit, currUnit, crease, time }], fail: [code] }
  */
 const convertCodeFetch = (codes) =>
 	Promise.all(codes.map((v) => fetchSingleFund(v))).then((datas) => {
@@ -165,7 +165,7 @@ const convertCodeFetch = (codes) =>
 				code: fundcode,
 				lastUnit: dwjz,
 				currUnit: gsz,
-				range: gszzl,
+				crease: gszzl,
 				time: formatTime(Date.now()),
 			}));
 		// 或失败
@@ -178,6 +178,31 @@ const convertCodeFetch = (codes) =>
 
 		return result;
 	});
+
+/**
+ * @description: 使用接口进行单个基金模糊查询 CATEGORY 700为可添加基金
+ * @param {String} keyword
+ * @return {Array} data
+ */
+const fundFuzzyFetch = async (keyword) => {
+	const param = {
+		url: `https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx`,
+		params: {
+			m: 1,
+			key: keyword,
+		},
+	};
+
+	const { Datas } = await requestGet(param);
+	const result = Datas.map(({ CODE, NAME, CATEGORYDESC, CATEGORY }) => ({
+		name: NAME,
+		code: CODE,
+		category: CATEGORYDESC,
+		type: CATEGORY,
+	}));
+
+	return result;
+};
 
 /**
  * @description: funds表 添加|更新 单个数据
@@ -238,7 +263,7 @@ const getFundsCode = async () => {
 /**
  * @description: 获取全部funds的数据，整理成tableData格式
  * @param {Array} codes
- * @return: [{ name, crease, code, lastUnit, currUnit, totalShare, totalReckon, incomeReckon, update }]
+ * @return: [{ name, crease, code, lastUnit, currUnit, totalShare, totalAmount, incomeReckon, update }]
  */
 const fetchAllFunds = (codes) => {
 	const requestMap = codes.map(({ code }) => fetchSingleFund(code));
@@ -251,6 +276,7 @@ const fetchAllFunds = (codes) => {
 			const totalShare = codes.filter(({ code }) => fundcode === code)[0].unit;
 			const incomeCalc = ((dwjz * totalShare * gszzl) / 100).toFixed(2);
 			const incomeReckon = totalShare ? (incomeCalc > 0 ? `+${incomeCalc}` : incomeCalc) : "0.00";
+			const totalAmount = totalShare ? (dwjz * totalShare).toFixed(2) : "-";
 
 			return {
 				name,
@@ -259,7 +285,7 @@ const fetchAllFunds = (codes) => {
 				currUnit: gsz,
 				crease: Number(gszzl) > 0 ? `+${gszzl}%` : `${gszzl}%`,
 				totalShare: totalShare || 0.0,
-				totalReckon: "-",
+				totalAmount,
 				incomeReckon: incomeReckon,
 				update: formatTime(Date.now()),
 			};
@@ -270,34 +296,18 @@ const fetchAllFunds = (codes) => {
 };
 
 /**
- * @description: 获取同花顺资讯
+ * @description: 获取同花顺资讯 今日资讯 http://www.10jqka.com.cn/ gbk | 实时资讯 https://news.10jqka.com.cn/tapp/news/push/stock/?page=1&tag=&track=website&pagesize=50
  * @return: [{ url, title }]
  */
 const fetchNewsInfo = async () => {
-	const url = "http://www.10jqka.com.cn/";
+	const url =
+		"https://news.10jqka.com.cn/tapp/news/push/stock/?page=1&tag=&track=website&pagesize=50";
+	const {
+		data: { list },
+	} = await requestGet({ url });
+	const result = list.map(({ title, url }) => ({ title, url }));
 
-	const originHtml = await fetchConvertGBK(url);
-	const $ = cheerio.load(originHtml);
-	const eachPanel = $('[tpe-plugin="preview_wap_row"]');
-	const dataList = [];
-
-	eachPanel.each(function (idx) {
-		if (idx === 4) {
-			const items = $(this)
-				.find("li a")
-				.filter(function () {
-					return $(this).text().trim().length;
-				})
-				.map(function () {
-					return {
-						title: $(this).text().trim(),
-						url: `http:${$(this).attr("href")}`,
-					};
-				});
-			dataList.push(...Array.from(items));
-		}
-	});
-	return dataList;
+	return result;
 };
 
 /**
@@ -345,7 +355,6 @@ const fetchFundNews = async (code) => {
 
 	try {
 		const { Data } = await requestGet(params);
-		console.log("Data", Data);
 		result = Data.map(({ PUBLISHDATEDesc, TITLE, ID, NEWCATEGORY }) => ({
 			title: TITLE,
 			url: `http://fund.eastmoney.com/gonggao/${code},${ID}.html`,
@@ -384,7 +393,9 @@ const fetchFundDetail = async (code) => {
 				.map(function () {
 					return $(this).text().trim();
 				});
-			holdShares.push(Array.from(itemData).slice(0, 3));
+
+			const sliceData = Array.from(itemData).slice(0, 3);
+			holdShares.push(sliceData.length < 3 ? ["暂无数据", "暂无数据", "暂无数据"] : sliceData);
 		});
 	// 往日净值
 	const pastUnit = [];
@@ -406,7 +417,7 @@ const fetchFundDetail = async (code) => {
 
 	const result = {
 		holdShares: {
-			head: holdShares[0],
+			head: holdShares[0] || [], //	那边需要渲染 避免报错
 			body: holdShares
 				.slice(1)
 				.map((v, i) => [
@@ -486,6 +497,7 @@ export {
 	getAllYearholiday,
 	fetchSingleFund,
 	convertCodeFetch,
+	fundFuzzyFetch,
 	updateSingleFund,
 	addAllFunds,
 	getFundsCode,

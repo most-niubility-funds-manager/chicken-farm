@@ -6,7 +6,7 @@ const Wrapper = styled.div.attrs({ className: 'table-sort' })`
   display: inline-block;
   position: relative;
   vertical-align: -6px;
-  margin-left: 4px;
+  margin-left: 6px;
 
   &::before {
     position: absolute;

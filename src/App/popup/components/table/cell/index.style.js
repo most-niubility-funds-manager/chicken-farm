@@ -4,7 +4,7 @@ const Td = styled.td`
 	box-sizing: content-box;
 	background-color: ${(props) => props.theme.tbodyBg};
 	color: ${(props) => (props.keyword ? props.theme.field : props.theme.normal)};
-	padding: 10px 10px;
+	padding: 8px 10px;
 	transition: background 0.2s ease-out;
 
 	&:first-of-type:hover {
@@ -13,12 +13,9 @@ const Td = styled.td`
 
 	.item-name {
 		min-height: 24px;
-		white-space: pre-wrap;
-		line-height: 1.2;
-	}
-
-	.item-code {
-		color: ${props => props.theme.tableCodeColor};
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 `;
 
@@ -26,12 +23,13 @@ const Tag = styled.span`
 	padding: 4px;
 	box-sizing: content-box;
 	border-radius: 2px;
+	font-weight: bold;
 
   &.decrease {
-    background-color: ${props => props.theme.decrease}
+    color: ${props => props.theme.decrease}
   }
   &.increase {
-    background-color: ${props => props.theme.increase}
+    color: ${props => props.theme.increase}
   }
 `;
 

@@ -38,7 +38,8 @@
     "*://api.fund.eastmoney.com/*"
   ],
   "web_accessible_resources": [
-    "static/js/*"
+    "static/js/*",
+    "http://fund.eastmoney.com"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

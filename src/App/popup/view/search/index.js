@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-28 10:47:44
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-09 16:48:27
+ * @LastEditTime: 2020-08-25 10:32:56
  * @Description: 搜索结果页
  */
 
@@ -23,6 +23,7 @@ import {
 import { useSelector } from "react-redux";
 import { updateSingleFund, addAllFunds } from "../../services";
 import Loading from "../../components/loading";
+import AddItem from "../../components/addItem";
 
 const SearchPage = (props) => {
 	const theme = useSelector((state) => state.theme);
@@ -52,7 +53,7 @@ const SearchPage = (props) => {
 
 	const addAllFundsData = () => {
 		const data = listData
-			.filter(({ active }) => !active)
+			.filter(({ active, type }) => !active && type === 700)
 			.map(({ name, code }) => ({
 				name,
 				code,
@@ -70,6 +71,7 @@ const SearchPage = (props) => {
 			<Content theme={theme} className={!active && "cancel"}>
 				<CloseBtn className="iconfont chicken-close" theme={theme} onClick={closeEvent} />
 				<Title theme={theme}>基金搜索:</Title>
+				<AddItem theme={theme} />
 				{/* 错误提示❌ */}
 				{!isLoading && fail.length ? (
 					<ErrorPanel theme={theme}>
@@ -84,13 +86,18 @@ const SearchPage = (props) => {
 					</LoadingWrapper>
 				) : listData.length ? (
 					<ListWrapper ref={listWrapperRef} className={fail.length && "isError"}>
-						{listData.map(({ code, name, active }, i) => (
+						{listData.map(({ code, name, category, type, active }, i) => (
 							<ListItem theme={theme} key={code}>
-								<span>{code}</span>
-								<span style={{ "text-align": "left" }}>{name}</span>
+								<p>{code}</p>
+								<p style={{ "text-align": "left" }}>{name}</p>
+								<span>{category}</span>
 								<BtnBox>
-									<Btn theme={theme} onClick={() => addFund(i)} className={active && "disabled"}>
-										{active ? "已添加" : "添加"}
+									<Btn
+										theme={theme}
+										onClick={() => addFund(i)}
+										className={(active || type !== 700) && "disabled"}
+									>
+										{type !== 700 ? "未支持" : active ? "已添加" : "添加"}
 									</Btn>
 								</BtnBox>
 							</ListItem>

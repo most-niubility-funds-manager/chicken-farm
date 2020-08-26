@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:52:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-21 11:03:27
+ * @LastEditTime: 2020-08-24 15:17:21
  * @Description: 主题色
  */
 import C from "./chromatography";
@@ -15,11 +15,12 @@ export const theme = {
 		button: C["color-blue-4"],
 		border: C["color-blue-7"],
 		footer: C["color-black-2"],
-		searchBg: C["color-black-2"],
+		searchBg: C["color-black-1"],
 		searchBtn: C["color-blue-2"],
 		normal: C["color-white-1"],
+		marqueeColor: C["color-white-4"],
 		theadBg: C["color-black-4"],
-		tbodyBg: C["color-black-2"],
+		tbodyBg: C["color-black-11"],
 		tableFixShadow: C["color-black-5"],
 		tabelCellHover: C["color-blue-5"],
 		background: C["color-black-3"],

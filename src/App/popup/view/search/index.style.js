@@ -126,24 +126,24 @@ const ErrorPanel = styled.div.attrs({ className: "error-panel" })`
 `;
 
 const ListWrapper = styled.div.attrs({ className: "list-wrapper" })`
-	height: calc(100% - 90px);
+	height: calc(100% - 130px);
 	overflow: overlay;
 	margin-bottom: 15px;
 	font-size: 12px;
 
   &.isError {
-	  height: calc(100% - 130px);
+	  height: calc(100% - 175px);
   }
 `;
 
 const ListItem = styled.div.attrs({ className: "list-item" })`
 	width: 100%;
-	height: 50px;
+	height: 40px;
 	display: grid;
-	grid-template-columns: 80px 1fr 100px;
+	grid-template-columns: 80px 1fr 60px 80px;
 	margin-bottom: 10px;
 	font-size: 14px;
-	line-height: 50px;
+	line-height: 40px;
 	background-color: ${(props) => props.theme.listBg};
 	text-align: center;
 	overflow: hidden;
@@ -194,7 +194,7 @@ const LoadingWrapper = styled.div.attrs({ className: "loading-wrapper" })`
 	color: ${props => props.theme.normal};
 
 	&.isError {
-		height: calc(100% - 110px);
+		height: calc(100% - 150px);
 	}
 `;
 

@@ -4,7 +4,6 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
   width: 500px;
   height: 500px;
   background-color: ${props => props.theme.background};
-  padding-top: 12px;
   position: relative;
   overflow: hidden;
 

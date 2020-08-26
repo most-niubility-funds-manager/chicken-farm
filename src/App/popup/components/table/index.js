@@ -1,12 +1,12 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-21 10:55:27
+ * @LastEditTime: 2020-08-25 13:52:48
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setActiveTr, updateForce, setTotalIncome } from "../../redux/actions";
+import { setActiveTr, updateForce, setTotalIncome, setTotalCrease } from "../../redux/actions";
 import { Wrapper, LoadingWrapper, EmptyFund } from "./index.style";
 import { getFundsCode, fetchAllFunds, updateSingleFund, syncFundsActively } from "../../services";
 import { requestRecursion, sortData } from "../../../../utils";
@@ -59,13 +59,6 @@ const FreeTable = () => {
 			textAlign: "right",
 			input: true,
 		},
-		// {
-		// 	title: "总仓估算",
-		// 	dataIndex: "totalReckon",
-		// 	key: "totalReckon",
-		// 	width: 100,
-		// 	textAlign: "right",
-		// },
 		{
 			title: "收益估算",
 			dataIndex: "incomeReckon",
@@ -75,7 +68,14 @@ const FreeTable = () => {
 			tag: true,
 			sort: true,
 		},
-		{ title: "更新时间", dataIndex: "update", key: "update", width: 100, textAlign: "right" },
+		{
+			title: "持仓成本",
+			dataIndex: "totalAmount",
+			key: "totalAmount",
+			width: 100,
+			textAlign: "right",
+		},
+		// { title: "更新时间", dataIndex: "update", key: "update", width: 100, textAlign: "right" },
 	];
 
 	const poll = async (fn, cb) => {
@@ -85,7 +85,7 @@ const FreeTable = () => {
 			if (intervalCheck()) {
 				clearTimeout(requestTimer);
 				cb(result);
-				return
+				return;
 			} else {
 				const timer = setTimeout(() => {
 					poll(fn, cb);
@@ -129,7 +129,6 @@ const FreeTable = () => {
 			});
 			setTableData(tempTableData);
 			calcTotalIncome(tempTableData);
-
 		});
 	}, [isMarketOpen, forceUpdate, currentSort]);
 
@@ -161,12 +160,22 @@ const FreeTable = () => {
 	};
 	// 总收益
 	const calcTotalIncome = (data) => {
-		const total = data.reduce((total, { crease, totalShare, lastUnit }) => {
+		const todayIncome = data.reduce((total, { crease, totalShare, lastUnit }) => {
 			const currIncome = totalShare ? (crease.replace("%", "") * totalShare * lastUnit) / 100 : 0.0;
 			total = total + Number(currIncome);
 			return !isNaN(total) && (total = total.toFixed(2)), +total;
 		}, 0);
-		dispatch(setTotalIncome(total));
+		// 上次总额
+		const lastTotal = data.reduce((total, { totalShare, lastUnit }) => {
+			const assets = totalShare * lastUnit;
+			total = Number(total) + Number(assets);
+			return total.toFixed(2);
+		}, 0);
+		// 涨跌幅
+		const todayCrease = ((todayIncome / lastTotal) * 100).toFixed(2);
+
+		dispatch(setTotalCrease(todayCrease));
+		dispatch(setTotalIncome(todayIncome));
 	};
 
 	return (

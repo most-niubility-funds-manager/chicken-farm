@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-31 14:08:49
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-20 17:28:34
+ * @LastEditTime: 2020-08-22 16:09:15
  * @Description: 每支基金的操作和基本信息面板
  */
 

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-20 17:59:48
+ * @LastEditTime: 2020-08-26 10:13:56
  * @Description: 主页面
  */
 
@@ -14,6 +14,7 @@ import {
 	setActiveTr,
 	setSearchResult,
 	setSortKey,
+	setImportState,
 } from "../../redux/actions";
 import { Wrapper, Content } from "./index.style";
 import { theme } from "../../../styles";
@@ -21,11 +22,12 @@ import Constant from "../../../../constants";
 import { getLocal } from "../../services/localStorage";
 import { addAllFunds, updateSingleFund, convertCodeFetch, getSyncStorage } from "../../services";
 import SectionGroup from "../../components/sectionGroup";
-import OperationLab from "../../components/operationLab";
+import NewsBar from "../../components/newsBar";
 import FreeTable from "../../components/table";
 import FooterBox from "../../components/footer";
 import SearchPage from "../search";
 import OperationPage from "../operationPanel";
+import ImportCard from "../../components/importCard";
 import { createDB } from "../../services/indexDB";
 
 const Home = () => {
@@ -35,10 +37,12 @@ const Home = () => {
 	const trade_table = { code: false, name: false, unit: false, state: false, time: false };
 	const isSearch = useSelector((state) => state.isSearch); //	是否在查询结果
 	const activeFundCode = useSelector((state) => state.activeFundCode); //	是否激活详情面板
+	const isImport = useSelector((state) => state.isImport); //	是否开启导入
 	const dispatch = useDispatch();
 	const tables = {};
 	const [searchClose, setSearchOpen] = useState(false);
 	const [detailClose, setDetailOpen] = useState(false);
+	const [importClose, setImportOpen] = useState(false);
 	const localConfig = getLocal(Constant.LOCAL_CONFIG);
 	const localSort = localConfig.sort || "name_0";
 
@@ -49,6 +53,10 @@ const Home = () => {
 	useEffect(() => {
 		activeFundCode && setDetailOpen(true);
 	}, [activeFundCode]);
+
+	useEffect(() => {
+		isImport && setImportOpen(true);
+	}, [isImport]);
 
 	dispatch(setSortKey(localSort));
 	dispatch(changeTheme(userTheme));
@@ -76,6 +84,13 @@ const Home = () => {
 		dispatch(setActiveTr(0));
 		setTimeout(() => {
 			setDetailOpen(false);
+		}, 200);
+	};
+
+	const closeImportCard = () => {
+		dispatch(setImportState(false));
+		setTimeout(() => {
+			setImportOpen(false);
 		}, 200);
 	};
 
@@ -111,7 +126,7 @@ const Home = () => {
 		<Wrapper theme={userTheme}>
 			<Content>
 				<SectionGroup />
-				<OperationLab />
+				<NewsBar />
 				<FreeTable />
 			</Content>
 			<FooterBox />
@@ -119,6 +134,8 @@ const Home = () => {
 			{searchClose && <SearchPage active={isSearch} closeEvent={closeSearchPage} />}
 			{/* 基金详情页 */}
 			{detailClose && <OperationPage active={activeFundCode} closeEvent={closeOperationPage} />}
+			{/* 数据导入 */}
+			{importClose && <ImportCard active={isImport} closeEvent={closeImportCard} />}
 		</Wrapper>
 	);
 };

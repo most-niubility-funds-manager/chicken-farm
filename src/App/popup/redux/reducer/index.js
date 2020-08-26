@@ -8,7 +8,10 @@ import {
 	SET_SEARCH_RESULT,
 	UPDATE_FORCE,
 	SET_TOTAL_INCOME,
+	SET_TOTAL_CREASE,
 	SET_SORT_KEY,
+	SET_IMPORT_STATE,
+	SET_MENU_STATE,
 } from "../actionTypes";
 
 // 默认全部状态
@@ -25,12 +28,13 @@ const defaultState = {
 	}, //	搜索结果
 	isSearchUpdate: false, //	搜索完更新列表数据
 	totalIncome: 0, //	当日总收益
+	totalCrease: 0,	//	当日较上次涨跌幅
 	sortKey: "name_0", //	key _ type
+	isImport: false,	//	导入数据面板
+	isMenuOpen: false,	//	菜单
 };
 
 export default (state = defaultState, action) => {
-	// console.log('reducer', state, action)
-
 	switch (action.type) {
 		case CHANGE_THEME:
 			return Object.assign({}, state, { theme: action.theme });
@@ -57,9 +61,18 @@ export default (state = defaultState, action) => {
 		case SET_TOTAL_INCOME:
 			state.totalIncome = action.total;
 			return state;
+		case SET_TOTAL_CREASE:
+			state.totalCrease = action.crease
+			return state;
 		case SET_SORT_KEY:
 			state.sortKey = action.key;
 			return state;
+		case SET_MENU_STATE: 
+			state.isMenuOpen = action.state
+			return state
+		case SET_IMPORT_STATE:
+			state.isImport = action.state
+			return state
 		default:
 			return state;
 	}

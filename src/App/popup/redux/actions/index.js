@@ -8,7 +8,10 @@ import {
 	SET_SEARCH_RESULT,
 	UPDATE_FORCE,
 	SET_TOTAL_INCOME,
-	SET_SORT_KEY
+	SET_TOTAL_CREASE,
+	SET_SORT_KEY,
+	SET_MENU_STATE,
+	SET_IMPORT_STATE,
 } from "../actionTypes";
 
 const changeTheme = (theme) => ({
@@ -56,9 +59,24 @@ const setTotalIncome = (total) => ({
 	total,
 });
 
+const setTotalCrease = (crease) => ({
+	type: SET_TOTAL_CREASE,
+	crease,
+});
+
 const setSortKey = (key) => ({
 	type: SET_SORT_KEY,
-	key
+	key,
+});
+
+const setMenuState = (state) => ({
+	type: SET_MENU_STATE,
+	state
+})
+
+const setImportState = (state) => ({
+	type: SET_IMPORT_STATE,
+	state
 })
 
 export {
@@ -71,5 +89,8 @@ export {
 	updateForce,
 	setActiveTr,
 	setTotalIncome,
-	setSortKey
+	setTotalCrease,
+	setSortKey,
+	setImportState,
+	setMenuState,
 };
