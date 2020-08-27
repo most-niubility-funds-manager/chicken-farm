@@ -60,7 +60,6 @@ const Tr = styled.tr`
 	&.active {
 		td {
 			background-color: #111;
-			cursor: pointer;
 		}
 	}
 `;
