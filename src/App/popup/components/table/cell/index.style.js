@@ -16,6 +16,7 @@ const Td = styled.td`
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		cursor: pointer;
 	}
 `;
 

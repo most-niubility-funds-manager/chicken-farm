@@ -25,9 +25,9 @@ const Wrapper = styled.div.attrs({ className: 'setting-menu' })`
   bottom: 40px;
   right: 4px;
   padding: 4px 0;
-  background-color: #000;
+  background-color: rgb(35 40 45);
   border-radius: 4px;
-  box-shadow: rgba(255,255,255, 0.05) 0px 0px 0px 1px, rgba(255,255,255, 0.1) 0px 3px 6px, rgba(255,255,255, 0.2) 0px 9px 24px;
+  //box-shadow: rgba(255,255,255, 0.05) 0px 0px 0px 1px, rgba(255,255,255, 0.1) 0px 3px 6px, rgba(255,255,255, 0.2) 0px 9px 24px;
   transform: scale(0);
   animation: ${popIn} 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.065) forwards;
   transform-origin: right bottom;
@@ -66,7 +66,7 @@ const ListItem = styled.div`
   }
 
   &:hover {
-    background-color: #ccc;
+    background-color: hsl(207 14% 10% / 1);
   }
 `
 
