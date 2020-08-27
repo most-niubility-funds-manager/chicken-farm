@@ -1,61 +1,75 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 import { Wrapper, ListItem } from "./index.style";
 import { Switch } from "antd";
 import "antd/dist/antd.css";
 import { getFundsCode } from "../../services";
-import { getLocal, setLocal } from '../../services/localStorage'
+import { getLocal, setLocal } from "../../services/localStorage";
 import { exportTxt } from "../../../../utils";
-import { setImportState, toggleWideScreen as tws } from '../../redux/actions'
-import Constants from '../../../../constants'
+import { setImportState, toggleWideScreen as tws } from "../../redux/actions";
+import Constants from "../../../../constants";
 
 const Menu = (props) => {
-  const { theme, active, closeEvent } = props
-  const userConfig = getLocal(Constants.LOCAL_CONFIG)
-  const [notify, setNotify] = useState(userConfig.notify || false)
-  const [wideScreen, setWideScreen] = useState(userConfig.wideScreen || false)
-  const [creaseReverse, setCreaseReverse] = useState(userConfig.creaseReverse || false)
-  const dispatch = useDispatch()
+	const { theme, active, closeEvent } = props;
+	const userConfig = getLocal(Constants.LOCAL_CONFIG);
+	const [notify, setNotify] = useState(userConfig.notify || false);
+	const [wideScreen, setWideScreen] = useState(userConfig.wideScreen || false);
+	const [creaseReverse, setCreaseReverse] = useState(userConfig.creaseReverse || false);
+	const dispatch = useDispatch();
 
-  // 宽屏开关
-  const toggleWideScreen = () => {
-    const value = !wideScreen
-		dispatch(tws(value))
-		setWideScreen(value)
-    setLocal(Constants.LOCAL_CONFIG, { wideScreen: value })
-  }
+	useEffect(() => {
+		const menuDom = document.querySelector(".setting-menu");
+		const closeHandler = (e) => {
+			if (!menuDom.contains(e.target)) {
+				closeEvent();
+			}
+		};
+		document.body.addEventListener("click", closeHandler, false);
 
-  // 颜色反转
-  const toggleCrease = () => {
-    const value = !creaseReverse
-    setCreaseReverse(value)
-    setLocal(Constants.LOCAL_CONFIG, { creaseReverse: value })
-  }
+		return () => {
+			document.body.removeEventListener("click", closeHandler);
+		};
+	}, []);
 
-  // 消息通知开关
-  const toggleNotify = () => {
-    const value = !notify
-    setNotify(value)
-    setLocal(Constants.LOCAL_CONFIG, { notify: value })
-  }
+	// 宽屏开关
+	const toggleWideScreen = () => {
+		const value = !wideScreen;
+		dispatch(tws(value));
+		setWideScreen(value);
+		setLocal(Constants.LOCAL_CONFIG, { wideScreen: value });
+	};
 
-  // 导出数据
+	// 颜色反转
+	const toggleCrease = () => {
+		const value = !creaseReverse;
+		setCreaseReverse(value);
+		setLocal(Constants.LOCAL_CONFIG, { creaseReverse: value });
+	};
+
+	// 消息通知开关
+	const toggleNotify = () => {
+		const value = !notify;
+		setNotify(value);
+		setLocal(Constants.LOCAL_CONFIG, { notify: value });
+	};
+
+	// 导出数据
 	const exportData = () => {
 		getFundsCode().then((_) => {
-      const content = `#${JSON.stringify(_)}#`
-			exportTxt(`打开同步基金数据`, content)
-			closeEvent()
+			const content = `#${JSON.stringify(_)}#`;
+			exportTxt(`打开同步基金数据`, content);
+			closeEvent();
 		});
-  };
-  
-  // 导入数据
-  const importData = () => {
-		dispatch(setImportState(true))
-		closeEvent()
-  }
+	};
+
+	// 导入数据
+	const importData = () => {
+		dispatch(setImportState(true));
+		closeEvent();
+	};
 
 	return (
-		<Wrapper className={ !active && 'cancel' }>
+		<Wrapper className={!active && "cancel"}>
 			<ListItem onClick={toggleWideScreen}>
 				<i>
 					<svg width="20" height="20" viewBox="0 0 20 20">
@@ -74,11 +88,11 @@ const Menu = (props) => {
 				<span>涨跌反转</span>
 				<Switch size="small" defaultChecked={creaseReverse} checked={creaseReverse}></Switch>
 			</ListItem>
-      <ListItem onClick={toggleNotify}>
-        <i className="iconfont chicken-notice"></i>
-        <span>每日交易提醒</span>
-        <Switch size="small" defaultChecked={notify} checked={notify}></Switch>
-      </ListItem>
+			<ListItem onClick={toggleNotify}>
+				<i className="iconfont chicken-notice"></i>
+				<span>每日交易提醒</span>
+				<Switch size="small" defaultChecked={notify} checked={notify}></Switch>
+			</ListItem>
 			<ListItem onClick={exportData}>
 				<i>
 					<svg width="20" height="20" viewBox="0 0 20 20">
