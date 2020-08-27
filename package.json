@@ -32,6 +32,8 @@
     "file-loader": "^6.0.0",
     "filemanager-webpack-plugin": "^2.0.5",
     "html-webpack-plugin": "^4.3.0",
+    "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1",
     "merge-jsons-webpack-plugin": "^1.0.21",
     "node-sass": "^4.14.1",
     "path": "^0.12.7",

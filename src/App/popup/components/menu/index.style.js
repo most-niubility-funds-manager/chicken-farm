@@ -31,6 +31,7 @@ const Wrapper = styled.div.attrs({ className: 'setting-menu' })`
   transform: scale(0);
   animation: ${popIn} 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.065) forwards;
   transform-origin: right bottom;
+  z-index: 10;
 
   &.cancel {
     animation: ${popOut} 0.2s ease-out forwards;

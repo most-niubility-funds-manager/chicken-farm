@@ -12,6 +12,7 @@ import {
 	SET_SORT_KEY,
 	SET_MENU_STATE,
 	SET_IMPORT_STATE,
+	TOGGLE_WIDESCREEN,
 } from "../actionTypes";
 
 const changeTheme = (theme) => ({
@@ -79,6 +80,11 @@ const setImportState = (state) => ({
 	state
 })
 
+const toggleWideScreen = (state) => ({
+	type: TOGGLE_WIDESCREEN,
+	state
+})
+
 export {
 	changeTheme,
 	setMarketState,
@@ -93,4 +99,5 @@ export {
 	setSortKey,
 	setImportState,
 	setMenuState,
+	toggleWideScreen
 };

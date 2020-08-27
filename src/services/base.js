@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-24 21:58:11
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-20 14:48:27
+ * @LastEditTime: 2020-08-27 17:49:36
  * @Description: 封装原生chrome api
  */
 
@@ -36,6 +36,16 @@ const createNotifiy = (id, options) =>
 	});
 
 /**
+ * @description: 删除清理发出去的通知
+ * @param {String} id
+ * @return {Promise}
+ */
+const clearNotifiy = (id) =>
+	new Promise((resolve) => {
+		chrome.notifications.clear(id, resolve);
+	});
+
+/**
  * @description: 获取插件内部资源
  * @param {String} path
  * @return {} resource
@@ -45,7 +55,7 @@ const getURL = (path) => chrome.runtime.getURL(path);
 /**
  * @description:  插件存储云同步 get
  * @param {String} key 键名
- * @return {Promise} 
+ * @return {Promise}
  */
 const syncGet = (key) =>
 	new Promise((resolve, reject) => {
@@ -60,7 +70,7 @@ const syncGet = (key) =>
 /**
  * @description: 插件数据同步存入
  * @param {Object} options 存入数据 {k : v}
- * @return {Promise} 
+ * @return {Promise}
  */
 const syncSet = (options) =>
 	new Promise((resolve, reject) => {
@@ -73,4 +83,4 @@ const syncSet = (options) =>
 		}
 	});
 
-export { sendMessage, createNotifiy, getURL, syncGet, syncSet };
+export { sendMessage, createNotifiy, clearNotifiy, getURL, syncGet, syncSet };

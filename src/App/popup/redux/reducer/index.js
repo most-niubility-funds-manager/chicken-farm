@@ -12,6 +12,7 @@ import {
 	SET_SORT_KEY,
 	SET_IMPORT_STATE,
 	SET_MENU_STATE,
+	TOGGLE_WIDESCREEN,
 } from "../actionTypes";
 
 // 默认全部状态
@@ -32,6 +33,7 @@ const defaultState = {
 	sortKey: "name_0", //	key _ type
 	isImport: false,	//	导入数据面板
 	isMenuOpen: false,	//	菜单
+	isWideScreen: false,	//	宽屏
 };
 
 export default (state = defaultState, action) => {
@@ -72,6 +74,9 @@ export default (state = defaultState, action) => {
 			return state
 		case SET_IMPORT_STATE:
 			state.isImport = action.state
+			return state
+		case TOGGLE_WIDESCREEN :
+			state.isWideScreen = action.state
 			return state
 		default:
 			return state;

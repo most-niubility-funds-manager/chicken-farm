@@ -67,10 +67,49 @@ const Content = styled.div`
   transform-origin: center center;
   background-color: #000;
   animation: ${popIn} 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.075) forwards;
+  padding: 15px;
 
   &.cancel {
     animation: ${popOut} 0.2s ease forwards;
   }
 `
 
-export { Wrapper, Mask, Content }
+const Title = styled.div`
+  height: 30px;
+  line-height: 30px;
+  font-size: 16px;
+  color: #fff;
+  text-align: left;
+  margin-bottom: 20px;
+`
+
+const Input = styled.input`
+  width: 100%;
+  height: 36px;
+  border-radius: 2px;
+  margin-bottom: 20px;
+  background-color: #000;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 0 1em;
+`
+
+const Error = styled.p`
+  width: 100%;
+  height: 24px;
+  border-radius: 2px;
+  border: 1px solid red;
+  font-size: 12px;
+  color: #fff;
+`
+
+const Succ = styled.p`
+  width: 100%;
+  height: 24px;
+  border-radius: 2px;
+  border: 1px solid green;
+  font-size: 12px;
+  color: #fff;
+`
+
+export { Wrapper, Mask, Content, Title, Input, Error, Succ }

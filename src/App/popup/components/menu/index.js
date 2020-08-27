@@ -6,21 +6,22 @@ import "antd/dist/antd.css";
 import { getFundsCode } from "../../services";
 import { getLocal, setLocal } from '../../services/localStorage'
 import { exportTxt } from "../../../../utils";
-import { setImportState } from '../../redux/actions'
+import { setImportState, toggleWideScreen as tws } from '../../redux/actions'
 import Constants from '../../../../constants'
 
 const Menu = (props) => {
   const { theme, active, closeEvent } = props
   const userConfig = getLocal(Constants.LOCAL_CONFIG)
+  const [notify, setNotify] = useState(userConfig.notify || false)
   const [wideScreen, setWideScreen] = useState(userConfig.wideScreen || false)
   const [creaseReverse, setCreaseReverse] = useState(userConfig.creaseReverse || false)
-  const [notify, setNotify] = useState(userConfig.notify || false)
   const dispatch = useDispatch()
 
   // 宽屏开关
   const toggleWideScreen = () => {
     const value = !wideScreen
-    setWideScreen(value)
+		dispatch(tws(value))
+		setWideScreen(value)
     setLocal(Constants.LOCAL_CONFIG, { wideScreen: value })
   }
 

@@ -14,4 +14,5 @@ export const UPDATE_FORCE = "UPDATE_FORCE"; //  搜索完成后更新数据
 export const SET_SORT_KEY = "SET_SORT_KEY"; //  需要排序的字段 key_0
 
 export const SET_MENU_STATE = "SET_MENU_STATE"  //  菜单
+export const TOGGLE_WIDESCREEN = "TOGGLE_WIDESCREEN" // 宽屏模式
 export const SET_IMPORT_STATE = "SET_IMPORT_STATE"  //  导入数据面板状态

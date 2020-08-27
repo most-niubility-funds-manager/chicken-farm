@@ -1,10 +1,10 @@
 /*
  * @Date: 2020-08-11 15:18:45
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-26 14:10:41
+ * @LastEditTime: 2020-08-27 17:51:57
  * @Description: 插件的所有通知
  */
-import { createNotifiy, getURL } from "./base";
+import { createNotifiy, clearNotifiy, getURL } from "./base";
 import { requestRecursion, arrivalRemind } from "../utils";
 import { getLocal } from "../App/popup/services/localStorage";
 import Constants from "../constants";
@@ -27,7 +27,9 @@ requestRecursion({
 				message: "还剩5分钟今日交易结束",
 				priority: 2,
 			}).then((_) => {
-				console.log("午时已到");
+				setTimeout(() => {
+					clearNotifiy(Constants.REMIND_MARKET_CLOSE);
+				}, 120000);
 			});
 	},
 });

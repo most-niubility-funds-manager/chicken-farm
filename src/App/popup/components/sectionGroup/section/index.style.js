@@ -7,7 +7,7 @@ const Section = styled.div.attrs({ className: 'section-item' })`
   background-color: ${props => props.theme.background};
   display: grid;
   align-items: center;
-  grid-template-columns: 50px 1fr;
+  grid-template-columns: 40% 1fr;
   padding: 0 4px;
   cursor: pointer;
   transition: all 0.2s ease;

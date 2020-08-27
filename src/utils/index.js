@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 13:50:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-26 14:03:27
+ * @LastEditTime: 2020-08-27 17:51:50
  * @Description: 小工具
  */
 
@@ -223,6 +223,7 @@ const exportTxt = (title, content) => {
 	aEl.click();
 	document.body.removeChild(aEl);
 };
+
 
 export {
 	requestRecursion,

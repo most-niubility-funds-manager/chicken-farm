@@ -1,19 +1,25 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div.attrs({ className: "wrapper" })`
-  width: 500px;
-  height: 500px;
-  background-color: ${props => props.theme.background};
-  position: relative;
-  overflow: hidden;
+	width: 500px;
+	height: 500px;
+	background-color: ${(props) => props.theme.background};
+	position: relative;
+	overflow: hidden;
+	transition: width 0.2s linear;
+	will-change: width;
 
-  &.heightLimit {
-    min-height: 500px;
-  }
-`
+	&.heightLimit {
+		min-height: 500px;
+	}
 
-const Content = styled.div.attrs({ className:'content' })`
-  height: calc(100% - 36px);
-`
+	&.wideScreen {
+		width: 672px;
+	}
+`;
 
-export { Wrapper, Content }
+const Content = styled.div.attrs({ className: "content" })`
+	height: calc(100% - 36px);
+`;
+
+export { Wrapper, Content };

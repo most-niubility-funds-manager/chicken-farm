@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-25 13:52:48
+ * @LastEditTime: 2020-08-27 16:29:08
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef, useCallback } from "react";
@@ -23,7 +23,7 @@ const FreeTable = () => {
 	const [activeIndex, setActiveIndex] = useState(null);
 	const [tableData, setTableData] = useState([]);
 	const [isEmpty, setIsEmpty] = useState(false);
-	const [requestTimer, setRequestTimer] = useState(null);
+	let fakeTimer = null
 
 	const intervalCheck = () => !isMarketOpen || isEmpty;
 
@@ -49,8 +49,6 @@ const FreeTable = () => {
 			sort: true,
 		},
 		// { title: "基金代码", dataIndex: "code", key: "code", width: 80, textAlign: "center" },
-		{ title: "净值", dataIndex: "lastUnit", key: "lastUnit", width: 80, textAlign: "right" },
-		{ title: "估值", dataIndex: "currUnit", key: "currUnit", width: 80, textAlign: "right" },
 		{
 			title: "持有份额",
 			dataIndex: "totalShare",
@@ -68,6 +66,8 @@ const FreeTable = () => {
 			tag: true,
 			sort: true,
 		},
+		{ title: "净值", dataIndex: "lastUnit", key: "lastUnit", width: 80, textAlign: "right" },
+		{ title: "估值", dataIndex: "currUnit", key: "currUnit", width: 80, textAlign: "right" },
 		{
 			title: "持仓成本",
 			dataIndex: "totalAmount",
@@ -83,15 +83,14 @@ const FreeTable = () => {
 
 		if (Object.prototype.toString.call(result) !== "[object Promise]") {
 			if (intervalCheck()) {
-				clearTimeout(requestTimer);
+				clearTimeout(fakeTimer);
 				cb(result);
 				return;
 			} else {
-				const timer = setTimeout(() => {
+				fakeTimer = setTimeout(() => {
 					poll(fn, cb);
 				}, 3000);
 				cb(result);
-				setRequestTimer(timer);
 			}
 		}
 	};
@@ -112,10 +111,6 @@ const FreeTable = () => {
 			.then((data) => sortData(data, currentSort));
 
 	useEffect(() => {
-		clearTimeout(requestTimer);
-	}, [currentSort]);
-
-	useEffect(() => {
 		poll(getIndexedFunds, (data) => {
 			const tempTableData = [];
 			data.map((v, i) => {
@@ -130,6 +125,10 @@ const FreeTable = () => {
 			setTableData(tempTableData);
 			calcTotalIncome(tempTableData);
 		});
+
+		return () => {
+			clearTimeout(fakeTimer)
+		}
 	}, [isMarketOpen, forceUpdate, currentSort]);
 
 	const leftTable = config.filter(({ fixed }) => fixed === "left");

@@ -167,6 +167,7 @@ const Btn = styled.button`
 	color: ${(props) => props.theme.normal};
 	font-size: 12px;
 	cursor: pointer;
+	line-height: initial;
 
 	&.disabled {
 		background-color: ${(props) => props.theme.addBtnDisabled};
