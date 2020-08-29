@@ -1,14 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Wrapper, Mask, Content, Title, Input, Error, Succ } from "./index.style";
+import { useSelector } from "react-redux";
+import { Wrapper, Mask, Content, Title, Input, Btn, Footer, BtnGroup } from "./index.style";
 import { addAllFunds, convertCodeFetch, updateSingleFund } from "../../services";
+import Alert from './alert'
 
 const ImportCard = (props) => {
 	const { active, closeEvent } = props;
+	const theme = useSelector(state => state.theme)
 	const inputEl = useRef(null);
-	const [isError, setError] = useState(false);
-	const [isLoading, setLoading] = useState(false);
-	const [isSucc, setSucc] = useState(false);
+	const [dataState, setDataState] = useState(0);	//	0 无状态 1 成功 2 失败 3 loading
 
 	useEffect(() => {
 		inputEl.current.focus();
@@ -28,7 +28,7 @@ const ImportCard = (props) => {
 		const str = reg.exec(value);
 
 		if (!str) {
-			setError(true);
+			setDataState(2);
 			return;
 		}
 
@@ -46,7 +46,7 @@ const ImportCard = (props) => {
 				};
 			});
 
-			setLoading(true);
+			setDataState(3);
 			// 若有新增基金，加入表同时改变了份额；再逐个更新一遍数据
 			addAllFunds(fundData)
 				.then((_) =>
@@ -55,22 +55,27 @@ const ImportCard = (props) => {
 					)
 				)
 				.then((_) => {
-					setLoading(false);
-					setSucc(true);
+					setDataState(1);
+					closeEvent()
 				});
 		} catch (error) {
-			setError(true);
+			setDataState(2);
 		}
 	};
 
 	return (
 		<Wrapper>
 			<Mask className={!active && "cancel"} onClick={closeEvent}></Mask>
-			<Content className={!active && "cancel"}>
-				<Title>导入数据</Title>
-				<Input type="text" ref={inputEl} onKeyDown={keydownHandler} />
-				{isError && <Error></Error>}
-				{isSucc && <Succ></Succ>}
+			<Content className={!active && "cancel"} theme={theme}>
+				<Title theme={theme}>导入数据</Title>
+				<Input type="text" ref={inputEl} onKeyDown={keydownHandler} theme={theme} />
+				<Footer>
+					<Alert theme={theme} isError={dataState} />
+					<BtnGroup>
+						<Btn theme={theme} onClick={closeEvent}>取消</Btn>
+						<Btn theme={theme} className="primary" onClick={submitHandler}>确定</Btn>
+					</BtnGroup>
+				</Footer>
 			</Content>
 		</Wrapper>
 	);

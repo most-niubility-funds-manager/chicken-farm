@@ -4,22 +4,27 @@ import Color from 'color';
 const Section = styled.div.attrs({ className: 'section-item' })`
   width: 100%;
   height: 40px;
-  color: ${props => props.theme.crease};
-  background-color: ${props => props.theme.background};
+  color: ${props => props.theme.increase};
+  background-color: ${props => props.theme.theadBg};
   display: grid;
   align-items: center;
   grid-template-columns: 40% 1fr;
   padding: 0 4px;
   cursor: pointer;
   transition: all 0.2s ease;
+
+  &.bad {
+    color: ${props => props.theme.decrease};
+  }
+
   &:hover {
-    background-color: ${props => Color(props.theme.background).darken(0.3).rgb().string()};
+    background-color: ${props => Color(props.theme.theadBg).darken(0.3).rgb().string()};
   }
 `
 
 const Name = styled.div.attrs({ className: 'item-name' })`
   font-size: 12px;
-  color: ${props => props.theme.color};
+  color: ${props => props.theme.normal};
   text-align: center;
   
   &:hover {

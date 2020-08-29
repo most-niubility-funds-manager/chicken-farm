@@ -7,6 +7,7 @@ const Wrapper = styled.div.attrs({ className: 'table-sort' })`
   position: relative;
   vertical-align: -6px;
   margin-left: 6px;
+  cursor: pointer;
 
   &::before {
     position: absolute;

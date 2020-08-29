@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Section, Name, Number, Detail } from "./index.style";
+import React from "react";
+import { Section, Name, Number } from "./index.style";
 
 const SectionItem = (props) => {
 	const {
-		data: { theme, name, total, count, percent },
+		theme,
+		data: { name, total, count, percent },
 		clickEvent,
 		type,
 	} = props;
@@ -21,7 +22,9 @@ const SectionItem = (props) => {
 			<Name theme={theme} onClick={openMarket}>
 				{name.substr(0, 2)}
 			</Name>
-			<Number onClick={clickEvent}>{sectionData[type]}</Number>
+			<Number onClick={clickEvent} className={!isRise && "bad"}>
+				{sectionData[type]}
+			</Number>
 		</Section>
 	);
 };

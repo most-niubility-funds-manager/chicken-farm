@@ -2,19 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Wrapper, ListItem } from "./index.style";
 import { Switch } from "antd";
-import "antd/dist/antd.css";
 import { getFundsCode } from "../../services";
 import { getLocal, setLocal } from "../../services/localStorage";
 import { exportTxt } from "../../../../utils";
-import { setImportState, toggleWideScreen as tws } from "../../redux/actions";
+import { changeTheme, setImportState, toggleWideScreen as tws } from "../../redux/actions";
 import Constants from "../../../../constants";
+import { theme as styleTheme } from "../../../styles";
+import "antd/dist/antd.css";
 
 const Menu = (props) => {
 	const { theme, active, closeEvent } = props;
 	const userConfig = getLocal(Constants.LOCAL_CONFIG);
-	const [notify, setNotify] = useState(userConfig.notify || false);
-	const [wideScreen, setWideScreen] = useState(userConfig.wideScreen || false);
-	const [creaseReverse, setCreaseReverse] = useState(userConfig.creaseReverse || false);
+	const [notify, setNotify] = useState((userConfig && userConfig.notify) || false);
+	const [wideScreen, setWideScreen] = useState((userConfig && userConfig.wideScreen) || false);
+	const [creaseReverse, setCreaseReverse] = useState(
+		(userConfig && userConfig.creaseReverse) || false
+	);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -42,8 +45,10 @@ const Menu = (props) => {
 	// 颜色反转
 	const toggleCrease = () => {
 		const value = !creaseReverse;
+		const localTheme = `dark${value ? "Reverse" : ""}`;
 		setCreaseReverse(value);
-		setLocal(Constants.LOCAL_CONFIG, { creaseReverse: value });
+		dispatch(changeTheme(styleTheme[localTheme]));
+		setLocal(Constants.LOCAL_CONFIG, { creaseReverse: value, theme: localTheme });
 	};
 
 	// 消息通知开关
@@ -69,8 +74,8 @@ const Menu = (props) => {
 	};
 
 	return (
-		<Wrapper className={!active && "cancel"}>
-			<ListItem onClick={toggleWideScreen}>
+		<Wrapper className={!active && "cancel"} theme={theme}>
+			<ListItem onClick={toggleWideScreen} theme={theme}>
 				<i>
 					<svg width="20" height="20" viewBox="0 0 20 20">
 						<path
@@ -83,17 +88,17 @@ const Menu = (props) => {
 				<span>宽屏模式</span>
 				<Switch size="small" defaultChecked={wideScreen} checked={wideScreen}></Switch>
 			</ListItem>
-			<ListItem onClick={toggleCrease}>
-				<i className="iconfont"></i>
+			<ListItem onClick={toggleCrease} theme={theme}>
+				<i className="iconfont chicken-fanzhuanjingtou"></i>
 				<span>涨跌反转</span>
 				<Switch size="small" defaultChecked={creaseReverse} checked={creaseReverse}></Switch>
 			</ListItem>
-			<ListItem onClick={toggleNotify}>
+			<ListItem onClick={toggleNotify} theme={theme}>
 				<i className="iconfont chicken-notice"></i>
 				<span>每日交易提醒</span>
 				<Switch size="small" defaultChecked={notify} checked={notify}></Switch>
 			</ListItem>
-			<ListItem onClick={exportData}>
+			<ListItem onClick={exportData} theme={theme}>
 				<i>
 					<svg width="20" height="20" viewBox="0 0 20 20">
 						<path
@@ -105,7 +110,7 @@ const Menu = (props) => {
 				</i>
 				<span>导出数据</span>
 			</ListItem>
-			<ListItem onClick={importData}>
+			<ListItem onClick={importData} theme={theme}>
 				<i>
 					<svg width="20" height="20" viewBox="0 0 20 20">
 						<path
@@ -117,7 +122,7 @@ const Menu = (props) => {
 				</i>
 				<span>导入数据</span>
 			</ListItem>
-			<ListItem>
+			<ListItem theme={theme}>
 				<i className="iconfont chicken-wenhao"></i>
 				<span>帮助文档</span>
 			</ListItem>

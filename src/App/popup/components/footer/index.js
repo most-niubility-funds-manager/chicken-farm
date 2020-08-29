@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-26 11:21:12
+ * @LastEditTime: 2020-08-28 10:15:30
  * @Description: my footer
  */
 
@@ -58,9 +58,9 @@ const FooterBox = () => {
 	}
 
 	const toggleMenu = () => {
-		if (!isMenuOpen) {
-			setMenuOpen(true)
+		if (!menuOpen) {
 			dispatch(setMenuState(true));
+			setMenuOpen(true)
 		} else {
 			closeMenu()
 		}
@@ -89,7 +89,7 @@ const FooterBox = () => {
 				<span className="iconfont chicken-more" onClick={toggleMenu}></span>
 			</Toolbar>
 			{/* 菜单 */}
-			{ menuOpen && <Menu active={isMenuOpen} closeEvent={closeMenu} /> }
+			{ menuOpen && <Menu theme={theme} active={isMenuOpen} closeEvent={closeMenu} /> }
 		</Wrapper>
 	);
 };

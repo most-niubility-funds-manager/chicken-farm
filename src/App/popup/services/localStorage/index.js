@@ -1,12 +1,12 @@
 /*
  * @Date: 2020-08-10 16:46:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-25 22:55:46
+ * @LastEditTime: 2020-08-29 10:09:39
  * @Description: localStorage的基础方法封装
  */
 
 // chicken-farm的用户配置  'fund-manager-config'
-// config  用户配置 | hide 隐藏总收益 | sort {key: 0 无 1 降序 2 升序} | theme | notify | wideScreen | creaseReverse
+// config  用户配置 | hide 隐藏总收益 | sort {key: 0 无 1 降序 2 升序} | theme | notify | wideScreen | creaseReverse | sectionView
 /**
  * @description: 插入
  * @param {String} key 键名

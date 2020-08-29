@@ -4,43 +4,38 @@ import { Wrapper } from "./index.style";
 import Section from "./section/index";
 import { getLargeCap } from "../../services/index";
 import { requestRecursion } from "../../../../utils";
+import { getLocal, setLocal } from "../../services/localStorage";
+import Constants from "../../../../constants";
 
 const SectionGroup = () => {
-  const [data, setData] = useState([]);
-  const [type, setType] = useState(0)
-  const theme = useSelector((state) => state.theme);
-  const isMarketOpen = useSelector((state) => state.isMarketOpen)
-  const intervalCheck = () => !isMarketOpen
+	const userConfig = getLocal(Constants.LOCAL_CONFIG);
+	const [data, setData] = useState([]);
+	const [type, setType] = useState(userConfig && userConfig.sectionView || 0);
+	const theme = useSelector((state) => state.theme);
+	const isMarketOpen = useSelector((state) => state.isMarketOpen);
+	const intervalCheck = () => !isMarketOpen;
 
-  useEffect(() => {
-    requestRecursion({
-      fns: getLargeCap, 
-      check: intervalCheck, 
-      time: 3000,
-      callback: (originData) => {
-        const formatData = originData.map((v) => ({
-          ...v,
-          theme: {
-            background: theme.theadBg,
-            color: theme.normal,
-            crease: v.count > 0 ? theme.increase : theme.decrease,
-          },
-        }));
-    
-        setData(formatData);
-      }
-    });
-  }, [isMarketOpen])
+	useEffect(() => {
+		requestRecursion({
+			fns: getLargeCap,
+			check: intervalCheck,
+			time: 3000,
+			callback: (originData) => {
+				setData(originData);
+			},
+		});
+	}, [isMarketOpen]);
 
-  const changeType = () => {
-    const num = type + 1 > 2 ? 0 : type + 1
-    setType(num)
-  }
+	const changeType = () => {
+		const num = type + 1 > 2 ? 0 : type + 1;
+		setType(num);
+		setLocal(Constants.LOCAL_CONFIG, { sectionView: num });
+	};
 
 	return (
 		<Wrapper theme={theme}>
 			{data.map((item) => (
-				<Section data={item} key={item.name} clickEvent={changeType} type={type} />
+				<Section data={item} key={item.name} theme={theme} clickEvent={changeType} type={type} />
 			))}
 		</Wrapper>
 	);

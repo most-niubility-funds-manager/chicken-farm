@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-27 16:48:23
+ * @LastEditTime: 2020-08-29 11:23:12
  * @Description: 主页面
  */
 
@@ -32,21 +32,21 @@ import ImportCard from "../../components/importCard";
 import { createDB } from "../../services/indexDB";
 
 const Home = () => {
-	const userTheme = theme.dark;
 	const tables = {};
 	const dispatch = useDispatch();
 	const holiday_table = { year: false, data: false };
 	const funds_table = { code: false, name: false, unit: false, state: false, create: false };
 	const trade_table = { code: false, name: false, unit: false, state: false, time: false };
+	const stateTheme = useSelector((state) => state.theme);
 	const isSearch = useSelector((state) => state.isSearch); //	是否在查询结果
 	const isImport = useSelector((state) => state.isImport); //	是否开启导入
-	const isWideScreen = useSelector(state => state.isWideScreen)	//	是否宽屏
+	const isWideScreen = useSelector((state) => state.isWideScreen); //	是否宽屏
 	const activeFundCode = useSelector((state) => state.activeFundCode); //	是否激活详情面板
 	const localConfig = getLocal(Constant.LOCAL_CONFIG);
 	const [searchClose, setSearchOpen] = useState(false);
 	const [detailClose, setDetailOpen] = useState(false);
 	const [importClose, setImportOpen] = useState(false);
-	const localSort = localConfig.sort || "name_0";
+	const localSort = (localConfig && localConfig.sort) || "name_0";
 
 	useEffect(() => {
 		isSearch && setSearchOpen(true);
@@ -61,8 +61,8 @@ const Home = () => {
 	}, [isImport]);
 
 	dispatch(setSortKey(localSort));
-	dispatch(changeTheme(userTheme));
-	dispatch(toggleWideScreen(localConfig.wideScreen || false))
+	dispatch(changeTheme((localConfig && theme[localConfig.theme]) || theme["dark"]));
+	dispatch(toggleWideScreen((localConfig && localConfig.wideScreen) || false));
 
 	tables[Constant.INDEX_HOLIDAY] = holiday_table;
 	tables[Constant.INDEX_FUND] = funds_table;
@@ -126,7 +126,7 @@ const Home = () => {
 	};
 
 	return (
-		<Wrapper theme={userTheme} className={ isWideScreen && 'wideScreen'} >
+		<Wrapper theme={stateTheme} className={isWideScreen && "wideScreen"}>
 			<Content>
 				<SectionGroup />
 				<NewsBar />

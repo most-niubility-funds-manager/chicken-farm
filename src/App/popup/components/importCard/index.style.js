@@ -7,6 +7,7 @@ const Wrapper = styled.div.attrs({ className: 'card-wrapper' })`
   top: 0;
   left: 0;
   z-index: 10;
+  backface-visibility: hidden;
 `
 
 const fadeIn = keyframes`
@@ -34,6 +35,7 @@ const Mask = styled.div`
   height: 100%;
   background-color: transparent;
   animation: ${fadeIn} 0.2s ease forwards;
+  will-change: backdrop-filter;
 
   &.cancel {
     animation: ${fadeOut} 0.2s ease forwards;
@@ -42,18 +44,22 @@ const Mask = styled.div`
 
 const popIn = keyframes`
   from {
-    transform: scale(0) translate(-50%, -50%);
+    opacity: 0;
+    transform: translate(-50%, -40%);
   }
   to {
-    transform: scale(1) translate(-50%, -50%);
+    opacity: 1;
+    transform: translate(-50%, -50%);
   }
 `
 const popOut = keyframes`
   from {
-    transform: scale(1) translate(-50%, -50%);
+    opacity: 1;
+    transform: translate(-50%, -50%);
   }
   to {
-    transform: scale(0) translate(-50%, -50%);
+    opacity: 0;
+    transform: translate(-50%, -40%);
   }
 `
 
@@ -62,12 +68,13 @@ const Content = styled.div`
   top: 50%;
   left: 50%;
   width: 450px;
-  height: 200px;
   border-radius: 5px;
-  transform-origin: center center;
-  background-color: #000;
+  opacity: 0;
+  transform: translate(-50%, -40%);
+  background-color: ${props => props.theme.importCardBg};
   animation: ${popIn} 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.075) forwards;
-  padding: 15px;
+  padding: 20px;
+  will-change: opacity transform;
 
   &.cancel {
     animation: ${popOut} 0.2s ease forwards;
@@ -78,7 +85,7 @@ const Title = styled.div`
   height: 30px;
   line-height: 30px;
   font-size: 16px;
-  color: #fff;
+  color: ${props => props.theme.importCardBtn};
   text-align: left;
   margin-bottom: 20px;
 `
@@ -88,28 +95,35 @@ const Input = styled.input`
   height: 36px;
   border-radius: 2px;
   margin-bottom: 20px;
-  background-color: #000;
+  background-color: ${props => props.theme.importCardBg};
   border: 1px solid #333;
-  color: #fff;
+  color: ${props => props.theme.importCardBtn};
   padding: 0 1em;
 `
 
-const Error = styled.p`
-  width: 100%;
-  height: 24px;
-  border-radius: 2px;
-  border: 1px solid red;
-  font-size: 12px;
-  color: #fff;
+const Footer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `
 
-const Succ = styled.p`
-  width: 100%;
-  height: 24px;
-  border-radius: 2px;
-  border: 1px solid green;
-  font-size: 12px;
-  color: #fff;
+const BtnGroup = styled.div`
+  display: flex;
+  align-items: center;
 `
 
-export { Wrapper, Mask, Content, Title, Input, Error, Succ }
+const Btn = styled.button`
+  padding: 4px 6px;
+  border-radius: 2px;
+  font-size: 12px;
+  color: ${props => props.theme.importCardBtn};
+  background-color: ${props => props.theme.importCardBtnBg};
+  margin-left: 10px;
+  cursor: pointer;
+
+  &.primary {
+    background-color: ${props => props.theme.importCardBtnDoneBg};
+  }
+`
+ 
+export { Wrapper, Mask, Content, Title, Input, Footer, BtnGroup, Btn }

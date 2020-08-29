@@ -31,6 +31,7 @@ const BoxBg = styled.div`
 	height: 40px;
 	background-color: ${(props) => (props.type ? props.theme.increaseBg : props.theme.decreaseBg)};
 	animation: ${props => animateWidth(props.width)} 0.5s ease-out forwards;
+	will-change: width;
 `;
 
 const BoxContent = styled.div`
