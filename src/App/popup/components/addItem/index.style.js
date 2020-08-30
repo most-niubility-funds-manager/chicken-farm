@@ -26,12 +26,11 @@ const Input = styled.input`
   caret-color: ${props => props.theme.normal};
   color: ${props => props.theme.normal};
   background-color: ${props => props.theme.searchBg};
-  transform: translateY(100%);
-  animation: ${slideUp} 0.2s linear 0.2s forwards;
+  /* animation: ${slideUp} 0.2s linear 0.2s forwards; */
   vertical-align: bottom;
 `
 
-const Button = styled.a`
+const Button = styled.button`
   display: inline-flex;
   width: 36px;
   height: 36px;
@@ -42,6 +41,11 @@ const Button = styled.a`
   color: ${props => props.theme.normal};
   font-size: 20px;
   cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: ${props => props.theme.searchBtnHover};
+  }
 `
 
 export { Wrapper, Input, Button }

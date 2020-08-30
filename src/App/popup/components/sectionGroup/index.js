@@ -13,6 +13,7 @@ const SectionGroup = () => {
 	const [type, setType] = useState(userConfig && userConfig.sectionView || 0);
 	const theme = useSelector((state) => state.theme);
 	const isMarketOpen = useSelector((state) => state.isMarketOpen);
+	const isWideScreen = useSelector((state) => state.isWideScreen); //	是否宽屏
 	const intervalCheck = () => !isMarketOpen;
 
 	useEffect(() => {
@@ -33,7 +34,7 @@ const SectionGroup = () => {
 	};
 
 	return (
-		<Wrapper theme={theme}>
+		<Wrapper theme={theme} wide={isWideScreen}>
 			{data.map((item) => (
 				<Section data={item} key={item.name} theme={theme} clickEvent={changeType} type={type} />
 			))}

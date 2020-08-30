@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div.attrs({ className: "footer" })`
-	width: 100%;
+	width: ${props => props.wide ? '672px' : '500px'};
+  will-change: width;
 	height: 36px;
 	position: absolute;
 	bottom: 0;

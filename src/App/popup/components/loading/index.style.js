@@ -51,4 +51,32 @@ const Content = styled.div`
 	}
 `;
 
-export { Wrapper, Content };
+const rotate = keyframes`
+	from {
+		transform: translateY(-50%) rotate(0deg);
+	}
+	to {
+		transform: translateY(-50%) rotate(360deg);
+	}
+`
+
+const TextWrapper = styled.p.attrs({ className: 'loading-text' })`
+	font-size: 14px;
+	color: ${(props) => props.theme.loading};
+	position: relative;
+
+	&::before {
+		position: absolute;
+		top: 50%;
+		left: -30px;
+		content: "";
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		border: 2px solid ${(props) => props.theme.loading};
+		border-right: none;
+		animation: ${rotate} 0.5s linear forwards infinite;
+	}
+`
+
+export { Wrapper, Content, TextWrapper };

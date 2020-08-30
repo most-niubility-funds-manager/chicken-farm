@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div.attrs({ className: 'tabel-wrapper' })`
-  width: 100%;
+  width: ${props => props.wide ? '672px' : '500px'};
+  will-change: width;
   height: 392px;
   position: relative;
   overflow: auto;

@@ -45,9 +45,11 @@ const NewsBar = () => {
 	const mouseenterHandler = () => setStop(true);
 	const mouseleaveHandler = () => setStop(false);
 
+	const openNewResource = () => window.open('https://news.10jqka.com.cn/realtimenews.html')
+
 	return (
 		<Wrapper>
-			<Title theme={theme}>最新资讯:</Title>
+			<Title theme={theme} onClick={openNewResource}>最新资讯:</Title>
 			<Marquee onMouseEnter={mouseenterHandler} onMouseLeave={mouseleaveHandler}>
 				<LinkWrapper theme={theme} style={{ transform: `translateX(-${offset}px)` }}>
 					{news.map(({ url, title }) => (

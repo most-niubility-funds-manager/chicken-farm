@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-30 14:13:11
+ * @LastEditTime: 2020-08-30 15:15:36
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef, useCallback } from "react";
@@ -15,6 +15,7 @@ import Loading from "../loading";
 
 const FreeTable = () => {
 	const theme = useSelector((state) => state.theme);
+	const isWideScreen = useSelector((state) => state.isWideScreen); //	是否宽屏
 	const forceUpdate = useSelector((state) => state.isSearchUpdate);
 	const isMarketOpen = useSelector((state) => state.isMarketOpen);
 	const currentSort = useSelector((state) => state.sortKey); //	当前排序方式
@@ -182,7 +183,7 @@ const FreeTable = () => {
 	};
 
 	return (
-		<Wrapper ref={TableEL} onScroll={ScrollHandler} className={!tableData.length && "loading"}>
+		<Wrapper ref={TableEL} onScroll={ScrollHandler} className={!tableData.length && "loading"} wide={isWideScreen}>
 			{!tableData.length && !isEmpty && (
 				<LoadingWrapper theme={theme}>
 					<Loading multi={3} />

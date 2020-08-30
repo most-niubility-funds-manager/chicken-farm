@@ -13,6 +13,11 @@ const Title = styled.p`
   display: flex;
   align-items: center;
   color: ${props => Color(props.theme.normal).alpha(0.5)};
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `
 
 const Marquee = styled.div`

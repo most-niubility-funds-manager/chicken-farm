@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-28 10:47:44
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-30 11:00:38
+ * @LastEditTime: 2020-08-30 15:39:11
  * @Description: 搜索结果页
  */
 
@@ -67,7 +67,6 @@ const SearchPage = (props) => {
 
 	return (
 		<Wrapper>
-			<Mask onClick={closeEvent} className={!active && "cancel"}></Mask>
 			<Content theme={theme} className={!active && "cancel"}>
 				<CloseBtn className="iconfont chicken-close" theme={theme} onClick={closeEvent} />
 				<Title theme={theme}>基金搜索:</Title>

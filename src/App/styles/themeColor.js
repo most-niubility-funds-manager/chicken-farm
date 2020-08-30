@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:52:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-29 11:34:31
+ * @LastEditTime: 2020-08-30 15:49:19
  * @Description: 主题色
  */
 import C from "./chromatography";
@@ -15,6 +15,7 @@ const dark = {
 	footer: C["color-black-2"],
 	searchBg: C["color-black-1"],
 	searchBtn: C["color-blue-2"],
+	searchBtnHover: C["color-blue-15"],
 	normal: C["color-white-1"],
 	marqueeColor: C["color-white-4"],
 	theadBg: C["color-black-4"],

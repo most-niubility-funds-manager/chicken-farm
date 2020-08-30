@@ -12,7 +12,7 @@ const Wrapper = styled.div.attrs({ className: 'table-sort' })`
   &::before {
     position: absolute;
     top: 4px;
-    left: 0;
+    right: 0;
     content: "";
     width: 0;
     height: 0;
@@ -24,7 +24,7 @@ const Wrapper = styled.div.attrs({ className: 'table-sort' })`
   &::after {
     position: absolute;
     bottom: 4px;
-    left: 0;
+    right: 0;
     content: "";
     width: 0;
     height: 0;
@@ -43,6 +43,15 @@ const Wrapper = styled.div.attrs({ className: 'table-sort' })`
     &::after {
       border-color: ${props => props.theme.tableSortActive} transparent transparent transparent;
     }
+  }
+
+  span {
+    position: absolute;
+    top: -10px;
+    right: -20px;
+    width: 100px;
+    height: 40px;
+    cursor: pointer;
   }
 `
 

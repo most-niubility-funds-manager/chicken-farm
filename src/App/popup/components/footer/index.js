@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-28 10:15:30
+ * @LastEditTime: 2020-08-30 15:18:00
  * @Description: my footer
  */
 
@@ -16,6 +16,7 @@ import Menu from '../menu'
 
 const FooterBox = () => {
 	const theme = useSelector((state) => state.theme);
+	const isWideScreen = useSelector((state) => state.isWideScreen); //	是否宽屏
 	const totalIncome = useSelector((state) => state.totalIncome);
 	const totalCrease = useSelector((state) => state.totalCrease);
 	const isMenuOpen = useSelector(state => state.isMenuOpen)
@@ -74,7 +75,7 @@ const FooterBox = () => {
 	};
 
 	return (
-		<Wrapper theme={theme}>
+		<Wrapper theme={theme} wide={isWideScreen}>
 			<StateBox theme={theme} isOpen={statusText === Constants.MARKET_OPEN}>
 				{statusText}
 			</StateBox>

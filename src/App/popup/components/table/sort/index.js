@@ -38,7 +38,9 @@ const SortIcon = (props) => {
 			theme={theme}
 			className={sortState === 0 ? "" : sortState === 1 ? "ascending" : "descending"}
 			onClick={clickHandler}
-		></Wrapper>
+		>
+			<span></span>
+		</Wrapper>
 	);
 };
 
