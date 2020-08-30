@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-27 22:52:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-26 11:26:02
+ * @LastEditTime: 2020-08-30 14:36:57
  * @Description: 全局样式
  */
 
@@ -79,7 +79,7 @@ export const GlobalStyle = createGlobalStyle`
     background-color: #1d5490;
   }
   body {
-    background-color: rgb(18, 18, 18);
+    background-color: ${(props) => props.bg || 'rgb(18, 18, 18)'};
     font-family: SanFrancisco, DIN;
   }
 `;

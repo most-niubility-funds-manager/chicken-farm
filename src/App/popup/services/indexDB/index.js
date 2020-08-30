@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 12:40:25
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-10 17:30:39
+ * @LastEditTime: 2020-08-30 11:15:04
  * @Description: indexdb数据库操作
  */
 
@@ -72,8 +72,7 @@ const indexedAdd = ({ store, table, data }) =>
 				const result = db.transaction([table], "readwrite").objectStore(table);
 				//  指定表对应的事务状态 '读写'
 				data.forEach((item) => result.add(item));
-
-				resolve();
+				resolve(result);
 			})
 			.catch((e) => reject(e));
 	});

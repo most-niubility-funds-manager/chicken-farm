@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-27 16:29:08
+ * @LastEditTime: 2020-08-30 14:13:11
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef, useCallback } from "react";
@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setActiveTr, updateForce, setTotalIncome, setTotalCrease } from "../../redux/actions";
 import { Wrapper, LoadingWrapper, EmptyFund } from "./index.style";
 import { getFundsCode, fetchAllFunds, updateSingleFund, syncFundsActively } from "../../services";
-import { requestRecursion, sortData } from "../../../../utils";
+import { sortData } from "../../../../utils";
 import SubTable from "./subTable";
 import Loading from "../loading";
 
@@ -23,7 +23,7 @@ const FreeTable = () => {
 	const [activeIndex, setActiveIndex] = useState(null);
 	const [tableData, setTableData] = useState([]);
 	const [isEmpty, setIsEmpty] = useState(false);
-	let fakeTimer = null
+	let fakeTimer = null;
 
 	const intervalCheck = () => !isMarketOpen || isEmpty;
 
@@ -108,7 +108,10 @@ const FreeTable = () => {
 					return [];
 				}
 			})
-			.then((data) => sortData(data, currentSort));
+			.then((data) => sortData(data, currentSort))
+			.catch((_) => {
+				setIsEmpty(true);
+			});
 
 	useEffect(() => {
 		poll(getIndexedFunds, (data) => {
@@ -127,8 +130,8 @@ const FreeTable = () => {
 		});
 
 		return () => {
-			clearTimeout(fakeTimer)
-		}
+			clearTimeout(fakeTimer);
+		};
 	}, [isMarketOpen, forceUpdate, currentSort]);
 
 	const leftTable = config.filter(({ fixed }) => fixed === "left");
@@ -155,6 +158,7 @@ const FreeTable = () => {
 	};
 	const modifyUnitBlurHandler = (index, unit) => {
 		const { code } = tableData[index];
+		console.log('blur 修改数据')
 		updateSingleFund({ unit }, { k: "code", v: code }).then((_) => syncFundsActively());
 	};
 	// 总收益

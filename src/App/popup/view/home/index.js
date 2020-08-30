@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-29 11:23:12
+ * @LastEditTime: 2020-08-30 14:15:05
  * @Description: 主页面
  */
 
@@ -71,7 +71,9 @@ const Home = () => {
 	createDB({
 		store: Constant.INDEX_STORE,
 		tables,
-	}).then((_) => syncCloudFunds());
+	})
+		.then((_) => syncCloudFunds())
+		.catch((_) => console.log("无数据库", _));
 
 	// 关闭搜索框后更新tableData, 清空search
 	const closeSearchPage = () => {
@@ -80,6 +82,7 @@ const Home = () => {
 		setTimeout(() => {
 			dispatch(updateForce(true));
 			setSearchOpen(false);
+			dispatch(updateForce(false));
 		}, 200);
 	};
 
@@ -93,7 +96,9 @@ const Home = () => {
 	const closeImportCard = () => {
 		dispatch(setImportState(false));
 		setTimeout(() => {
+			dispatch(updateForce(true));
 			setImportOpen(false);
+			dispatch(updateForce(false));
 		}, 200);
 	};
 

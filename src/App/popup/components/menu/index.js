@@ -122,10 +122,10 @@ const Menu = (props) => {
 				</i>
 				<span>导入数据</span>
 			</ListItem>
-			<ListItem theme={theme}>
+			{/* <ListItem theme={theme}>
 				<i className="iconfont chicken-wenhao"></i>
 				<span>帮助文档</span>
-			</ListItem>
+			</ListItem> */}
 		</Wrapper>
 	);
 };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-26 14:05:35
+ * @LastEditTime: 2020-08-30 14:09:53
  * @Description: 天天基金api
  */
 
@@ -216,13 +216,48 @@ const updateSingleFund = async (data, key) => {
 		table: Constants.INDEX_FUND,
 		data,
 		key,
-	}).then(({ id, name, code, state, unit }) =>
-		indexedUpdate({
+	}).then((indexData) => {
+		const { id, name, code, state, unit } = indexData;
+		return indexedUpdate({
 			store: Constants.INDEX_STORE,
 			table: Constants.INDEX_FUND,
 			data: { name, code, state, id, unit, ...data },
-		})
-	);
+		});
+	});
+};
+
+/**
+ * @description: 导入数据的修改判断
+ * @param {Array} data
+ */
+const updateFundByImport = async (data) => {
+	// 获取数据库中匹配的数据 无为null
+	return Promise.all(
+		data.map(({ code }) =>
+			indexedFindSingle({
+				store: Constants.INDEX_STORE,
+				table: Constants.INDEX_FUND,
+				key: { k: "code", v: code },
+			})
+		)
+	).then((indexDatas) => {
+		console.log("数据库中数据", indexDatas, data);
+		return indexDatas.map((fund, idx) => {
+			if (fund) {
+				return indexedUpdate({
+					store: Constants.INDEX_STORE,
+					table: Constants.INDEX_FUND,
+					data: { ...fund, ...data[idx] },
+				});
+			} else {
+				return indexedAdd({
+					store: Constants.INDEX_STORE,
+					table: Constants.INDEX_FUND,
+					data: [{ ...data[idx] }],
+				});
+			}
+		});
+	});
 };
 
 /**
@@ -509,4 +544,5 @@ export {
 	getSyncStorage,
 	setSyncStorage,
 	syncFundsActively,
+	updateFundByImport,
 };

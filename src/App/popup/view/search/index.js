@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-28 10:47:44
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-25 10:32:56
+ * @LastEditTime: 2020-08-30 11:00:38
  * @Description: 搜索结果页
  */
 
@@ -21,7 +21,7 @@ import {
 	LoadingWrapper,
 } from "./index.style";
 import { useSelector } from "react-redux";
-import { updateSingleFund, addAllFunds } from "../../services";
+import { addAllFunds } from "../../services";
 import Loading from "../../components/loading";
 import AddItem from "../../components/addItem";
 

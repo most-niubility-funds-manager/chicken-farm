@@ -1,14 +1,19 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Wrapper, Mask, Content, Title, Input, Btn, Footer, BtnGroup } from "./index.style";
-import { addAllFunds, convertCodeFetch, updateSingleFund } from "../../services";
-import Alert from './alert'
+import {
+	addAllFunds,
+	convertCodeFetch,
+	updateFundByImport,
+	syncFundsActively,
+} from "../../services";
+import Alert from "./alert";
 
 const ImportCard = (props) => {
 	const { active, closeEvent } = props;
-	const theme = useSelector(state => state.theme)
+	const theme = useSelector((state) => state.theme);
 	const inputEl = useRef(null);
-	const [dataState, setDataState] = useState(0);	//	0 无状态 1 成功 2 失败 3 loading
+	const [dataState, setDataState] = useState(0); //	0 无状态 1 成功 2 失败 3 loading
 
 	useEffect(() => {
 		inputEl.current.focus();
@@ -48,15 +53,11 @@ const ImportCard = (props) => {
 
 			setDataState(3);
 			// 若有新增基金，加入表同时改变了份额；再逐个更新一遍数据
-			addAllFunds(fundData)
-				.then((_) =>
-					Promise.all(
-						fundData.map(({ unit, code }) => updateSingleFund({ unit }, { k: "code", v: code }))
-					)
-				)
+			updateFundByImport(fundData)
+				.then((_) => syncFundsActively())
 				.then((_) => {
 					setDataState(1);
-					closeEvent()
+					closeEvent();
 				});
 		} catch (error) {
 			setDataState(2);
@@ -72,8 +73,12 @@ const ImportCard = (props) => {
 				<Footer>
 					<Alert theme={theme} isError={dataState} />
 					<BtnGroup>
-						<Btn theme={theme} onClick={closeEvent}>取消</Btn>
-						<Btn theme={theme} className="primary" onClick={submitHandler}>确定</Btn>
+						<Btn theme={theme} onClick={closeEvent}>
+							取消
+						</Btn>
+						<Btn theme={theme} className="primary" onClick={submitHandler}>
+							确定
+						</Btn>
 					</BtnGroup>
 				</Footer>
 			</Content>
