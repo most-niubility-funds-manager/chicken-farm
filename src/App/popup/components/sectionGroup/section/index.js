@@ -13,6 +13,7 @@ const SectionItem = (props) => {
 	const percentData = isRise ? `+${percent}%` : `${percent}%`;
 	const sectionData = [total, countData, percentData];
 
+	
 	const openMarket = () => {
 		window.open("http://q.10jqka.com.cn/");
 	};
@@ -22,7 +23,7 @@ const SectionItem = (props) => {
 			<Name theme={theme} onClick={openMarket}>
 				{name.substr(0, 2)}
 			</Name>
-			<Number onClick={clickEvent} className={!isRise && "bad"}>
+			<Number onClick={clickEvent} theme={theme} className={!isRise && "bad"}>
 				{sectionData[type]}
 			</Number>
 		</Section>

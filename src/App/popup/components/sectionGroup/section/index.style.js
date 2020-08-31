@@ -13,10 +13,6 @@ const Section = styled.div.attrs({ className: 'section-item' })`
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &.bad {
-    color: ${props => props.theme.decrease};
-  }
-
   &:hover {
     background-color: ${props => Color(props.theme.theadBg).darken(0.3).rgb().string()};
   }
@@ -39,6 +35,10 @@ const Number = styled.p.attrs({ className: 'item-number' })`
   font-size: 14px;
   font-weight: bold;
   text-align: left;
+
+  &.bad {
+    color: ${props => props.theme.decrease};
+  }
 `
 
 const Detail = styled.p.attrs({ className: 'item-detail' })`
