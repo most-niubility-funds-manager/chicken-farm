@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-31 12:03:50
+ * @LastEditTime: 2020-08-31 23:01:40
  * @Description: 天天基金api
  */
 
@@ -546,4 +546,5 @@ export {
 	setSyncStorage,
 	syncFundsActively,
 	updateFundByImport,
+	fetchAllYearholiday
 };

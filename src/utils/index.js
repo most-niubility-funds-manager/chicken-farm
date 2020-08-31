@@ -1,12 +1,11 @@
 /*
  * @Date: 2020-07-22 13:50:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-27 17:51:50
+ * @LastEditTime: 2020-08-31 23:05:27
  * @Description: 小工具
  */
 
 import Constants from "../constants";
-import { getAllYearholiday } from "../App/popup/services";
 
 /**
  * @description: 递归请求，获取到结果后继续请求
@@ -101,11 +100,12 @@ const isMarketOpen = async () => {
 
 /**
  * @description: 到点提醒
+ * @param { Array } holidays
  * @param {String} hour
  * @param {String} minute
  * @return {Boolean}
  */
-const arrivalRemind = async (hour = 14, minute = 55) => {
+const arrivalRemind = async (holidays, hour = 14, minute = 55) => {
 	const SETTING_TIME = getPreciseTime(hour, minute);
 	const TODAY = getPreciseTime();
 	const MINUTE = 1000 * 60;
@@ -113,7 +113,6 @@ const arrivalRemind = async (hour = 14, minute = 55) => {
 	const DIFF = Math.abs(CURRENT_TIME - SETTING_TIME);
 	const weekend = [0, 6]; //	周末的getDay
 
-	const holidays = await getAllYearholiday();
 	const isHoliday = holidays.includes(TODAY) || weekend.includes(new Date().getDay());
 
 	if (isHoliday || DIFF > MINUTE) {
@@ -223,7 +222,6 @@ const exportTxt = (title, content) => {
 	aEl.click();
 	document.body.removeChild(aEl);
 };
-
 
 export {
 	requestRecursion,
