@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-31 10:24:07
+ * @LastEditTime: 2020-08-31 12:03:50
  * @Description: 天天基金api
  */
 
@@ -393,7 +393,7 @@ const fetchFundNews = async (code) => {
 		result = Data.map(({ PUBLISHDATEDesc, TITLE, ID, NEWCATEGORY }) => ({
 			title: TITLE,
 			url: `http://fund.eastmoney.com/gonggao/${code},${ID}.html`,
-			type: typeMap.get(NEWCATEGORY),
+			type: typeMap.get(NEWCATEGORY * 1),
 			time: PUBLISHDATEDesc,
 		}));
 	} catch (error) {
