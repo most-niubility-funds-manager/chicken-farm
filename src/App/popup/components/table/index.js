@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-25 00:20:04
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-30 15:15:36
+ * @LastEditTime: 2020-08-31 10:24:16
  * @Description: 重中之重 多功能表格
  */
 import React, { useEffect, useState, useRef, useCallback } from "react";
@@ -159,7 +159,6 @@ const FreeTable = () => {
 	};
 	const modifyUnitBlurHandler = (index, unit) => {
 		const { code } = tableData[index];
-		console.log('blur 修改数据')
 		updateSingleFund({ unit }, { k: "code", v: code }).then((_) => syncFundsActively());
 	};
 	// 总收益

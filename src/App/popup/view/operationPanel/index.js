@@ -1,14 +1,19 @@
 /*
  * @Date: 2020-07-31 14:08:49
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-22 16:09:15
+ * @LastEditTime: 2020-08-31 10:27:25
  * @Description: 每支基金的操作和基本信息面板
  */
 
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Wrapper, Mask, Content, CloseBtn, Title, DelBtn } from "./index.styled";
-import { fetchFundDetail, getUserSingleFundData, deleteSingleFund, syncFundsActively } from "../../services";
+import {
+	fetchFundDetail,
+	getUserSingleFundData,
+	deleteSingleFund,
+	syncFundsActively,
+} from "../../services";
 import Tab from "../../components/detailTab";
 
 const Operation = (props) => {
@@ -28,10 +33,9 @@ const Operation = (props) => {
 	}, [activeCode]);
 
 	const deleteClickHandler = () => {
-		deleteSingleFund(activeCode).then(() => {
-			syncFundsActively();
-			closeEvent();
-		});
+		deleteSingleFund(activeCode)
+			.then(() => syncFundsActively())
+			.then(() => closeEvent());
 	};
 
 	return (

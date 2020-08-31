@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-30 14:09:53
+ * @LastEditTime: 2020-08-31 10:24:07
  * @Description: 天天基金api
  */
 
@@ -524,6 +524,7 @@ const syncFundsActively = async () => {
 	const result = {};
 	result[Constants.SYNC_FUNDS] = funds;
 
+	console.log('同步数据', result)
 	setSyncStorage(result);
 };
 

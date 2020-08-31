@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Wrapper, Mask, Content, Title, Input, Btn, Footer, BtnGroup } from "./index.style";
 import {
-	addAllFunds,
 	convertCodeFetch,
 	updateFundByImport,
 	syncFundsActively,

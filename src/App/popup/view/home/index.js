@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 16:44:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-30 14:15:05
+ * @LastEditTime: 2020-08-31 10:28:10
  * @Description: 主页面
  */
 
@@ -89,7 +89,9 @@ const Home = () => {
 	const closeOperationPage = () => {
 		dispatch(setActiveTr(0));
 		setTimeout(() => {
+			dispatch(updateForce(true));
 			setDetailOpen(false);
+			dispatch(updateForce(false));
 		}, 200);
 	};
 

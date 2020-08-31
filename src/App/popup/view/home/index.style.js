@@ -6,6 +6,7 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
 	background-color: ${(props) => props.theme.background};
 	position: relative;
 	overflow: hidden;
+	will-change: width;
 
 	&.heightLimit {
 		min-height: 500px;
