@@ -26,6 +26,12 @@ const Fund = {
     return result
   },
 
+  async getDataByKeyValue(option) {
+    const table = dbUtils.getTable(TABLE.WOLAI_EXPORT_FILE)
+    const result = await table.indexedFindSingle(option)
+
+    return result
+  },
 }
 
 module.exports = Fund
