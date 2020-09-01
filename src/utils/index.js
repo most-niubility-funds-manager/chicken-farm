@@ -197,9 +197,9 @@ const sortData = (data, datakey) => {
 	return type * 1 === 1
 		? tempData
 		: tempData.reduce((arr, cur) => {
-				arr.unshift(cur);
-				return arr;
-		  }, []);
+			arr.unshift(cur);
+			return arr;
+		}, []);
 };
 
 /**
