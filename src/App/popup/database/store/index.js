@@ -12,7 +12,7 @@ export default class TableStore extends Client {
     // 模型集合
     // this.models = {};
 
-    this.__store = options.db
+    this.store = options.db
   }
 
   /**
@@ -30,7 +30,9 @@ export default class TableStore extends Client {
    * 定义数据表
    */
   defineTable(tableName, tableOptions) {
-    this.tables[tableName] = new Table(tableName, tableOptions).setStore(this.__store, tableName)
+    this.setStore(this.store)
+
+    this.tables[tableName] = new Table(tableName, tableOptions).setStore(this)
   }
 
   /**

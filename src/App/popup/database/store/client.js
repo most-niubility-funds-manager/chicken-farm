@@ -27,7 +27,20 @@ export default class Client {
  */
 
   constructor() {
-    this.conn = this.openDB()
+    // this.conn = this.openDB()
+  }
+
+  setStore(store) {
+    this.store = store
+  }
+
+    /**
+   * 执行请求命令
+   * @param  {String[]} tableNames 表
+   * @param  {String} command 请求命令
+   */
+  request(...args) {
+    return this.store.transaction(...args)
   }
 
   openDB(store, version = 1) {

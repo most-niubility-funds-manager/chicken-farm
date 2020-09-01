@@ -3,9 +3,10 @@ export default class Table {
   * 设置 TableStore 实例
   * @param {TableStore} store TableStore实例
   */
-  setStore(store, tableName) {
-    this.store = store
-    this.tableName = tableName
+  setStore(props) {
+    this.store = props.store
+    this.request = props.request
+    this.tableName = props.tableName
 
     return this
   }
@@ -16,7 +17,7 @@ export default class Table {
    * @return: promise.resolve
    */
   indexedAdd({ data }) {
-    const result = this.store.transaction([this.tableName], "readwrite").objectStore(this.tableName);
+    const result = this.request([this.tableName], "readwrite").objectStore(this.tableName);
     //  指定表对应的事务状态 '读写'
     data.forEach((item) => result.add(item));
 
@@ -29,7 +30,7 @@ export default class Table {
   */
   indexedFindAll() {
     return new Promise((resolve, reject) => {
-      const transaction = this.store.transaction([this.tableName], "readwrite"); //  指定表对应的事务状态 '读写'
+      const transaction = this.request([this.tableName], "readwrite"); //  指定表对应的事务状态 '读写'
       const objectStore = transaction.objectStore(this.tableName);
       const dataList = []; //  查询结果
 
@@ -52,7 +53,7 @@ export default class Table {
   */
   indexedFindSingle({ key: { k, v } }) {
     return new Promise((resolve, reject) => {
-      const transaction = this.store.transaction([this.tableName], "readwrite");
+      const transaction = this.request([this.tableName], "readwrite");
       const objectStore = transaction.objectStore(this.tableName);
       const index = objectStore.index(k);
       const request = index.get(v);
@@ -74,7 +75,7 @@ export default class Table {
   * @return: Promise.resolve
   */
   indexedUpdate({ data }) {
-    this.store.transaction([this.tableName], "readwrite").objectStore(this.tableName).put(data);
+    this.request([this.tableName], "readwrite").objectStore(this.tableName).put(data);
   }
 
   /**
@@ -84,7 +85,7 @@ export default class Table {
   */
   indexedDelete({ key: { k, v } }) {
     return new Promise((resolve, reject) => {
-      const request = db.transaction([this.tableName], "readwrite").objectStore(this.tableName).openCursor();
+      const request = this.request([this.tableName], "readwrite").objectStore(this.tableName).openCursor();
 
       request.onsuccess = ({ target }) => {
         const { result: cursor } = target;
