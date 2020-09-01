@@ -1,14 +1,16 @@
 import TableStore from '../../database/store'
 
-const clients = {}
-
-export default {
+class DbUtils {
   /*
  * @Date: 2020-07-25 12:40:25
  * @LastEditors: elegantYu
  * @LastEditTime: 2020-08-30 11:15:04
  * @Description: indexdb数据库操作
  */
+
+  constructor() {
+    this.clients = {}
+  }
 
   // 数据库名 chicken-farm
   // 表名及结构
@@ -52,33 +54,42 @@ export default {
       }
       //  失败
       request.onerror = reject;
-    }),
+    })
 
 
   /**
    * 创建数据库实例
    */
 
-  createInstance = async (instanceName, db) => {
+  createInstance = async ({ store, success, ...configs }) => {
+    const db = await this.createDB({ store, ...configs })
+
+    if (success) {
+      success(db)
+    }
+
     const client = new TableStore({ db })
 
     await client.sync()
     // TODO: const tableNames = await client.sync() 建索引表
 
-    clients[instanceName] = db
+    this.clients[store] = db
 
     return client
-  },
+  }
 
   /**
    * 获取数据库实例
    */
 
   getInstance = instanceName => {
-    if (clients[instanceName]) {
-      return clients[instanceName]
+    if (this.clients[instanceName]) {
+      return this.clients[instanceName]
     }
 
     throw new Error('Invalid database instance name.')
   }
+
 }
+
+export default new DbUtils()
