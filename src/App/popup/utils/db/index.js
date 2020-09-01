@@ -47,11 +47,7 @@ class DbUtils {
       };
 
       // 打开
-      request.onsuccess = ({ target: { result } }) => {
-        resolve(result)
-
-        this.createInstance(store, result)
-      }
+      request.onsuccess = ({ target: { result } }) => resolve(result)
       //  失败
       request.onerror = reject;
     })
@@ -64,20 +60,24 @@ class DbUtils {
    */
 
   async createInstance({ store, success, ...configs }) {
-    const db = await this.createDB({ store, ...configs })
+    try {
+      const db = await this.createDB({ store, ...configs })
 
-    if (success) {
-      success(db)
+      if (success) {
+        success(db)
+      }
+
+      const client = new TableStore({ db })
+
+      await client.sync()
+      // TODO: const tableNames = await client.sync() 建索引表
+
+      this.clients[store] = db
+
+      return client
+    } catch (err) {
+      console.log(err, 'IndexDB initializer error.')
     }
-
-    const client = new TableStore({ db })
-
-    await client.sync()
-    // TODO: const tableNames = await client.sync() 建索引表
-
-    this.clients[store] = db
-
-    return client
   }
 
   /**
