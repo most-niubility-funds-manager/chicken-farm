@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-30 15:18:00
+ * @LastEditTime: 2020-09-01 09:53:57
  * @Description: my footer
  */
 
@@ -35,6 +35,7 @@ const FooterBox = () => {
 			check: intervalCheck,
 			time: 1000,
 			callback: ([text, state]) => {
+				console.log('开盘交易', text)
 				dispatch(setMarketState(state)); //	状态文本
 				dispatch(setMarketStateText(text));
 				setOpen(text);
