@@ -11,6 +11,13 @@ export default class Table {
     return this
   }
 
+  insert(data) {
+    const result = this.request([this.tableName], "readwrite").objectStore(this.tableName);
+    result.add(data)
+
+    return result;
+  }
+
   /**
    * @description: 添加数据
    * @param {Object} { data: 独享数据[] }

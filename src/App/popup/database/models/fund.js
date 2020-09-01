@@ -18,6 +18,14 @@ const Fund = {
 
     return result
   },
+
+  async batchInsert(data) {
+    const table = dbUtils.getTable(INDEX_FUND)
+    const result = await table.indexedAdd({ data: data.reduce((_, item) => [..._, new FundModel(item)], []) })
+
+    return result
+  },
+
 }
 
 module.exports = Fund
