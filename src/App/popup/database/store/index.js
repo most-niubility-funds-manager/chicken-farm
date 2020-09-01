@@ -30,7 +30,7 @@ export default class TableStore extends Client {
    * 定义数据表
    */
   defineTable(tableName, tableOptions) {
-    this.tables[tableName] = new Table(tableName, tableOptions).setStore(this.__store)
+    this.tables[tableName] = new Table(tableName, tableOptions).setStore(this.__store, tableName)
   }
 
   /**

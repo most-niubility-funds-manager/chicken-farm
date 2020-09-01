@@ -3,19 +3,20 @@ export default class Table {
   * 设置 TableStore 实例
   * @param {TableStore} store TableStore实例
   */
-  setStore(store) {
+  setStore(store, tableName) {
     this.store = store
+    this.tableName = tableName
 
     return this
   }
 
   /**
    * @description: 添加数据
-   * @param {Object} { store: 数据库名, table: 数据表名, data: 独享数据[] }
+   * @param {Object} { data: 独享数据[] }
    * @return: promise.resolve
    */
-  indexedAdd = ({ table, data }) => {
-    const result = this.store.transaction([table], "readwrite").objectStore(table);
+  indexedAdd = ({ data }) => {
+    const result = this.store.transaction([this.tableName], "readwrite").objectStore(this.tableName);
     //  指定表对应的事务状态 '读写'
     data.forEach((item) => result.add(item));
 
@@ -24,13 +25,12 @@ export default class Table {
 
   /**
   * @description: 返回全部数据
-  * @param {Object} { store, table }
   * @return: dataList []
   */
-  indexedFindAll = ({ table }) =>
+  indexedFindAll = () =>
     new Promise((resolve, reject) => {
-      const transaction = this.store.transaction([table], "readwrite"); //  指定表对应的事务状态 '读写'
-      const objectStore = transaction.objectStore(table);
+      const transaction = this.store.transaction([this.tableName], "readwrite"); //  指定表对应的事务状态 '读写'
+      const objectStore = transaction.objectStore(this.tableName);
       const dataList = []; //  查询结果
 
       objectStore.openCursor().onsuccess = ({ target: { result: cursor } }) => {
@@ -45,13 +45,13 @@ export default class Table {
 
   /**
   * @description: 查询指定索引 的 限定值 数据 eg: { code: 2020 }的对应数据
-  * @param {Object} { store, table, key: { k, v } }
+  * @param {Object} { key: { k, v } }
   * @return: { code, name, unit, state }
   */
-  indexedFindSingle = ({ table, key: { k, v } }) =>
+  indexedFindSingle = ({ key: { k, v } }) =>
     new Promise((resolve, reject) => {
-      const transaction = this.store.transaction([table], "readwrite");
-      const objectStore = transaction.objectStore(table);
+      const transaction = this.store.transaction([this.tableName], "readwrite");
+      const objectStore = transaction.objectStore(this.tableName);
       const index = objectStore.index(k);
       const request = index.get(v);
 
@@ -66,21 +66,21 @@ export default class Table {
 
   /**
   * @description: 修改已有数据 | 插入新数据
-  * @param {Object} { store, table, data: 单条数据对象(包含主键id) }
+  * @param {Object} { data: 单条数据对象(包含主键id) }
   * @return: Promise.resolve
   */
-  indexedUpdate = ({ table, data }) => {
-    this.store.transaction([table], "readwrite").objectStore(table).put(data);
+  indexedUpdate = ({ data }) => {
+    this.store.transaction([this.tableName], "readwrite").objectStore(this.tableName).put(data);
   }
 
   /**
   * @description: 删除指定某条数据
-  * @param {Object} { store, table, key: { 字段：值 } }
+  * @param {Object} { key: { 字段：值 } }
   * @return: Promise.resolve
   */
-  indexedDelete = ({ store, table, key: { k, v } }) =>
+  indexedDelete = ({ key: { k, v } }) =>
     new Promise((resolve, reject) => {
-      const request = db.transaction([table], "readwrite").objectStore(table).openCursor();
+      const request = db.transaction([this.tableName], "readwrite").objectStore(this.tableName).openCursor();
 
       request.onsuccess = ({ target }) => {
         const { result: cursor } = target;
