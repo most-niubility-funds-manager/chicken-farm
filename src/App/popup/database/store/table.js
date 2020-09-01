@@ -15,7 +15,7 @@ export default class Table {
    * @param {Object} { data: 独享数据[] }
    * @return: promise.resolve
    */
-  indexedAdd = ({ data }) => {
+  indexedAdd({ data }) {
     const result = this.store.transaction([this.tableName], "readwrite").objectStore(this.tableName);
     //  指定表对应的事务状态 '读写'
     data.forEach((item) => result.add(item));
@@ -27,8 +27,8 @@ export default class Table {
   * @description: 返回全部数据
   * @return: dataList []
   */
-  indexedFindAll = () =>
-    new Promise((resolve, reject) => {
+  indexedFindAll() {
+    return new Promise((resolve, reject) => {
       const transaction = this.store.transaction([this.tableName], "readwrite"); //  指定表对应的事务状态 '读写'
       const objectStore = transaction.objectStore(this.tableName);
       const dataList = []; //  查询结果
@@ -42,14 +42,16 @@ export default class Table {
         }
       };
     });
+  }
+
 
   /**
   * @description: 查询指定索引 的 限定值 数据 eg: { code: 2020 }的对应数据
   * @param {Object} { key: { k, v } }
   * @return: { code, name, unit, state }
   */
-  indexedFindSingle = ({ key: { k, v } }) =>
-    new Promise((resolve, reject) => {
+  indexedFindSingle({ key: { k, v } }) {
+    return new Promise((resolve, reject) => {
       const transaction = this.store.transaction([this.tableName], "readwrite");
       const objectStore = transaction.objectStore(this.tableName);
       const index = objectStore.index(k);
@@ -63,13 +65,15 @@ export default class Table {
         }
       };
     });
+  }
+
 
   /**
   * @description: 修改已有数据 | 插入新数据
   * @param {Object} { data: 单条数据对象(包含主键id) }
   * @return: Promise.resolve
   */
-  indexedUpdate = ({ data }) => {
+  indexedUpdate({ data }) {
     this.store.transaction([this.tableName], "readwrite").objectStore(this.tableName).put(data);
   }
 
@@ -78,8 +82,8 @@ export default class Table {
   * @param {Object} { key: { 字段：值 } }
   * @return: Promise.resolve
   */
-  indexedDelete = ({ key: { k, v } }) =>
-    new Promise((resolve, reject) => {
+  indexedDelete({ key: { k, v } }) {
+    return new Promise((resolve, reject) => {
       const request = db.transaction([this.tableName], "readwrite").objectStore(this.tableName).openCursor();
 
       request.onsuccess = ({ target }) => {
@@ -95,5 +99,7 @@ export default class Table {
         }
       };
     });
+  }
+
 
 }

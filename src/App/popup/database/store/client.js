@@ -30,12 +30,12 @@ export default class Client {
     this.conn = this.openDB()
   }
 
-  openDB = (store, version = 1) =>
-    new Promise((resolve, reject) => {
+  openDB(store, version = 1) {
+    return new Promise((resolve, reject) => {
       const request = window.indexedDB.open(store, version);
 
       request.onsuccess = ({ target: { result } }) => resolve(result);
       request.onerror = reject;
     });
-
+  }
 }

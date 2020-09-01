@@ -22,8 +22,8 @@ class DbUtils {
    * @param {Object} { store:数据库名, tables: { name: structure } 表名和表结构, keyPath: 主键(默认id) }
    * @return: 数据库实例
    */
-  createDB = ({ store, tables, keyPath = "id" }, version = 1) =>
-    new Promise((resolve, reject) => {
+  createDB({ store, tables, keyPath = "id" }, version = 1) {
+    return new Promise((resolve, reject) => {
       const request = window.indexedDB.open(store, version);
       // 更新
       request.onupgradeneeded = ({ target }) => {
@@ -55,13 +55,15 @@ class DbUtils {
       //  失败
       request.onerror = reject;
     })
+  }
+
 
 
   /**
    * 创建数据库实例
    */
 
-  createInstance = async ({ store, success, ...configs }) => {
+  async createInstance({ store, success, ...configs }) {
     const db = await this.createDB({ store, ...configs })
 
     if (success) {
@@ -82,7 +84,7 @@ class DbUtils {
    * 获取数据库实例
    */
 
-  getInstance = instanceName => {
+  getInstance(instanceName) {
     if (this.clients[instanceName]) {
       return this.clients[instanceName]
     }
