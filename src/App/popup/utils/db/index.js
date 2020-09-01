@@ -50,7 +50,7 @@ class DbUtils {
       request.onsuccess = ({ target: { result } }) => {
         resolve(result)
 
-        this.createInstance(instanceName, result)
+        this.createInstance(store, result)
       }
       //  失败
       request.onerror = reject;
