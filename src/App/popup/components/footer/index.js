@@ -35,7 +35,6 @@ const FooterBox = () => {
 			check: intervalCheck,
 			time: 1000,
 			callback: ([text, state]) => {
-				console.log('开盘交易', text)
 				dispatch(setMarketState(state)); //	状态文本
 				dispatch(setMarketStateText(text));
 				setOpen(text);
