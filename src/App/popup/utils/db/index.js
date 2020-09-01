@@ -92,6 +92,12 @@ class DbUtils {
     throw new Error('Invalid database instance name.')
   }
 
+  getTable(tableName) {
+    const [schema, table] = tableName.split('.')
+
+    return this.clients[schema].getTable(table)
+  }
+
 }
 
 export default new DbUtils()

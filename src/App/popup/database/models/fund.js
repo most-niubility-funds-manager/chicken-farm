@@ -1,0 +1,23 @@
+import { INDEX_FUND } from '../constants'
+import dbUtils from '../../utils/db'
+
+class FundModel {
+  constructor(data) {
+    const nowDate = new Date().getTime()
+
+    this.id = data.id
+    this.created_time = nowDate
+  }
+}
+
+const Fund = {
+  async insert(data) {
+    const table = dbUtils.getTable(INDEX_FUND)
+    const model = new FundModel(data)
+    const result = await table.insert(model)
+
+    return result
+  },
+}
+
+module.exports = Fund

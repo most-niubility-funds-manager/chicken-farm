@@ -19,7 +19,7 @@ export default class TableStore extends Client {
    * 同步 tables 数据
    */
   async sync() {
-    const tableNames = Object.keys(TABLE_NAME).reduce((_, k) => [..._, TABLE_NAME[k]], [])
+    const tableNames = Object.keys(TABLE_NAME).reduce((_, k) => [..._, TABLE_NAME[k].split('.')[1]], [])
 
     tableNames.forEach(name => this.defineTable(name))
 
