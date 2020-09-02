@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-31 23:01:40
+ * @LastEditTime: 2020-09-02 00:38:21
  * @Description: 天天基金api
  */
 
@@ -110,7 +110,7 @@ const getAllYearholiday = async () => {
 };
 
 /**
- * @description: 查询单个基金代码数值
+ * @description: 查询单个基金代码数值 普通基金
  * @param {String} code
  * @return: null | Object
  */
@@ -126,8 +126,9 @@ const fetchSingleFund = async (code) => {
 	try {
 		const result = await requestGet(params);
 		const noFindReg = /doctype/g;
+		const formatRes = result.replace(/^jsonpgz\(|\);$/g, "");
 		const jsonp = /\{.*?\}/g;
-		if (noFindReg.test(result)) {
+		if (noFindReg.test(result) || !formatRes.length) {
 			return null;
 		}
 
@@ -141,6 +142,32 @@ const fetchSingleFund = async (code) => {
 		}, {});
 		return resultJson;
 	} catch (error) {
+		return null;
+	}
+};
+
+/**
+ * @description: QDII基金 需要用查询接口获取html的数据 http://fund.eastmoney.com/[code].html?spm=search
+ * @param {String} code
+ * @return { name, fundcode, dwjz, gszzl, gsz }
+ */
+const fetchQDFund = async (code) => {
+	const params = {
+		url: `http://fund.eastmoney.com/${code}.html?spm=search`,
+		type: "text",
+	};
+
+	try {
+		const result = await requestGet(params);
+		const $ = cheerio.load(result);
+		const dwjz = $(".fix_dwjz").text(); //	单位净值
+		const name = $(".fix_fname").text();
+		const fundcode = $(".fix_fcode").text();
+		const gszzl = 0; //	涨幅
+		const gsz = 0; //	估算净值
+
+		return { name, fundcode, dwjz, gszzl, gsz };
+	} catch (e) {
 		return null;
 	}
 };
@@ -303,12 +330,28 @@ const getFundsCode = async () => {
 const fetchAllFunds = (codes) => {
 	const requestMap = codes.map(({ code }) => fetchSingleFund(code));
 	return Promise.all(requestMap).then((res) => {
-		const result = res.map((item, i) => {
+		const result = res.map(async (item, i) => {
 			if (!item) {
-				return { code: codes[i] };
+				const { fundcode, dwjz, gsz, name } = await fetchQDFund(codes[i].code);
+				const totalShare = codes[i].unit;
+				const incomeReckon = 0.0;
+				const totalAmount = totalShare ? (codes[i].unit * dwjz).toFixed(2) : "-";
+
+				console.log('都是QDII嗷', codes[i].code)
+				return {
+					name,
+					code: fundcode,
+					lastUnit: dwjz,
+					currUnit: gsz,
+					crease: "+0.0%",
+					totalShare: totalShare || 0.0,
+					totalAmount,
+					incomeReckon,
+				};
 			}
+
 			const { fundcode, dwjz, gsz, gszzl, gztime, jzrq, name } = item;
-			const totalShare = codes.filter(({ code }) => fundcode === code)[0].unit;
+			const totalShare = codes[i].unit;
 			const incomeCalc = ((dwjz * totalShare * gszzl) / 100).toFixed(2);
 			const incomeReckon = totalShare ? (incomeCalc > 0 ? `+${incomeCalc}` : incomeCalc) : "0.00";
 			const totalAmount = totalShare ? (dwjz * totalShare).toFixed(2) : "-";
@@ -321,12 +364,12 @@ const fetchAllFunds = (codes) => {
 				crease: Number(gszzl) > 0 ? `+${gszzl}%` : `${gszzl}%`,
 				totalShare: totalShare || 0.0,
 				totalAmount,
-				incomeReckon: incomeReckon,
+				incomeReckon,
 				update: formatTime(Date.now()),
 			};
 		});
 
-		return result;
+		return Promise.all(result)
 	});
 };
 
@@ -524,7 +567,7 @@ const syncFundsActively = async () => {
 	const result = {};
 	result[Constants.SYNC_FUNDS] = funds;
 
-	console.log('同步数据', result)
+	console.log("同步数据", result);
 	setSyncStorage(result);
 };
 
@@ -546,5 +589,5 @@ export {
 	setSyncStorage,
 	syncFundsActively,
 	updateFundByImport,
-	fetchAllYearholiday
+	fetchAllYearholiday,
 };
