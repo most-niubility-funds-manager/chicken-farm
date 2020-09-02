@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 14:22:32
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-09-01 09:53:57
+ * @LastEditTime: 2020-09-02 13:44:32
  * @Description: my footer
  */
 
@@ -38,6 +38,7 @@ const FooterBox = () => {
 				dispatch(setMarketState(state)); //	状态文本
 				dispatch(setMarketStateText(text));
 				setOpen(text);
+				console.log('交易状态', text)
 			},
 		});
 	}, []);

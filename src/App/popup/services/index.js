@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-09-02 00:38:21
+ * @LastEditTime: 2020-09-02 22:25:18
  * @Description: 天天基金api
  */
 
@@ -332,18 +332,18 @@ const fetchAllFunds = (codes) => {
 	return Promise.all(requestMap).then((res) => {
 		const result = res.map(async (item, i) => {
 			if (!item) {
-				const { fundcode, dwjz, gsz, name } = await fetchQDFund(codes[i].code);
+				const { fundcode, dwjz, gsz, gszzl, name } = await fetchQDFund(codes[i].code);
 				const totalShare = codes[i].unit;
 				const incomeReckon = 0.0;
 				const totalAmount = totalShare ? (codes[i].unit * dwjz).toFixed(2) : "-";
 
-				console.log('都是QDII嗷', codes[i].code)
+				console.log("都是QDII嗷", codes[i].code);
 				return {
 					name,
 					code: fundcode,
 					lastUnit: dwjz,
 					currUnit: gsz,
-					crease: "+0.0%",
+					crease: Number(gszzl) > 0 ? `+${gszzl}%` : `${gszzl}%`,
 					totalShare: totalShare || 0.0,
 					totalAmount,
 					incomeReckon,
@@ -369,7 +369,7 @@ const fetchAllFunds = (codes) => {
 			};
 		});
 
-		return Promise.all(result)
+		return Promise.all(result);
 	});
 };
 
@@ -447,6 +447,64 @@ const fetchFundNews = async (code) => {
 };
 
 /**
+ * 获取持仓股票的号码 http://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jjcc&code=[code]&topline=10&year=&month=&rt=[随机数]
+ * 根据股票号码获取实时 涨跌幅  https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&invt=2&fields=f2,f3,f12,f14,f9&secids=[所有股票号码 1.code,1.code]&_=[时间戳]
+ * @description: 更换获取基金持仓分布的接口
+ * @param {String} code
+ * @return {Array}
+ */
+const fetchFundHoldShares = async (code) => {
+	const params = {
+		url: `http://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jjcc&code=${code}&topline=10&year=&month=&rt=${Math.random()}`,
+		type: "text",
+	};
+	const contentHtml = await requestGet(params);
+	const $ = cheerio.load(/"(.*)"/g.exec(contentHtml)[1]);
+	const holdData = [];
+	const gpdmList = $("#gpdmList").eq(0).text();
+	const tempCodes = gpdmList.split(',')
+	tempCodes.pop()
+	const codes = tempCodes.map(v => v.split('.')[1])
+
+	$(".tzxq tbody tr").each(function (i) {
+		const code = codes[i];
+		const name = $(this).find("td").eq(2).text();
+		const percent = $(this).find("td").eq(6).text();
+
+		holdData.length < 10 && holdData.push({ code, name, percent });
+	});
+
+	// 获取涨幅
+	const creaseParams = {
+		url: `https://push2.eastmoney.com/api/qt/ulist.np/get`,
+		params: {
+			fltt: 2,
+			invt: 2,
+			fields: "f2,f3,f12,f14,f9",
+			secids: gpdmList,
+			_: Date.now(),
+		},
+	};
+	const {
+		data: { diff },
+	} = await requestGet(creaseParams);
+	const result = holdData
+		.map((v, i) => {
+			const { f3: crease = 0, f2: price = 0 } = diff.find(({ f12 }) => v.code === f12) || {}
+			return { ...v, crease, price };
+		})
+		.reduce(
+			(arr, { name, percent, crease, price }) => [
+				...arr,
+				[name, percent, crease > 0 ? `+${crease}%` : `${crease}%`, price],
+			],
+			[]
+		);
+
+	return result;
+};
+
+/**
  * @description: 获取单个基金详细信息
  * @param {String} code
  * @return: { holdShares: { head, body }, pastUnit: { head, body }, manager: [], newsList: [{ url, title, date }] }
@@ -460,21 +518,10 @@ const fetchFundDetail = async (code) => {
 	const originHtml = await requestGet(params);
 	const manager = await fetchFundManager(code);
 	const newsList = await fetchFundNews(code);
-	const $ = cheerio.load(originHtml);
-	// 持仓分布
-	const holdShares = [];
-	$("#position_shares")
-		.find("tr")
-		.each(function () {
-			const itemData = $(this)
-				.find("td,th")
-				.map(function () {
-					return $(this).text().trim();
-				});
+	const holdShares = await fetchFundHoldShares(code);
 
-			const sliceData = Array.from(itemData).slice(0, 3);
-			holdShares.push(sliceData.length < 3 ? ["暂无数据", "暂无数据", "暂无数据"] : sliceData);
-		});
+	const $ = cheerio.load(originHtml);
+
 	// 往日净值
 	const pastUnit = [];
 	$("#Li1")
@@ -490,18 +537,16 @@ const fetchFundDetail = async (code) => {
 		});
 
 	// 俩数据涨跌对应的比例
-	const holdSharesPercent = calcDataPercent(holdShares.slice(1).map((v) => v[2]));
+	const holdSharesPercent = calcDataPercent(holdShares.map((v) => v[2]));
 	const pastUnitPercent = calcDataPercent(pastUnit.slice(1).map((v) => v[1]));
 
 	const result = {
 		holdShares: {
-			head: holdShares[0] || [], //	那边需要渲染 避免报错
-			body: holdShares
-				.slice(1)
-				.map((v, i) => [
-					...v,
-					{ value: holdSharesPercent[i].value, type: holdSharesPercent[i].type },
-				]),
+			head: ["股票名称", "持仓占比", "涨跌幅", "最新价"], //	那边需要渲染 避免报错
+			body: holdShares.map((v, i) => [
+				...v,
+				{ value: holdSharesPercent[i].value, type: holdSharesPercent[i].type },
+			]),
 		},
 		pastUnit: {
 			head: pastUnit[0],

@@ -13,7 +13,7 @@ const Header = styled.div.attrs({ className: 'hold-header' })`
   display: grid;
   align-items:center;
   justify-items: center;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   font-weight: bold;
 `
 
@@ -23,7 +23,7 @@ const BodyItem = styled.div`
   display: grid;
   align-items:center;
   justify-items: center;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 `
 
 const Cell = styled.span`
