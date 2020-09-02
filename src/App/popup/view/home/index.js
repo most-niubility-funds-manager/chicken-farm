@@ -30,6 +30,7 @@ import SearchPage from "../search";
 import OperationPage from "../operationPanel";
 import ImportCard from "../../components/importCard";
 import { createDB } from "../../services/indexDB";
+import dbUtils from '../../utils/db';
 
 const Home = () => {
 	const tables = {};
@@ -67,13 +68,21 @@ const Home = () => {
 	tables[Constant.INDEX_HOLIDAY] = holiday_table;
 	tables[Constant.INDEX_FUND] = funds_table;
 	tables[Constant.INDEX_TRADE] = trade_table;
-	// 创建节假日表、基金表、交易表
-	createDB({
+
+
+	// Initializer
+	dbUtils.createInstance({
 		store: Constant.INDEX_STORE,
 		tables,
+		success: syncCloudFunds
 	})
-		.then((_) => syncCloudFunds())
-		.catch((_) => console.log("无数据库", _));
+	// 创建节假日表、基金表、交易表
+	// createDB({
+	// 	store: Constant.INDEX_STORE,
+	// 	tables,
+	// })
+	// 	.then((_) => syncCloudFunds())
+	// 	.catch((_) => console.log("无数据库", _));
 
 	// 关闭搜索框后更新tableData, 清空search
 	const closeSearchPage = () => {
