@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-27 22:52:10
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-08-30 14:36:57
+ * @LastEditTime: 2020-09-03 11:50:18
  * @Description: 全局样式
  */
 
@@ -38,7 +38,6 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     scroll-behavior: smooth;
     font-size: 12px;
-    user-select:none;
   }
 
   ul,

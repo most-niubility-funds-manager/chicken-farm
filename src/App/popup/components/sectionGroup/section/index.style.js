@@ -13,6 +13,10 @@ const Section = styled.div.attrs({ className: 'section-item' })`
   cursor: pointer;
   transition: all 0.2s ease;
 
+  &.wideScreen {
+    grid-template-columns: 40px 1fr 50px;
+  }
+
   &:hover {
     background-color: ${props => Color(props.theme.theadBg).darken(0.3).rgb().string()};
   }
@@ -44,12 +48,13 @@ const Number = styled.p.attrs({ className: 'item-number' })`
 const Detail = styled.p.attrs({ className: 'item-detail' })`
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  flex-direction: column;
   justify-content: center;
   font-size: 12px;
 
-  span:first-of-type {
-    margin-right: 5px
+  &.bad {
+    color: ${props => props.theme.decrease};
   }
 `
 

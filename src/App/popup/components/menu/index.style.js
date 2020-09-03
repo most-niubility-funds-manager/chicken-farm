@@ -32,6 +32,7 @@ const Wrapper = styled.div.attrs({ className: 'setting-menu' })`
   transform-origin: right bottom;
   backface-visibility: hidden;
   z-index: 10;
+  user-select:none;
 
   &.cancel {
     animation: ${popOut} 0.2s ease-out forwards;

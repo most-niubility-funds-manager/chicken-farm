@@ -28,6 +28,12 @@ const SectionGroup = () => {
 	}, [isMarketOpen]);
 
 	const changeType = () => {
+		if (isWideScreen) {
+			setType(0);
+			setLocal(Constants.LOCAL_CONFIG, { sectionView: 0 });
+			return
+		}
+
 		const num = type + 1 > 2 ? 0 : type + 1;
 		setType(num);
 		setLocal(Constants.LOCAL_CONFIG, { sectionView: num });
