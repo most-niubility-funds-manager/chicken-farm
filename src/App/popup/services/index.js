@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-21 18:23:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-09-02 22:25:18
+ * @LastEditTime: 2020-09-04 11:29:20
  * @Description: 天天基金api
  */
 
@@ -163,7 +163,7 @@ const fetchQDFund = async (code) => {
 		const dwjz = $(".fix_dwjz").text(); //	单位净值
 		const name = $(".fix_fname").text();
 		const fundcode = $(".fix_fcode").text();
-		const gszzl = 0; //	涨幅
+		const gszzl = $(".fix_zzl").text().replace("%", ""); //	涨幅
 		const gsz = 0; //	估算净值
 
 		return { name, fundcode, dwjz, gszzl, gsz };
@@ -462,9 +462,9 @@ const fetchFundHoldShares = async (code) => {
 	const $ = cheerio.load(/"(.*)"/g.exec(contentHtml)[1]);
 	const holdData = [];
 	const gpdmList = $("#gpdmList").eq(0).text();
-	const tempCodes = gpdmList.split(',')
-	tempCodes.pop()
-	const codes = tempCodes.map(v => v.split('.')[1])
+	const tempCodes = gpdmList.split(",");
+	tempCodes.pop();
+	const codes = tempCodes.map((v) => v.split(".")[1]);
 
 	$(".tzxq tbody tr").each(function (i) {
 		const code = codes[i];
@@ -490,7 +490,7 @@ const fetchFundHoldShares = async (code) => {
 	} = await requestGet(creaseParams);
 	const result = holdData
 		.map((v, i) => {
-			const { f3: crease = 0, f2: price = 0 } = diff.find(({ f12 }) => v.code === f12) || {}
+			const { f3: crease = 0, f2: price = 0 } = diff.find(({ f12 }) => v.code === f12) || {};
 			return { ...v, crease, price };
 		})
 		.reduce(

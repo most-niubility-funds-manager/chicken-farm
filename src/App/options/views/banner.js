@@ -12,7 +12,6 @@ const Banner = () => {
 
   return (
     <Wrapper>
-asdsad
     </Wrapper>
   )
 }
