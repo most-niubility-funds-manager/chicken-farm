@@ -1,0 +1,38 @@
+@import "./color.scss";
+
+.normal {
+	--home-bg: var(--black-1f);
+	--market-title: var(--white-ee);
+	--market-bg: var(--black-12);
+	--market-decrease: var(--green-3e);
+	--market-crease: var(--red);
+	--market-bg-crease: var(--red-6b);
+	--market-bg-decrease: var(--green-2d);
+	--market-pulse-crease: var(--red-6d);
+	--market-pulse-decrease: var(--green-21);
+	--market-border: var(--black-33);
+
+	--table-th: var(--white-c9);
+	--table-th-sub: var(--black-7f);
+	--table-tr: var(--white-c9);
+	--table-tr-detail: var(--black-7f);
+	--table-tr-border: var(--black-33);
+
+	--footer-bg: var(--black-1f);
+	--footer-border: var(--black-33);
+	--footer-font: var(--white-ee);
+	--footer-state-open: var(--blue);
+	--footer-state-close: var(--yellow);
+	--footer-icon-hover: var(--black);
+
+	--search-bg: var(--black-1f);
+	--search-title: var(--white-ee);
+	--search-input:var(--white-ee);
+	--search-input-placeholder: var(--black-99);
+	--search-input-bg: var(--black);
+	--search-btn: var(--blue);
+	--search-item-bg: var(--black);
+	--search-item-btn: var(--blue);
+	--search-item-btn-disabled: var(--black-99);
+	--search-empty: var(--white-ee);
+}

@@ -12,6 +12,11 @@
     "48": "static/icons/logo48.png",
     "128": "static/icons/logo128.png"
   },
+  "options_page": "options.html",
+  "options_ui": {
+    "chrome_style": true,
+    "page": "options.html"
+  },
   "background": {
     "page": "background.html",
     "persistent": true
@@ -31,11 +36,7 @@
     "webRequest",
     "webRequestBlocking",
     "notifications",
-    "*://*.baidu.com/*",
-    "*://*.10jqka.com.cn/*",
-    "*://fundgz.1234567.com.cn/*",
-    "*://*.eastmoney.com/*",
-    "*://api.fund.eastmoney.com/*"
+    "<all_urls>"
   ],
   "web_accessible_resources": [
     "static/js/*",

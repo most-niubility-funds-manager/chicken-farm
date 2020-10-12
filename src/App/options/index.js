@@ -1,16 +1,11 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
-import { GlobalStyle } from "../styles";
-import Banner from './views/banner'
-import Content from './views/content'
+import { HashRouter } from "react-router-dom";
+import App from './App'
 
 ReactDOM.render(
-	<Fragment>
-		<GlobalStyle bg="#fff" />
-    <Banner />
-    <Content />
-	</Fragment>,
-	document.querySelector("#root")
+	<HashRouter>
+    <App />
+	</HashRouter>,
+	document.getElementById("root")
 );
-
-console.log("nothing");
