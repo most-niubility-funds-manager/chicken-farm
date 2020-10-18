@@ -1,22 +1,33 @@
 @import "./color.scss";
 
 .normal {
-	--home-bg: var(--black-1f);
-	--market-title: var(--white-ee);
-	--market-bg: var(--black-12);
-	--market-decrease: var(--green-3e);
-	--market-crease: var(--red);
-	--market-bg-crease: var(--red-6b);
-	--market-bg-decrease: var(--green-2d);
-	--market-pulse-crease: var(--red-6d);
-	--market-pulse-decrease: var(--green-21);
-	--market-border: var(--black-33);
+	--home-bg: var(--black-17);
 
-	--table-th: var(--white-c9);
-	--table-th-sub: var(--black-7f);
-	--table-tr: var(--white-c9);
+	--market-title: var(--white-ee);
+	--market-bg: var(--black-1f);
+	--market-decrease: var(--green);
+	--market-crease: var(--red);
+
+	--income-bg: var(--black-1f);
+	--income-color: var(--white-ff-dim65);
+	--income-main: var(--white-ff-dim85);
+	--income-icon: var(--white-ff-dim12);
+	--income-decrease: var(--green);
+	--income-increase: var(--red);
+
+	--table-th: var(--white-ff-dim45);
+	--table-th-main: var(--yellow);
+	--table-th-main-active: var(--yellow);
+	--table-th-icon: var(--white-ff-dim12);
+	--table-th-menu-bg: var(--black-2a);
+	--table-th-menu-active: var(--white-ff-dim08);
+
+	--table-tr: var(--white-ff-dim85);
+	--table-tr-code: var(--white-ff-dim45);
+	--table-tr-bg: var(--black-1f);
 	--table-tr-detail: var(--black-7f);
-	--table-tr-border: var(--black-33);
+	--table-tr-increase: var(--red);
+	--table-tr-decrease: var(--green);
 
 	--footer-bg: var(--black-1f);
 	--footer-border: var(--black-33);
@@ -25,14 +36,20 @@
 	--footer-state-close: var(--yellow);
 	--footer-icon-hover: var(--black);
 
-	--search-bg: var(--black-1f);
+	--search-bg: var(--black-26);
 	--search-title: var(--white-ee);
-	--search-input:var(--white-ee);
-	--search-input-placeholder: var(--black-99);
-	--search-input-bg: var(--black);
-	--search-btn: var(--blue);
-	--search-item-bg: var(--black);
+	--search-input: var(--white-ff-dim85);
+	--search-input-caret: var(--white-ff-dim85);
+	--search-input-placeholder: var(--white-ff-dim45);
+	--search-input-bg: var(--black-26);
+	--search-btn: var(--white-ff-dim12);
+	--search-btn-hover: var(--white-ff-dim50);
+	--search-btn-bg: var(--black-26);
+
+	--search-item: var(--white-ff-dim85);
+	--search-item-code: var(--white-ff-dim45);
+	--search-item-bg: var(--black-1f);
 	--search-item-btn: var(--blue);
-	--search-item-btn-disabled: var(--black-99);
-	--search-empty: var(--white-ee);
+	--search-item-btn-disabled: var(--white-ff-dim12);
+	--search-empty: var(--white-ff-dim85);
 }

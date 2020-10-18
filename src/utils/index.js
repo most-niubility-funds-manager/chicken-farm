@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-22 13:50:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-07 14:18:09
+ * @LastEditTime: 2020-10-18 16:53:01
  * @Description: 小工具
  */
 
@@ -162,6 +162,26 @@ const exportTxt = (title, content) => {
 	document.body.removeChild(aEl);
 };
 
+// 千分位
+const thousandUnit = (num) => {
+	const hasDecimal = num.toString().includes(".");
+	const decimal = num.toString().split(".")[1];
+	const main = num.toString().split(".")[0].split("");
+
+	const format = main.reduceRight((str, v, i) => {
+		const idx = main.length - i;
+		const remainder = !(idx % 3);
+		if (remainder && !!i) {
+			return `,${v}${str}`;
+		}
+		return `${v}${str}`;
+	}, "");
+
+	const result = hasDecimal ? `${format}.${decimal}` : format;
+
+	return result;
+};
+
 export {
 	convertDate,
 	getPreciseTime,
@@ -171,4 +191,5 @@ export {
 	arrivalRemind,
 	sortData,
 	exportTxt,
+	thousandUnit,
 };

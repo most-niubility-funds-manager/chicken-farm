@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Home from "./views/home";
+import App from "./views";
 import "./assets/scss/reset.scss";
 import "./assets/scss/theme.scss";
 
-ReactDOM.render(<Home />, document.querySelector("#root"));
+ReactDOM.render(<App />, document.querySelector("#root"));

@@ -1,68 +1,70 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getAllFundCodes, getUserTableHead } from "../../services";
+import { getAllFundCodes, getFundRealTimeData, getMarketStatus } from "../../services";
+import Saga from "@lib/saga";
 import Head from "./tableHead";
 import Item from "./tableItem";
 
 const Wrapper = styled.div.attrs({ className: "content" })`
 	width: 100%;
-	height: 420px;
-	overflow: auto;
-`;
-
-const List = styled.div.attrs({ className: "list" })`
-	width: 100%;
 	height: auto;
 `;
 
+const List = styled.div`
+	width: 100%;
+	height: 370px;
+	overflow: overlay;
+`;
+
+const Empty = styled.div`
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 13px;
+	color: var(--table-th);
+`;
+
 const Content = (props) => {
-	const { user } = props;
-	const [codes, setCodes] = useState([]);
-	const [headConfig, setHeadConfig] = useState([]);
-	const [update, setUpdate] = useState(false);
-
-	const listener = (message) => {
-		const { command, data = null } = message;
-		const commandMap = new Map([
-			[
-				"forceUpdate",
-				(data) => {
-					setUpdate(data);
-					setTimeout(() => setUpdate(false));
-				},
-			],
-		]);
-
-		commandMap.get(command)(data);
-
-		return true;
-	};
-
-	useEffect(() => {
-		chrome.runtime.onMessage.addListener(listener);
-		return () => {
-			chrome.runtime.onMessage.removeListener(listener);
-		};
-	}, []);
+	const { user, forceUpdate, tableType } = props;
+	const [codes, setCodes] = useState([]); //	原数据
+	const [fundData, setFundData] = useState([]); //	基金数据
+	const onlyCode = codes.map(({ code }) => code); //	只有code
+	const realTimeSaga = new Saga(() => getFundRealTimeData(onlyCode));
+	// const marketStatusSaga = new Saga(getMarketStatus)
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const codes = await getAllFundCodes(user.uid);
-			const head = await getUserTableHead();
-			setCodes(codes);
-			setHeadConfig(head);
+			const originCodes = await getAllFundCodes(user.uid);
+			const currentCodes = originCodes.filter((v) => (!tableType ? !!v.follow : !!v.init_cost));
+			setCodes(currentCodes);
 		};
-
 		user && fetchData();
-		console.log("刷星", update);
-	}, [user, update]);
+	}, [user, forceUpdate, tableType]);
+
+	useEffect(() => {
+		codes.length &&
+			realTimeSaga.start((data) => {
+				setFundData(data);
+			}, 5000);
+
+		return () => {
+			realTimeSaga.stop();
+		};
+	}, [codes]);
+
+	const renderItemJSX = () =>
+		codes.length ? (
+			fundData.map((data, i) => <Item type={tableType} data={data} base={codes[i]}></Item>)
+		) : (
+			<Empty>暂无基金</Empty>
+		);
 
 	return (
 		<Wrapper>
-			<Head config={headConfig}></Head>
-			<List>
-				<Item></Item>
-			</List>
+			<Head></Head>
+			<List>{renderItemJSX()}</List>
 		</Wrapper>
 	);
 };

@@ -1,25 +1,41 @@
 /*
  * @Date: 2020-10-05 23:00:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-09 17:00:09
+ * @LastEditTime: 2020-10-18 15:40:30
  * @Description: 数据请求的操作
  */
 // 大盘数据
 import Http from "@lib/fetch";
-import { FUNDBASE, FUNDHISTORY, HOLIDAY, ALLFUNDS, DERIVED, FUNDSEARCH, ADDFUND } from "../api";
+import {
+	FUNDBASE,
+	FUNDHISTORY,
+	HOLIDAY,
+	ALLFUNDS,
+	DERIVED,
+	FUNDSEARCH,
+	ADDFUND,
+	FUNDLIVE,
+} from "../api";
 
 // 获取大盘数据
-export const getFundBase = async (code) => {
+export const getFundBase = async (codes) => {
 	const {
-		data: { name, chg, current, percent, symbol },
-	} = await Http.get(FUNDBASE, { symbol: code });
-	return {
-		name,
-		count: chg,
-		current,
-		code: symbol,
-		percent: percent.toString().includes("-") ? `${percent}%` : `+${percent}%`,
-	};
+		data: { diff },
+	} = await Http.get(FUNDBASE, {
+		secids: codes.join(),
+		fields: "f2,f3,f4,f12,f14",
+		fltt: 2,
+		_: Date.now(),
+	});
+	const result = diff.map(({ f2, f3, f4, f12, f14 }) => ({
+		name: f14,
+		count: f4,
+		current: f2,
+		percent: f3.toString().includes("-") ? `${f3}%` : `+${f3}%`,
+		code: f12,
+	}));
+
+	return result;
 };
 
 // 获取基金历史日增值 10天数据
@@ -80,11 +96,13 @@ export const getLastTradeTime = async () => {
 };
 
 // 基金搜索
-export const findFund = async (k) => {
-	const {
-		data: { items },
-	} = await Http.get(FUNDSEARCH, { k });
-	return items;
+export const findFund = async (key) => {
+	const { Datas } = await Http.get(FUNDSEARCH, { key, m: 1, _: Date.now() });
+	const result = Datas.filter(
+		({ CATEGORY }) => CATEGORY === 700
+	).map(({ CODE, NAME, FundBaseInfo: { DWJZ } }) => ({ code: CODE, name: NAME, value: DWJZ }));
+
+	return result;
 };
 
 // 添加基金
@@ -93,4 +111,44 @@ export const fundAdd = async ({ uid, code }) => {
 	return {
 		status,
 	};
+};
+
+// 实时获取基金数据 - 天天基金
+export const getLiveFundData = async ({ codes }) => {
+	const params = {
+		pageIndex: 1,
+		pageSize: codes.length,
+		plat: "Android",
+		appType: "ttjj",
+		product: "EFund",
+		Version: 1,
+		deviceid: 1,
+		Fcodes: codes.join(),
+	};
+	console.log('什么参数', params, codes)
+
+	try {
+		const { Datas } = await Http.get(FUNDLIVE, params);
+		const result = Datas.map(
+			({
+				FCODE: code,
+				GSZ: fakeUnit,
+				GSZZL: fakePercent,
+				NAV: realUnit,
+				NAVCHGRT: realPercent,
+				SHORTNAME: name,
+			}) => ({
+				name,
+				code,
+				fakeUnit,
+				fakePercent,
+				realUnit,
+				realPercent,
+			})
+		);
+
+		return result;
+	} catch (error) {
+		return [];
+	}
 };

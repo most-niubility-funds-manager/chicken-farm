@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-06 20:42:02
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-11 22:37:25
+ * @LastEditTime: 2020-10-18 18:29:35
  * @Description: 插件基本接口需求
  */
 import store from "../model/store";
@@ -49,12 +49,6 @@ export const getMarketOpen = async (sendResponse) => {
 	sendResponse({ text: stateText, status: isOpen });
 };
 
-// 强制更新popup
-export const forceUpdate = async () => {
-	const tabs = await queryCurrentTab();
-	tabSendMessage(tabs, { command: "forceUpdate", data: true });
-};
-
 // 获取用户配置的表头, 返回键名及相关信息(日期啥的)
 export const getTableHead = async (sendResponse) => {
 	const tableFields = store.get("tableFields");
@@ -90,4 +84,39 @@ export const getTableHead = async (sendResponse) => {
 	const config = await Promise.all(tableFields.map((key) => keyMap.get(key)()));
 
 	sendResponse(config);
+};
+
+// 强制更新popup
+export const forceUpdate = async () => {
+	const tabs = await queryCurrentTab();
+	tabSendMessage(tabs, { command: "forceUpdate", data: true });
+};
+
+// 基金列表切换类型
+export const changeListType = async (state) => {
+	const tabs = await queryCurrentTab();
+	tabSendMessage(tabs, { command: "changeListType", data: state });
+};
+
+// 搜索面板
+export const setSearchState = async (state) => {
+	const tabs = await queryCurrentTab();
+	tabSendMessage(tabs, { command: "setSearchState", data: state });
+};
+
+// 总资产
+export const getTotalData = async (sendResponse) => {
+	const total = store.get("totalCost");
+	const result = Object.values(total).reduce(
+		(obj, curr) =>
+			Object.keys(obj).reduce((o, k) => ({ ...o, [k]: Number(obj[k] || 0) + Number(curr[k]) }), {}),
+		{ totalCost: 0, lastIncome: 0, totalIncome: 0 }
+	);
+	sendResponse(result);
+};
+
+// 设置总资产
+export const setTotalData = async ({ code, totalCost, lastIncome, totalIncome }) => {
+	const total = store.get("totalCost");
+	store.set("totalCost", { ...total, [code]: { totalCost, lastIncome, totalIncome } });
 };

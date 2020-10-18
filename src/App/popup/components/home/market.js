@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 09:43:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-11 14:55:02
+ * @LastEditTime: 2020-10-17 19:13:31
  * @Description: 大盘
  */
 import React, { useState, useEffect } from "react";
@@ -9,61 +9,51 @@ import styled, { keyframes } from "styled-components";
 import Saga from "@lib/saga";
 import { getFundBaseData, getMarketStatus } from "../../services";
 
+const fadeIn = keyframes`
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+`
+
 const Wrapepr = styled.div.attrs({ className: "market" })`
 	width: 100%;
 	height: 60px;
-	padding: 5px 5px;
+	padding: 8px;
+	border-radius: 6px;
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 5px;
-	border-bottom: 1px solid var(--market-border);
+	grid-template-columns: repeat(2, 1fr);
+	gap: 0 34px;
+	background-color: var(--market-bg);
+	margin-bottom: 8px;
+	opacity: 0;
+	animation: ${fadeIn} 0.18s linear 0.1s forwards;
 `;
 
 const Item = styled.div`
 	width: 100%;
 	height: 100%;
-	border-radius: 6px;
-	background-color: var(--market-bg);
-	cursor: pointer;
 	display: flex;
-	flex-direction: column;
+	align-items: center;
 	justify-content: space-between;
-	padding: 5px;
-	font-size: 14px;
+	font-size: 13px;
+	color: var(--market-title);
+
+	.desc {
+		font-weight: 500;
+	}
 
 	&.crease {
-		background-image: linear-gradient(0deg, var(--market-bg-crease), transparent);
-		animation: ${() => pulse("--market-pulse-crease")} 0.4s linear forwards;
-
 		.desc {
 			color: var(--market-crease);
 		}
 	}
 	&.decrease {
-		background-image: linear-gradient(0deg, var(--market-bg-decrease), transparent);
-		animation: ${() => pulse("--market-pulse-decrease")} 0.4s linear forwards;
-
 		.desc {
 			color: var(--market-decrease);
 		}
-	}
-
-	.title {
-		color: var(--market-title);
-	}
-	.desc {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-`;
-
-const pulse = (color) => keyframes`
-	from{
-		border: 1px solid var(${color});
-	}
-	to {
-		border: 1px solid transparent;
 	}
 `;
 
@@ -82,6 +72,10 @@ const Market = () => {
 				}));
 				setBaseData(result);
 			}, 5000);
+
+			return () => {
+				baseDataSaga.stop()
+			}
 	}, [isStart]);
 
 	useEffect(() => {
@@ -89,16 +83,17 @@ const Market = () => {
 			setStart(status);
 			!status && baseDataSaga.stop(); //	是否终止请求
 		}, 1000);
+
+		return () => {
+			statusSaga.stop()
+		}
 	}, []);
 
 	const renderMarketJSX = () =>
 		baseData.map(({ className, current, name, percent }) => (
 			<Item className={className} key={name}>
 				<p className="title">{name}</p>
-				<p className="desc">
-					<span>{current}</span>
-					<span>{percent}</span>
-				</p>
+				<p className="desc">{percent}</p>
 			</Item>
 		));
 

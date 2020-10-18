@@ -1,59 +1,94 @@
 /*
  * @Date: 2020-10-08 21:00:33
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-11 19:55:07
+ * @LastEditTime: 2020-10-18 12:16:03
  * @Description: 搜索页面
  */
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import SearchBox from "../components/search/input";
-import Item from "../components/search/item";
-import { searchFund } from "../services";
+import styled, { keyframes } from "styled-components";
+import { postFund } from "../services";
 
-const Wrapper = styled.div.attrs({ className: "search" })`
-	position: absolute;
-	top: 100%;
-	left: 0;
-	width: 100%;
-	height: 0;
-	background-color: var(--search-bg);
-	transition: all 0.2s ease;
-	display: grid;
-	grid-template-rows: 40px 51px 1fr;
-	transform: translateY(100%);
-	overflow: hidden;
-	opacity: 0;
-
-	&.open {
-		height: 100%;
-		padding: 20px;
-		transform: translateY(-100%);
-		opacity: 1;
+const fadeIn = keyframes`
+	from {
+		opacity: 0;
 	}
-
-	.title {
-		height: 28px;
-		font-size: 16px;
-		color: var(--search-title);
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-
-		i {
-			font-size: 20px;
-			cursor: pointer;
-		}
+	to {
+		opacity: 1
 	}
 `;
 
-const Content = styled.div`
+const Wrapper = styled.div.attrs({ className: "search" })`
 	width: 100%;
-	height: 100%;
+	height: 470px;
 	overflow: auto;
+	opacity: 0;
+	animation: ${fadeIn} 0.18s linear 0.1s forwards;
+`;
 
-	.list {
-		width: 100%;
-		height: auto;
+const Item = styled.div`
+	width: 100%;
+	height: auto;
+	padding: 8px;
+	border-radius: 6px;
+	background-color: var(--search-item-bg);
+	display: grid;
+	grid-template-columns: 1fr 60px 84px;
+	margin-bottom: 8px;
+
+	.first {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 4px;
+
+		.top {
+			color: var(--search-item);
+			font-size: 13px;
+			font-weight: 500;
+		}
+		.bottom {
+			color: var(--search-item-code);
+			font-size: 12px;
+		}
+	}
+
+	.second {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: center;
+		gap: 4px;
+
+		.top {
+			color: var(--search-item);
+			font-size: 13px;
+		}
+		.bottom {
+			color: var(--search-item-code);
+			font-size: 12px;
+		}
+	}
+
+	.thrid {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+
+		button {
+			width: 56px;
+			height: 32px;
+			border-radius: 6px;
+			background-color: var(--search-item-btn);
+			font-size: 13px;
+			color: var(--search-item);
+			transition: all 0.18s linear;
+			cursor: pointer;
+
+			&:disabled {
+				background-color: var(--search-item-btn-disabled);
+				color: var(--search-item-code);
+			}
+		}
 	}
 `;
 
@@ -64,42 +99,59 @@ const Empty = styled.div`
 	align-items: center;
 	justify-content: center;
 	color: var(--search-empty);
+	font-size: 13px;
 `;
 
 const Search = (props) => {
-	const { closeEvent, active, user } = props;
+	const { user, data } = props;
 	const [result, setResult] = useState([]);
 
-	const searchEvent = async (k) => {
-		const data = await searchFund(k);
-		setResult([...data]);
+	useEffect(() => {
+		console.log("user", user);
+		data.length && setResult(data.map((v) => ({ ...v, active: false })));
+	}, [data]);
+
+	const followHandler = (idx) => {
+		const { uid } = user;
+		const code = result[idx].code;
+		const isActive = result[idx].active;
+		const list = result.map((v, i) => {
+			if (i === idx) {
+				return { ...v, active: true };
+			}
+			return v;
+		});
+		if (!isActive) {
+			setResult(list);
+			postFund({ uid, code });
+		}
 	};
 
-	useEffect(() => {
-		setResult([]);
-	}, [active]);
+	const renderContentJSX = () => {
+		if (result.length) {
+			return result.map(({ code, name, value, active }, i) => (
+				<Item key={code}>
+					<div className="first">
+						<span className="top">{name}</span>
+						<span className="bottom">{code}</span>
+					</div>
+					<div className="second">
+						<span className="top">{value}</span>
+						<span className="bottom">单位净值</span>
+					</div>
+					<div className="thrid">
+						<button disabled={active} onClick={() => followHandler(i)}>
+							{active ? "已关注" : "关注"}
+						</button>
+					</div>
+				</Item>
+			));
+		} else {
+			return <Empty>暂无搜索结果</Empty>;
+		}
+	};
 
-	const renderContentJSX = () =>
-		result.length ? (
-			<div className="list">
-				{result.map((v) => (
-					<Item key={v.id} fund={v} user={user} />
-				))}
-			</div>
-		) : (
-			<Empty>暂无搜索结果</Empty>
-		);
-
-	return (
-		<Wrapper className={active && "open"}>
-			<div className="title">
-				<b>基金搜索:</b>
-				<i className="iconfont chicken-close" onClick={closeEvent}></i>
-			</div>
-			<SearchBox active={active} searchEvent={searchEvent} />
-			<Content>{renderContentJSX()}</Content>
-		</Wrapper>
-	);
+	return <Wrapper>{renderContentJSX()}</Wrapper>;
 };
 
 export default Search;

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-09-24 15:00:30
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-09 18:00:42
+ * @LastEditTime: 2020-10-18 17:54:50
  * @Description: 数据交互中心
  */
 import {
@@ -15,9 +15,17 @@ import {
 	forceLogin,
 	jumpIndex,
 } from "./account";
-import { fundBase, fundKeyword } from "./danjuan";
-import { getMarketOpen, forceUpdate, getTableHead } from "./base";
-import { addFund, fundCodes } from './fund'
+import { fundBase, fundKeyword, getFundRealTimeData } from "./danjuan";
+import {
+	getMarketOpen,
+	forceUpdate,
+	getTableHead,
+	changeListType,
+	setSearchState,
+	getTotalData,
+	setTotalData,
+} from "./base";
+import { addFund, fundCodes } from "./fund";
 
 const commandMap = new Map([
 	["getUser", (data, sendResponse) => getLocalUser(sendResponse)],
@@ -35,7 +43,12 @@ const commandMap = new Map([
 	["forceUpdate", (data, sendResponse) => forceUpdate(sendResponse)], //	强制更新列表数据
 	["getTableHead", (data, sendResponse) => getTableHead(sendResponse)], //	列表表头配置
 	["searchFund", (data, sendResponse) => fundKeyword(data, sendResponse)], //	基金搜索
-	["addFund", (data, sendResponse) => addFund(data, sendResponse)],	//	添加基金
+	["addFund", (data, sendResponse) => addFund(data, sendResponse)], //	添加基金
+	["changeListType", (data) => changeListType(data)], //	基金列表切换类型
+	["setSearchState", (data) => setSearchState(data)], //	切换搜索状态
+	["getFundRealTimeData", (data, sendResponse) => getFundRealTimeData(data, sendResponse)], //	获取基金实时数据
+	["getTotalData", (data, sendResponse) => getTotalData(sendResponse)], //	总资产面板数据
+	["setTotalData", (data) => setTotalData(data)], //	保存资产
 ]);
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
