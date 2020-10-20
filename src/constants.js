@@ -1,3 +1,3 @@
-const API_HOST = "http://localhost:3000/fm/v1";
+const API_HOST = "http://elegantyu.cn/api/fundmanager";
 
 export { API_HOST };

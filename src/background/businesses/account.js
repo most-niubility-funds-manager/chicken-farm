@@ -1,12 +1,12 @@
 /*
  * @Date: 2020-09-24 15:54:43
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-07 11:10:14
+ * @LastEditTime: 2020-10-20 21:39:24
  * @Description: 用户账户登录、注册、退出
  */
 import Http from "@lib/fetch";
 import Saga from "@lib/saga";
-import { tabSendMessage, queryCurrentTab } from "@lib/chrome";
+import { sendMessage } from "@lib/chrome";
 import { LOGIN, REGISTER, CHECKID, CHECKNAME } from "../api";
 
 // 登录
@@ -105,12 +105,22 @@ export const clearUser = async () => {
 
 // 通知popup或options 登录
 export const forceLogin = async () => {
-	const tabs = await queryCurrentTab();
-	tabSendMessage(tabs, { command: "forceLogin" });
+	sendMessage({ command: "forceLogin" });
 };
 
 // 让options跳转首页
 export const jumpIndex = async () => {
-	const tabs = await queryCurrentTab();
-	tabSendMessage(tabs, { command: "jumpIndex" });
+	sendMessage({ command: "jumpIndex" });
+};
+
+// popup更新userinfo数据
+export const updateUserInfo = async () => {
+	const info = localStorage.getItem("fund-manager-user");
+	sendMessage({ command: "updateUserInfo", data: JSON.parse(info) });
+};
+
+// 清空popup数据并更新页面
+export const clearUserInfo = async () => {
+	clearUser();
+	sendMessage({ command: "updateUserInfo", data: null });
 };

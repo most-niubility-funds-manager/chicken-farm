@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-17 15:21:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-18 17:51:34
+ * @LastEditTime: 2020-10-20 17:33:59
  * @Description: 顶部收益面板
  */
 import React, { useState, useEffect } from "react";
@@ -19,43 +19,32 @@ const fadeIn = keyframes`
 	}
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div.attrs({ className: "income" })`
 	width: 100%;
 	height: 60px;
 	padding: 8px;
 	border-radius: 6px;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	gap: 0 7px;
-	align-items: center;
-	color: var(--income-color);
+	gap: 0 34px;
 	background-color: var(--income-bg);
 	margin-bottom: 8px;
 	opacity: 0;
 	animation: ${fadeIn} 0.18s linear 0.1s forwards;
 `;
 
-const AllText = styled.div`
-	font-size: 13px;
-	display: flex;
-	align-items: center;
-	gap: 4px;
-	cursor: pointer;
-
-	i {
-		font-size: 14px;
-		color: var(--income-icon);
-	}
-`;
-
-const Detail = styled.div`
+const Item = styled.div`
+	width: 100%;
+	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	font-size: 13px;
+	color: var(--income-color);
 
-	.crease {
+	.desc {
 		font-weight: 500;
+		color: var(--income-main);
 		&.increase {
 			color: var(--income-increase);
 		}
@@ -63,12 +52,6 @@ const Detail = styled.div`
 			color: var(--income-decrease);
 		}
 	}
-`;
-
-const AllMoney = styled.div`
-	font-weight: 500;
-	font-size: 18px;
-	color: var(--income-main);
 `;
 
 const IncomePanel = () => {
@@ -84,20 +67,30 @@ const IncomePanel = () => {
 		};
 	}, []);
 
+	// crease class
+	const { lastIncome, totalIncome, fakeIncome, totalCost } = total;
+	const lastCrease = `desc ${lastIncome < 0 ? "decrease" : "increase"}`;
+	const totalCrease = `desc ${totalIncome < 0 ? "decrease" : "increase"}`;
+	const fakeCrease = `desc ${fakeIncome < 0 ? "decrease" : "increase"}`;
+
 	return (
 		<Wrapper>
-			<AllText>
-				总资产<i className="iconfont chicken-browse"></i>
-			</AllText>
-			<Detail>
-				昨日收益
-				<span className="crease">{total.lastIncome}</span>
-			</Detail>
-			<AllMoney>{total.totalCost}</AllMoney>
-			<Detail>
-				累计收益
-				<span className="crease">{total.totalIncome}</span>
-			</Detail>
+			<Item>
+				<p className="title">总资产</p>
+				<p className="desc">{thousandUnit(totalCost)}</p>
+			</Item>
+			<Item>
+				<p className="title">昨日收益</p>
+				<p className={lastCrease}>{lastIncome < 0 ? lastIncome : `+${lastIncome}`}</p>
+			</Item>
+			<Item>
+				<p className="title">累计收益</p>
+				<p className={totalCrease}>{totalIncome < 0 ? totalIncome : `+${totalIncome}`}</p>
+			</Item>
+			<Item>
+				<p className="title">今日预估</p>
+				<p className={fakeCrease}>{fakeIncome < 0 ? fakeIncome : `+${fakeIncome}`}</p>
+			</Item>
 		</Wrapper>
 	);
 };

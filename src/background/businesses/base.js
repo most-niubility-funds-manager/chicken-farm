@@ -1,13 +1,13 @@
 /*
  * @Date: 2020-10-06 20:42:02
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-18 18:29:35
+ * @LastEditTime: 2020-10-20 18:00:21
  * @Description: 插件基本接口需求
  */
 import store from "../model/store";
 import { getHoliday, getLastTradeTime } from "../services";
 import { getPreciseTime, convertDate } from "@utils";
-import { queryCurrentTab, tabSendMessage } from "@lib/chrome";
+import { sendMessage } from "@lib/chrome";
 
 // 获取节假日并判断现在的交易状态
 export const getMarketOpen = async (sendResponse) => {
@@ -88,20 +88,17 @@ export const getTableHead = async (sendResponse) => {
 
 // 强制更新popup
 export const forceUpdate = async () => {
-	const tabs = await queryCurrentTab();
-	tabSendMessage(tabs, { command: "forceUpdate", data: true });
+	sendMessage({ command: "forceUpdate", data: true });
 };
 
 // 基金列表切换类型
 export const changeListType = async (state) => {
-	const tabs = await queryCurrentTab();
-	tabSendMessage(tabs, { command: "changeListType", data: state });
+	sendMessage({ command: "changeListType", data: state });
 };
 
 // 搜索面板
 export const setSearchState = async (state) => {
-	const tabs = await queryCurrentTab();
-	tabSendMessage(tabs, { command: "setSearchState", data: state });
+	sendMessage({ command: "setSearchState", data: state });
 };
 
 // 总资产
@@ -109,14 +106,42 @@ export const getTotalData = async (sendResponse) => {
 	const total = store.get("totalCost");
 	const result = Object.values(total).reduce(
 		(obj, curr) =>
-			Object.keys(obj).reduce((o, k) => ({ ...o, [k]: Number(obj[k] || 0) + Number(curr[k]) }), {}),
-		{ totalCost: 0, lastIncome: 0, totalIncome: 0 }
+			Object.keys(obj).reduce(
+				(o, k) => ({ ...o, [k]: (Number(obj[k] || 0) + Number(curr[k])).toFixed(2) }),
+				{}
+			),
+		{ totalCost: 0, lastIncome: 0, totalIncome: 0, fakeIncome: 0 }
 	);
+
 	sendResponse(result);
 };
 
 // 设置总资产
-export const setTotalData = async ({ code, totalCost, lastIncome, totalIncome }) => {
+export const setTotalData = async ({ code, totalCost, lastIncome, totalIncome, fakeIncome }) => {
 	const total = store.get("totalCost");
-	store.set("totalCost", { ...total, [code]: { totalCost, lastIncome, totalIncome } });
+	store.set("totalCost", { ...total, [code]: { totalCost, lastIncome, totalIncome, fakeIncome } });
+};
+
+// 设置页面
+export const setSettingState = async (state) => {
+	sendMessage({ command: "setSettingState", data: state });
+};
+
+// 详情页
+export const setDetailState = async ({ state, code }) => {
+	sendMessage({ command: "setDetailState", data: { state, code } });
+};
+
+// 获取用户本地配置
+export const getUserLocalSetting = async (sendResponse) => {
+	const config = store.get("userSetting");
+	sendResponse(config);
+};
+
+// 配置用户配置
+export const setUserLocalSetting = async ({ key, value }) => {
+	const config = store.get("userSetting");
+	const result = { ...config, [key]: value };
+	store.set("userSetting", result);
+	sendMessage({ command: "updateSetting", data: result });
 };

@@ -1,13 +1,13 @@
 /*
  * @Date: 2020-10-05 22:36:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-18 15:35:40
+ * @LastEditTime: 2020-10-19 14:50:28
  * @Description: 蛋卷基金相关请求控制
  */
 import store from "../model/store";
 import { getFundBase, getFundHistory, findFund, getLiveFundData } from "../services/index";
 import { getLastDay, getPreciseTime } from "@utils";
-import { queryCurrentTab, tabSendMessage } from "@lib/chrome";
+import { sendMessage } from "@lib/chrome";
 
 // 是否需要更新
 const isDiffTime = (time) => {
@@ -41,9 +41,8 @@ export const fundBase = async (sendResponse) => {
 
 // 搜索基金
 export const fundKeyword = async (keyword, sendResponse) => {
-	const tabs = await queryCurrentTab();
 	const data = await findFund(keyword);
-	tabSendMessage(tabs, { command: "setSearchData", data });
+	sendMessage({ command: "setSearchData", data });
 
 	sendResponse(data);
 };

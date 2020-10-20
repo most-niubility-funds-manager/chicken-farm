@@ -36,7 +36,6 @@
 	--footer-state-close: var(--yellow);
 	--footer-icon-hover: var(--black);
 
-	--search-bg: var(--black-26);
 	--search-title: var(--white-ee);
 	--search-input: var(--white-ff-dim85);
 	--search-input-caret: var(--white-ff-dim85);
@@ -52,4 +51,97 @@
 	--search-item-btn: var(--blue);
 	--search-item-btn-disabled: var(--white-ff-dim12);
 	--search-empty: var(--white-ff-dim85);
+
+	--setting-title: var(--white-ff-dim85);
+	--setting-bg: var(--black-17);
+	--setting-block: var(--white-ff-dim85);
+	--setting-block-bg: var(--black-1f);
+	--setting-switch: var(--black-61);
+	--setting-switch-span: var(--white);
+	--setting-switch-active: var(--blue-17);
+	--setting-username: var(--white-ff-dim45);
+
+	--login-bg: var(--black-1f);
+	--login-icon: var(--white-ff-dim12);
+	--login-tab: var(--white-ff-dim45);
+	--login-tab-active: var(--white-ff-dim85);
+	--login-label: var(--white-ff-dim65);
+	--login-input: var(--white-ff-dim85);
+	--login-input-bg: var(--black-2d);
+	--login-btn: var(--white-ff-dim85);
+	--login-btn-bg: var(--blue);
+	--login-error: var(--red-f5);
+}
+
+.reserveNormal {
+	--home-bg: var(--black-17);
+
+	--market-title: var(--white-ee);
+	--market-bg: var(--black-1f);
+	--market-decrease: var(--red);
+	--market-crease: var(--green);
+
+	--income-bg: var(--black-1f);
+	--income-color: var(--white-ff-dim65);
+	--income-main: var(--white-ff-dim85);
+	--income-icon: var(--white-ff-dim12);
+	--income-decrease: var(--red);
+	--income-increase: var(--green);
+
+	--table-th: var(--white-ff-dim45);
+	--table-th-main: var(--yellow);
+	--table-th-main-active: var(--yellow);
+	--table-th-icon: var(--white-ff-dim12);
+	--table-th-menu-bg: var(--black-2a);
+	--table-th-menu-active: var(--white-ff-dim08);
+
+	--table-tr: var(--white-ff-dim85);
+	--table-tr-code: var(--white-ff-dim45);
+	--table-tr-bg: var(--black-1f);
+	--table-tr-detail: var(--black-7f);
+	--table-tr-increase: var(--green);
+	--table-tr-decrease: var(--red);
+
+	--footer-bg: var(--black-1f);
+	--footer-border: var(--black-33);
+	--footer-font: var(--white-ee);
+	--footer-state-open: var(--blue);
+	--footer-state-close: var(--yellow);
+	--footer-icon-hover: var(--black);
+
+	--search-title: var(--white-ee);
+	--search-input: var(--white-ff-dim85);
+	--search-input-caret: var(--white-ff-dim85);
+	--search-input-placeholder: var(--white-ff-dim45);
+	--search-input-bg: var(--black-26);
+	--search-btn: var(--white-ff-dim12);
+	--search-btn-hover: var(--white-ff-dim50);
+	--search-btn-bg: var(--black-26);
+
+	--search-item: var(--white-ff-dim85);
+	--search-item-code: var(--white-ff-dim45);
+	--search-item-bg: var(--black-1f);
+	--search-item-btn: var(--blue);
+	--search-item-btn-disabled: var(--white-ff-dim12);
+	--search-empty: var(--white-ff-dim85);
+
+	--setting-title: var(--white-ff-dim85);
+	--setting-bg: var(--black-17);
+	--setting-block: var(--white-ff-dim85);
+	--setting-block-bg: var(--black-1f);
+	--setting-switch: var(--black-61);
+	--setting-switch-span: var(--white);
+	--setting-switch-active: var(--blue-17);
+	--setting-username: var(--white-ff-dim45);
+
+	--login-bg: var(--black-1f);
+	--login-icon: var(--white-ff-dim12);
+	--login-tab: var(--white-ff-dim45);
+	--login-tab-active: var(--white-ff-dim85);
+	--login-label: var(--white-ff-dim65);
+	--login-input: var(--white-ff-dim85);
+	--login-input-bg: var(--black-2d);
+	--login-btn: var(--white-ff-dim85);
+	--login-btn-bg: var(--blue);
+	--login-error: var(--red-f5);
 }

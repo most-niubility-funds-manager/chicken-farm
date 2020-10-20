@@ -14,6 +14,10 @@ const List = styled.div`
 	width: 100%;
 	height: 370px;
 	overflow: overlay;
+
+	&.long {
+		height: 430px;
+	}
 `;
 
 const Empty = styled.div`
@@ -27,7 +31,7 @@ const Empty = styled.div`
 `;
 
 const Content = (props) => {
-	const { user, forceUpdate, tableType } = props;
+	const { user, forceUpdate, tableType, setting } = props;
 	const [codes, setCodes] = useState([]); //	原数据
 	const [fundData, setFundData] = useState([]); //	基金数据
 	const onlyCode = codes.map(({ code }) => code); //	只有code
@@ -37,10 +41,11 @@ const Content = (props) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const originCodes = await getAllFundCodes(user.uid);
-			const currentCodes = originCodes.filter((v) => (!tableType ? !!v.follow : !!v.init_cost));
+			const currentCodes = originCodes.filter((v) => (!tableType ? !!v.follow : !!v.init_unit));
 			setCodes(currentCodes);
 		};
-		user && fetchData();
+		setFundData([]);
+		user && user.uid && fetchData();
 	}, [user, forceUpdate, tableType]);
 
 	useEffect(() => {
@@ -61,10 +66,17 @@ const Content = (props) => {
 			<Empty>暂无基金</Empty>
 		);
 
+	const renderListJSX = () => {
+		const { marketState, incomeState } = setting;
+		const className = (!tableType && !marketState) || (tableType && !incomeState) ? "long" : "";
+
+		return <List className={className}>{renderItemJSX()}</List>;
+	};
+
 	return (
 		<Wrapper>
 			<Head></Head>
-			<List>{renderItemJSX()}</List>
+			{renderListJSX()}
 		</Wrapper>
 	);
 };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 09:43:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-17 19:13:31
+ * @LastEditTime: 2020-10-20 10:09:33
  * @Description: 大盘
  */
 import React, { useState, useEffect } from "react";
@@ -18,7 +18,7 @@ const fadeIn = keyframes`
 	}
 `
 
-const Wrapepr = styled.div.attrs({ className: "market" })`
+const Wrapper = styled.div.attrs({ className: "market" })`
 	width: 100%;
 	height: 60px;
 	padding: 8px;
@@ -97,7 +97,7 @@ const Market = () => {
 			</Item>
 		));
 
-	return <Wrapepr>{renderMarketJSX()}</Wrapepr>;
+	return <Wrapper>{renderMarketJSX()}</Wrapper>;
 };
 
 export default Market;

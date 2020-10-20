@@ -5,7 +5,6 @@ import Income from "../components/home/income";
 import Content from "../components/home/content";
 import Search from "./search";
 import Nav from "../components/home/nav";
-import { getUserInfo } from "../services";
 
 const fadeIn = keyframes`
 	from {
@@ -31,8 +30,8 @@ const HomeWrapper = styled.div.attrs({ className: "home" })`
 	animation: ${fadeIn} 0.18s linear 0.1s forwards;
 `;
 
-const Home = () => {
-	const [user, setUser] = useState(null);
+const Home = (props) => {
+	const { user, setting } = props;
 	const [searchActive, setSearchActive] = useState(false);
 	const [update, setUpdate] = useState(false);
 	const [tableType, setTableType] = useState(false);
@@ -40,10 +39,12 @@ const Home = () => {
 
 	// 顶部框
 	const renderTopPanelJSX = () => {
-		if (!tableType) {
+		if (!tableType && setting.marketState) {
 			return <Market />;
-		} else {
+		} else if (tableType && setting.incomeState) {
 			return <Income />;
+		} else {
+			return null;
 		}
 	};
 
@@ -53,7 +54,7 @@ const Home = () => {
 			return (
 				<HomeWrapper>
 					{renderTopPanelJSX()}
-					<Content user={user} forceUpdate={update} tableType={tableType} />
+					<Content user={user} forceUpdate={update} tableType={tableType} setting={setting} />
 				</HomeWrapper>
 			);
 		} else {
@@ -83,7 +84,9 @@ const Home = () => {
 			["setSearchData", (data) => setSearchData(data)],
 		]);
 
-		commandMap.get(command)(data);
+		if (commandMap.get(command)) {
+			commandMap.get(command)(data);
+		}
 
 		return true;
 	};
@@ -93,11 +96,6 @@ const Home = () => {
 		return () => {
 			chrome.runtime.onMessage.removeListener(onMessageListener);
 		};
-	}, []);
-
-	useEffect(async () => {
-		const info = await getUserInfo();
-		setUser(info);
 	}, []);
 
 	return (

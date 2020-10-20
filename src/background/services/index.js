@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 23:00:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-18 15:40:30
+ * @LastEditTime: 2020-10-18 19:51:05
  * @Description: 数据请求的操作
  */
 // 大盘数据
@@ -125,7 +125,6 @@ export const getLiveFundData = async ({ codes }) => {
 		deviceid: 1,
 		Fcodes: codes.join(),
 	};
-	console.log('什么参数', params, codes)
 
 	try {
 		const { Datas } = await Http.get(FUNDLIVE, params);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { setSearchState, searchFund } from "../../services";
+import { setSearchState, searchFund, setSettingState } from "../../services";
 
 const Wrapper = styled.div.attrs({ className: "search-box" })`
 	width: 100%;
@@ -122,7 +122,7 @@ const SearchBox = () => {
 		const { value } = inputEl.current;
 
 		if (keyCode === 13) {
-			searchFund(value)
+			searchFund(value);
 			e.preventDefault();
 		} else if (keyCode === 8 && !value.length) {
 			expandDeactiveHandler();
@@ -144,6 +144,8 @@ const SearchBox = () => {
 		}
 		inputEl.current.value = "";
 	};
+	// 打开设置
+	const settingActiveHandler = () => setSettingState(true);
 
 	return (
 		<Wrapper>
@@ -157,7 +159,7 @@ const SearchBox = () => {
 					onClick={expandDeactiveHandler}
 				></i>
 			</InputWrapper>
-			<Btn className="iconfont chicken-conditions"></Btn>
+			<Btn className="iconfont chicken-conditions" onClick={settingActiveHandler}></Btn>
 		</Wrapper>
 	);
 };

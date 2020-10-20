@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 22:43:25
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-18 17:57:00
+ * @LastEditTime: 2020-10-20 18:04:24
  * @Description: 缓存数据 避免重复请求
  */
 const config = {
@@ -13,6 +13,12 @@ const config = {
 	expired: null, //  每次获取数据记录的时间，若不是同一天，则重新请求
 	tableFields: ["valuation", "lastTime", "lastWeek", "afterAdd"], //	配置的列表显示字段	最多四个字段 valuation, lastTime, lastWeek, afterAdd, cost, realTime
 	totalCost: {}, //	各基金的金额
+	userSetting: {
+		reverseColor: false,
+		tradeNotice: false,
+		marketState: true,
+		incomeState: true,
+	}, //	用户本地配置
 	get(key) {
 		return this[key];
 	},

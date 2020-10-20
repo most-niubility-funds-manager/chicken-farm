@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { setTotalData } from "../../services";
+import { setTotalData, setDetailState } from "../../services";
 
 const FocusWrapper = styled.div.attrs({ className: "table-list-item" })`
 	width: 100%;
@@ -14,6 +14,7 @@ const FocusWrapper = styled.div.attrs({ className: "table-list-item" })`
 	background-color: var(--table-tr-bg);
 	font-size: 13px;
 	margin-bottom: 8px;
+	cursor: pointer;
 
 	.first {
 		display: flex;
@@ -56,6 +57,8 @@ const HoldWrapper = styled.div.attrs({ className: "table-list-item" })`
 	font-size: 12px;
 	color: var(--table-tr-code);
 	background-color: var(--table-tr-bg);
+	margin-bottom: 8px;
+	cursor: pointer;
 
 	.title {
 		font-size: 13px;
@@ -106,6 +109,7 @@ const Item = (props) => {
 		: `+${data.fakePercent}%`;
 	// 成本
 	const cost = (base.init_cost * base.init_unit).toFixed(2);
+	const currentCost = (base.init_cost * data.realUnit).toFixed(2);
 	// 累计收益
 	const totalIncome = () => {
 		const value = (base.init_cost * data.realUnit).toFixed(2);
@@ -113,14 +117,22 @@ const Item = (props) => {
 		return diff.includes("-") ? `${diff}` : `+${diff}`;
 	};
 	// 昨日收益
-	const lastIncome = ((base.init_cost * data.realPercent) / 100).toFixed(2);
+	const lastIncome = () => {
+		const number = (base.init_cost * data.realPercent) / 100;
+		return number > 0 ? `+${number.toFixed(2)}` : number.toFixed(2);
+	};
 	// 实时估算
 	const fakeIncome = () => {
 		if (data.fakePercent !== "--") {
-			return ((cost * data.fakePercent) / 100).toFixed(2);
+			const number = (cost * data.fakePercent) / 100;
+			return number > 0 ? `+${number.toFixed(2)}` : number.toFixed(2);
 		} else {
 			return "--";
 		}
+	};
+
+	const openDetailHandler = () => {
+		setDetailState({ state: true, code: data.code });
 	};
 
 	useEffect(() => {
@@ -128,8 +140,9 @@ const Item = (props) => {
 			// 提交并计算总资产
 			const params = {
 				code: data.code,
-				totalCost: cost,
-				lastIncome,
+				totalCost: currentCost,
+				lastIncome: lastIncome(),
+				fakeIncome: fakeIncome() === "--" ? 0 : fakeIncome(),
 				totalIncome: totalIncome(),
 			};
 			setTotalData(params);
@@ -138,7 +151,7 @@ const Item = (props) => {
 
 	if (!type) {
 		return (
-			<FocusWrapper>
+			<FocusWrapper onClick={openDetailHandler}>
 				<span className="first">
 					<p className="title">{data.name}</p>
 					<p className="code">{data.code}</p>
@@ -149,12 +162,12 @@ const Item = (props) => {
 		);
 	} else {
 		return (
-			<HoldWrapper>
+			<HoldWrapper onClick={openDetailHandler}>
 				<p className="title">{data.name}</p>
 				<div className="detail-grid">
 					<div className="item">
 						<p>金额</p>
-						<span>{cost}</span>
+						<span>{currentCost}</span>
 					</div>
 					<div className="item">
 						<p>累计收益</p>
@@ -164,7 +177,9 @@ const Item = (props) => {
 					</div>
 					<div className="item">
 						<p>昨日收益</p>
-						<span className={lastIncome.includes("-") ? "decrease" : "increase"}>{lastIncome}</span>
+						<span className={lastIncome().includes("-") ? "decrease" : "increase"}>
+							{lastIncome()}
+						</span>
 					</div>
 					<div className="item">
 						<p>今日预估</p>

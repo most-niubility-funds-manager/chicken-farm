@@ -3,7 +3,6 @@ import { fundAdd, getUserFunds } from "../services/index";
 // 基金数据获取
 export const fundCodes = async ({ uid }, sendResponse) => {
 	const codes = await getUserFunds(uid);
-	console.log("基金数据获取", uid);
 
 	sendResponse(codes);
 };
