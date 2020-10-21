@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 23:00:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-18 19:51:05
+ * @LastEditTime: 2020-10-21 22:16:42
  * @Description: 数据请求的操作
  */
 // 大盘数据
@@ -15,6 +15,8 @@ import {
 	FUNDSEARCH,
 	ADDFUND,
 	FUNDLIVE,
+	UPDATEFOLLOW,
+	UPDATEHOLD,
 } from "../api";
 
 // 获取大盘数据
@@ -150,4 +152,16 @@ export const getLiveFundData = async ({ codes }) => {
 	} catch (error) {
 		return [];
 	}
+};
+
+// 取关或回关
+export const updateFollow = async ({ uid, code, state, cost }) => {
+	const { status } = await Http.post(UPDATEFOLLOW, { uid, code, state, cost });
+	return { status };
+};
+
+// 修改持有
+export const updateHold = async ({ uid, code, cost, unit }) => {
+	const { status } = await Http.post(UPDATEHOLD, { uid, code, cost, unit });
+	return { status };
 };

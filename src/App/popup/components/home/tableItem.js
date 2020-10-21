@@ -99,7 +99,7 @@ const HoldWrapper = styled.div.attrs({ className: "table-list-item" })`
 `;
 
 const Item = (props) => {
-	const { type, data, base = {} } = props;
+	const { type, data, base = {}, refreshTotal } = props;
 
 	// 涨跌clss
 	const creaseType = data.fakePercent.includes("-") ? "decrease" : "increase";
@@ -118,7 +118,7 @@ const Item = (props) => {
 	};
 	// 昨日收益
 	const lastIncome = () => {
-		const number = (base.init_cost * data.realPercent) / 100;
+		const number = (base.init_cost * data.realUnit * data.realPercent) / 100;
 		return number > 0 ? `+${number.toFixed(2)}` : number.toFixed(2);
 	};
 	// 实时估算
@@ -132,11 +132,17 @@ const Item = (props) => {
 	};
 
 	const openDetailHandler = () => {
-		setDetailState({ state: true, code: data.code });
+		setDetailState({
+			state: true,
+			code: data.code,
+			followState: base.follow,
+			cost: base.init_cost,
+			unit: base.init_unit,
+		});
 	};
 
 	useEffect(() => {
-		if (type && base.init_unit) {
+		if (type && base.init_cost) {
 			// 提交并计算总资产
 			const params = {
 				code: data.code,
@@ -147,7 +153,7 @@ const Item = (props) => {
 			};
 			setTotalData(params);
 		}
-	}, [type]);
+	}, [type, refreshTotal]);
 
 	if (!type) {
 		return (

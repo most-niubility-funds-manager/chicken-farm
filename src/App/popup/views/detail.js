@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { setDetailState } from "../services";
+import { setDetailState, setFundFollowState } from "../services";
+import HoldPage from "../components/detail/hold";
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
 	width: 100%;
 	height: 100%;
 	padding: 16px 8px 0;
-	background-color: var(--setting-bg);
+	background-color: var(--detail-bg);
 	transform: translateX(100%);
 	transition: all 0.18s linear;
 	z-index: 1;
@@ -24,7 +25,7 @@ const Title = styled.div`
 	align-items: center;
 	justify-content: space-between;
 
-	color: var(--setting-title);
+	color: var(--detail-title);
 
 	margin-bottom: 20px;
 
@@ -37,25 +38,79 @@ const Title = styled.div`
 
 		i {
 			font-size: 16px;
-			color: var(--setting-title);
+			color: var(--detail-title);
 			margin-right: 4px;
+		}
+	}
+
+	.btn-group {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+
+		button {
+			width: 56px;
+			height: 32px;
+			border-radius: 6px;
+			background-color: var(--detail-button);
+			color: var(--detail-button-color);
+			font-size: 13px;
+			transition: all 0.15s linear;
+			cursor: pointer;
+
+			&.disabled {
+				background-color: var(--detail-button-disable);
+				color: var(--detail-button-disable-color);
+			}
 		}
 	}
 `;
 
 const Detail = (props) => {
-	const { active, code } = props;
+	const {
+		data: { state, code, followState, cost, unit },
+		user,
+	} = props;
+	const [followed, setFollowed] = useState(false);
+	const [holdState, setHoldState] = useState(false);
+	const holdPageData = {
+		code,
+		cost,
+		unit,
+		uid: user.uid,
+	};
 
 	const closeHandler = () => setDetailState(false);
+	const toggleFollowState = () => {
+		setFollowed(!followed);
+		setFundFollowState({ uid: user.uid, code, state: !followed });
+	};
+
+	useEffect(() => {
+		setFollowed(!!followState);
+	}, [state]);
 
 	return (
-		<Wrapper className={active && "active"}>
-			<Title onClick={closeHandler}>
-				<div className="title">
+		<Wrapper className={state && "active"}>
+			<Title>
+				<div className="title" onClick={closeHandler}>
 					<i className="iconfont chicken-arrow-left"></i>
 					产品详情
 				</div>
+				<div className="btn-group">
+					<button className={followed && "disabled"} onClick={toggleFollowState}>
+						{followed ? "已关注" : "关注"}
+					</button>
+					<button onClick={() => setHoldState(true)}>持有</button>
+				</div>
 			</Title>
+
+			{/* 持有弹窗 */}
+			<HoldPage
+				active={holdState}
+				data={holdPageData}
+				closeEvent={() => setHoldState(false)}
+			></HoldPage>
 		</Wrapper>
 	);
 };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-06 19:11:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-20 21:37:08
+ * @LastEditTime: 2020-10-21 22:42:45
  * @Description: 请求background
  */
 import { sendMessage } from "@lib/chrome";
@@ -54,11 +54,20 @@ export const getFundRealTimeData = (codes) =>
 export const getTotalData = () => sendMessage({ command: "getTotalData" });
 // 每支基金提交资产信息
 export const setTotalData = (data) => sendMessage({ command: "setTotalData", data });
+// 重置总资产
+export const resetTotalData = () => sendMessage({ command: "resetTotalData" });
 // 激活设置页面
 export const setSettingState = (state) => sendMessage({ command: "setSettingState", data: state });
+
 // 激活产品详情页
-export const setDetailState = ({ state, code }) =>
-	sendMessage({ command: "setDetailState", data: { state, code } });
+export const setDetailState = (data) => sendMessage({ command: "setDetailState", data });
+// 修改基金是否关注
+export const setFundFollowState = ({ uid, code, state, cost }) =>
+	sendMessage({ command: "setFundFollowState", data: { uid, code, state, cost } });
+// 修改基金持有
+export const setFundHold = ({ uid, code, cost, unit, state }) =>
+	sendMessage({ command: "setFundHold", data: { uid, code, cost, unit, state } });
+
 // 获取配置
 export const getUserLocalSetting = () => sendMessage({ command: "getUserLocalSetting" });
 // 设置单个配置

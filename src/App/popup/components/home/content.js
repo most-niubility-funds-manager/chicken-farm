@@ -41,7 +41,7 @@ const Content = (props) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const originCodes = await getAllFundCodes(user.uid);
-			const currentCodes = originCodes.filter((v) => (!tableType ? !!v.follow : !!v.init_unit));
+			const currentCodes = originCodes.filter((v) => (!tableType ? !!v.follow : !!v.init_cost));
 			setCodes(currentCodes);
 		};
 		setFundData([]);
@@ -61,7 +61,7 @@ const Content = (props) => {
 
 	const renderItemJSX = () =>
 		codes.length ? (
-			fundData.map((data, i) => <Item type={tableType} data={data} base={codes[i]}></Item>)
+			fundData.map((data, i) => <Item type={tableType} data={data} base={codes[i]} refreshTotal={forceUpdate}></Item>)
 		) : (
 			<Empty>暂无基金</Empty>
 		);

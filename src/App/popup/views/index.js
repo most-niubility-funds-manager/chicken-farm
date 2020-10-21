@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-16 18:17:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-20 21:17:51
+ * @LastEditTime: 2020-10-21 22:43:33
  * @Description: 项目wrapper
  */
 import React, { useState, useEffect } from "react";
@@ -24,8 +24,7 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
 const App = () => {
 	const [user, setUser] = useState({});
 	const [settingActive, setSettingActive] = useState(false);
-	const [detailActive, setDetailActive] = useState(false);
-	const [currentFund, setCurrentFund] = useState("");
+	const [detailData, setDetailData] = useState({})
 	const [userSetting, setUserSetting] = useState({});
 
 	const onMessageListener = (message) => {
@@ -34,9 +33,8 @@ const App = () => {
 			["setSettingState", (data) => setSettingActive(data)],
 			[
 				"setDetailState",
-				({ state, code }) => {
-					setDetailActive(state);
-					setCurrentFund(code);
+				(data) => {
+					setDetailData(data)
 				},
 			],
 			["updateUserInfo", (data) => setUser(data)],
@@ -71,9 +69,9 @@ const App = () => {
 	return (
 		<Wrapper>
 			{/* 切换页面 */}
-			<Home user={user} setting={userSetting}></Home>
+			<Home user={user} setting={userSetting} ></Home>
 			<Setting active={settingActive} data={userSetting} user={user}></Setting>
-			<Detail active={detailActive} code={currentFund}></Detail>
+			<Detail  user={user} data={detailData}></Detail>
 			<LoginPage user={user}></LoginPage>
 		</Wrapper>
 	);

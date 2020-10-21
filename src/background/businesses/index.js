@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-09-24 15:00:30
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-20 21:08:48
+ * @LastEditTime: 2020-10-21 22:42:10
  * @Description: 数据交互中心
  */
 import {
@@ -26,12 +26,13 @@ import {
 	setSearchState,
 	getTotalData,
 	setTotalData,
+	resetTotalData,
 	setSettingState,
 	setDetailState,
 	getUserLocalSetting,
 	setUserLocalSetting,
 } from "./base";
-import { addFund, fundCodes } from "./fund";
+import { addFund, fundCodes, setFundHold, setFundFollowState } from "./fund";
 
 const commandMap = new Map([
 	["getUser", (data, sendResponse) => getLocalUser(sendResponse)],
@@ -55,12 +56,15 @@ const commandMap = new Map([
 	["getFundRealTimeData", (data, sendResponse) => getFundRealTimeData(data, sendResponse)], //	获取基金实时数据
 	["getTotalData", (data, sendResponse) => getTotalData(sendResponse)], //	总资产面板数据
 	["setTotalData", (data) => setTotalData(data)], //	保存资产
+	["resetTotalData", () => resetTotalData()],	//	重置总资产面板
 	["setSettingState", (data) => setSettingState(data)],
 	["setDetailState", (data) => setDetailState(data)], //	详情页
 	["updateUserInfo", () => updateUserInfo()],
 	["getUserLocalSetting", (data, sendResponse) => getUserLocalSetting(sendResponse)],
 	["setUserLocalSetting", (data) => setUserLocalSetting(data)],
 	["clearUserInfo", () => clearUserInfo()],
+	["setFundFollowState", (data, sendResponse) => setFundFollowState(data, sendResponse)],
+	["setFundHold", (data, sendResponse) => setFundHold(data, sendResponse)],	//	修改持有
 ]);
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

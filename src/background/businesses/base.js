@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-06 20:42:02
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-20 18:00:21
+ * @LastEditTime: 2020-10-21 22:41:09
  * @Description: 插件基本接口需求
  */
 import store from "../model/store";
@@ -122,14 +122,20 @@ export const setTotalData = async ({ code, totalCost, lastIncome, totalIncome, f
 	store.set("totalCost", { ...total, [code]: { totalCost, lastIncome, totalIncome, fakeIncome } });
 };
 
+// 重置总资产
+export const resetTotalData = async () => {
+	store.set("totalCost", {});
+	sendMessage({ command: "forceUpdate" });
+};
+
 // 设置页面
 export const setSettingState = async (state) => {
 	sendMessage({ command: "setSettingState", data: state });
 };
 
 // 详情页
-export const setDetailState = async ({ state, code }) => {
-	sendMessage({ command: "setDetailState", data: { state, code } });
+export const setDetailState = async (data) => {
+	sendMessage({ command: "setDetailState", data });
 };
 
 // 获取用户本地配置
