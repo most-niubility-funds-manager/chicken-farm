@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-09-24 15:04:54
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-09 18:11:15
+ * @LastEditTime: 2020-10-22 11:46:23
  * @Description: chrome 基础api封装
  */
 
@@ -11,12 +11,11 @@
  * @return {Any}
  */
 export const sendMessage = ({ command, data = null }) =>
-	new Promise((resolve, reject) => {
+	new Promise((resolve) => {
 		chrome.runtime.sendMessage({ command, data }, (result) => {
 			const Error = chrome.runtime.lastError;
 			if (Error) {
-				console.warn(`[Chrome Runtime Error]: ${Error.message}`);
-				return reject();
+				console.info(`[Chrome Runtime Error]: ${Error.message}`);
 			}
 			return resolve(result);
 		});
@@ -28,12 +27,11 @@ export const sendMessage = ({ command, data = null }) =>
  * @return {type}
  */
 export const tabSendMessage = (tabs, options) =>
-	new Promise((resolve, reject) => {
+	new Promise((resolve) => {
 		const { id } = tabs[0];
 		const Error = chrome.runtime.lastError;
 		if (Error) {
-			console.log(`[Chrome Tab Error]: ${Error.message}`);
-			return reject();
+			console.info(`[Chrome Tab Error]: ${Error.message}`);
 		}
 		chrome.tabs.sendMessage(id, options, resolve);
 	});
@@ -43,11 +41,10 @@ export const tabSendMessage = (tabs, options) =>
  * @return {Tab}
  */
 export const queryCurrentTab = () =>
-	new Promise((resolve, reject) => {
+	new Promise((resolve) => {
 		const Error = chrome.runtime.lastError;
 		chrome.tabs.query({ active: true }, (tabs) => resolve(tabs));
 		if (Error) {
-			console.log(`[Chrome QueryTab Error]: ${Error.message}`);
-			reject();
+			console.info(`[Chrome QueryTab Error]: ${Error.message}`);
 		}
 	});

@@ -1,4 +1,5 @@
 import { fundAdd, getUserFunds, updateFollow, updateHold } from "../services/index";
+import { sendMessage } from "@lib/chrome";
 
 // 基金数据获取
 export const fundCodes = async ({ uid }, sendResponse) => {
@@ -15,6 +16,7 @@ export const addFund = async ({ uid, code }, sendResponse) => {
 // 修改基金是否关注的状态
 export const setFundFollowState = async ({ uid, code, state, cost }, sendResponse) => {
 	const { status } = await updateFollow({ uid, code, state, cost });
+	sendMessage({ command: "forceUpdate" });
 	sendResponse(status);
 };
 

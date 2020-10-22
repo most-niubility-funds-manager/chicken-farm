@@ -9,7 +9,7 @@ const Wrapper = styled.div`
 	left: 0;
 	width: 100%;
 	height: 100%;
-	padding: 16px 8px 0;
+	padding: 20px 16px 0;
 	background-color: var(--detail-bg);
 	transform: translateX(100%);
 	transition: all 0.18s linear;
@@ -77,13 +77,13 @@ const Detail = (props) => {
 		code,
 		cost,
 		unit,
-		uid: user.uid,
+		uid: user&& user.uid,
 	};
 
 	const closeHandler = () => setDetailState(false);
 	const toggleFollowState = () => {
 		setFollowed(!followed);
-		setFundFollowState({ uid: user.uid, code, state: !followed });
+		setFundFollowState({ uid: user.uid, code, state: !followed ? "1" : undefined, cost });
 	};
 
 	useEffect(() => {

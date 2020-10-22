@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getAllFundCodes, getFundRealTimeData, getMarketStatus } from "../../services";
+import {
+	getAllFundCodes,
+	getFundRealTimeData,
+	getMarketStatus,
+	setSearchState,
+} from "../../services";
 import Saga from "@lib/saga";
 import Head from "./tableHead";
 import Item from "./tableItem";
@@ -22,12 +27,24 @@ const List = styled.div`
 
 const Empty = styled.div`
 	width: 100%;
-	height: 100%;
+	height: 95%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 13px;
 	color: var(--table-th);
+
+	&.click-area {
+		cursor: pointer;
+		border-radius: 6px;
+		border: 1px dashed var(--table-th);
+		transition: all 0.18s linear;
+
+		&:hover {
+			color: var(--table-empty-hover);
+			border: 1px dashed var(--table-empty-hover);
+		}
+	}
 `;
 
 const Content = (props) => {
@@ -59,11 +76,17 @@ const Content = (props) => {
 		};
 	}, [codes]);
 
+	const gotoSearchHandler = () => setSearchState(true);
+
 	const renderItemJSX = () =>
 		codes.length ? (
-			fundData.map((data, i) => <Item type={tableType} data={data} base={codes[i]} refreshTotal={forceUpdate}></Item>)
+			fundData.map((data, i) => (
+				<Item type={tableType} data={data} base={codes[i]} refreshTotal={forceUpdate}></Item>
+			))
 		) : (
-			<Empty>暂无基金</Empty>
+			<Empty className={!tableType && "click-area"} onClick={gotoSearchHandler}>
+				{tableType ? "暂无基金" : "暂无基金，点击添加"}
+			</Empty>
 		);
 
 	const renderListJSX = () => {

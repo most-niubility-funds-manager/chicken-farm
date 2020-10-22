@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-18 19:53:03
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-20 21:43:43
+ * @LastEditTime: 2020-10-22 11:20:56
  * @Description: 个人设置页
  */
 import React, { useState } from "react";
@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 	left: 0;
 	width: 100%;
 	height: 100%;
-	padding: 16px 8px 0;
+	padding: 20px 16px 0;
 	background-color: var(--setting-bg);
 	transform: translateX(100%);
 	transition: all 0.18s linear;

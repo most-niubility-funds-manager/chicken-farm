@@ -134,7 +134,7 @@ const HoldPage = (props) => {
 		if (cost < 0 || unit < 0) return;
 
 		await setFundHold({ uid, code, cost, unit });
-		resetTotalData()
+		resetTotalData();
 		closeEvent();
 	};
 

@@ -113,7 +113,8 @@ const Btn = styled.div`
 	}
 `;
 
-const SearchBox = () => {
+const SearchBox = (props) => {
+	const { searchActive } = props
 	const inputEl = useRef(null);
 	const [isExpand, setExpand] = useState(false);
 
@@ -132,20 +133,22 @@ const SearchBox = () => {
 	// 激活搜索框
 	const expandActiveHandler = () => {
 		if (!isExpand) {
-			setExpand(true);
 			setSearchState(true);
 		}
 		inputEl.current.focus();
 	};
 	const expandDeactiveHandler = () => {
 		if (isExpand) {
-			setExpand(false);
 			setSearchState(false);
 		}
 		inputEl.current.value = "";
 	};
 	// 打开设置
 	const settingActiveHandler = () => setSettingState(true);
+
+	useEffect(() => {
+		setExpand(searchActive)
+	}, [searchActive])
 
 	return (
 		<Wrapper>

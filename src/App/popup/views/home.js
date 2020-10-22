@@ -100,7 +100,7 @@ const Home = (props) => {
 
 	return (
 		<Wrapper>
-			<Nav></Nav>
+			<Nav searchActive={searchActive}></Nav>
 			{renderBodyJSX()}
 		</Wrapper>
 	);
