@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-09-24 15:00:30
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-21 22:42:10
+ * @LastEditTime: 2020-11-03 22:29:07
  * @Description: 数据交互中心
  */
 import {
@@ -21,18 +21,19 @@ import { fundBase, fundKeyword, getFundRealTimeData } from "./danjuan";
 import {
 	getMarketOpen,
 	forceUpdate,
-	getTableHead,
 	changeListType,
 	setSearchState,
 	getTotalData,
 	setTotalData,
-	resetTotalData,
+	modifyHold,
 	setSettingState,
 	setDetailState,
 	getUserLocalSetting,
 	setUserLocalSetting,
+	setLoginActive,
 } from "./base";
-import { addFund, fundCodes, setFundHold, setFundFollowState } from "./fund";
+import { addFund, fundCodes, setFundHold, setFundFollowState, getFundDetailData } from "./fund";
+import "./notify"
 
 const commandMap = new Map([
 	["getUser", (data, sendResponse) => getLocalUser(sendResponse)],
@@ -44,32 +45,32 @@ const commandMap = new Map([
 	["forceLogin", () => forceLogin()],
 	["jumpIndex", () => jumpIndex()], //	注册/登录完毕跳转首页
 	["clearUser", () => clearUser()],
+	["setLoginActive", (data) => setLoginActive(data)], //	切换popup登录页面状态
 	["getFundBaseData", (data, sendResponse) => fundBase(sendResponse)], //	大盘数据
 	["checkMarketOpen", (data, sendResponse) => getMarketOpen(sendResponse)],
 	["allFundCodes", (data, sendResponse) => fundCodes(data, sendResponse)], //	用户所有基金代码及相关配置
 	["forceUpdate", (data, sendResponse) => forceUpdate(sendResponse)], //	强制更新列表数据
-	["getTableHead", (data, sendResponse) => getTableHead(sendResponse)], //	列表表头配置
 	["searchFund", (data, sendResponse) => fundKeyword(data, sendResponse)], //	基金搜索
 	["addFund", (data, sendResponse) => addFund(data, sendResponse)], //	添加基金
 	["changeListType", (data) => changeListType(data)], //	基金列表切换类型
 	["setSearchState", (data) => setSearchState(data)], //	切换搜索状态
 	["getFundRealTimeData", (data, sendResponse) => getFundRealTimeData(data, sendResponse)], //	获取基金实时数据
 	["getTotalData", (data, sendResponse) => getTotalData(sendResponse)], //	总资产面板数据
-	["setTotalData", (data) => setTotalData(data)], //	保存资产
-	["resetTotalData", () => resetTotalData()],	//	重置总资产面板
+	["setTotalData", (data, sendResponse) => setTotalData(data, sendResponse)], //	保存资产
+	["modifyHold", (data) => modifyHold(data)], //	重置总资产面板
 	["setSettingState", (data) => setSettingState(data)],
 	["setDetailState", (data) => setDetailState(data)], //	详情页
+	["getFundDetailData", (data, sendResponse) => getFundDetailData(data, sendResponse)], //	获取基金详情数据
 	["updateUserInfo", () => updateUserInfo()],
 	["getUserLocalSetting", (data, sendResponse) => getUserLocalSetting(sendResponse)],
 	["setUserLocalSetting", (data) => setUserLocalSetting(data)],
 	["clearUserInfo", () => clearUserInfo()],
 	["setFundFollowState", (data, sendResponse) => setFundFollowState(data, sendResponse)],
-	["setFundHold", (data, sendResponse) => setFundHold(data, sendResponse)],	//	修改持有
+	["setFundHold", (data, sendResponse) => setFundHold(data, sendResponse)], //	修改持有
 ]);
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	const { command, data = null } = message;
-	const { tab } = sender;
 
 	commandMap.get(command)(data, sendResponse);
 

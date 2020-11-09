@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { setTotalData, setDetailState } from "../../services";
+import Saga from "@lib/saga";
 
 const FocusWrapper = styled.div.attrs({ className: "table-list-item" })`
 	width: 100%;
@@ -99,7 +100,7 @@ const HoldWrapper = styled.div.attrs({ className: "table-list-item" })`
 `;
 
 const Item = (props) => {
-	const { type, data, base = {}, refreshTotal } = props;
+	const { type = true, data, user } = props;
 
 	// 涨跌clss
 	const creaseType = data.fakePercent.includes("-") ? "decrease" : "increase";
@@ -108,18 +109,21 @@ const Item = (props) => {
 		? `${data.fakePercent}%`
 		: `+${data.fakePercent}%`;
 	// 成本
-	const cost = (base.init_cost * base.init_unit).toFixed(2);
-	const currentCost = (base.init_cost * data.realUnit).toFixed(2);
+	const cost = (data.init_cost * data.init_unit).toFixed(2);
+	const currentCost = (data.init_cost * data.realUnit).toFixed(2);
 	// 累计收益
 	const totalIncome = () => {
-		const value = (base.init_cost * data.realUnit).toFixed(2);
+		const value = (data.init_cost * data.realUnit).toFixed(2);
 		const diff = (value - cost).toFixed(2);
 		return diff.includes("-") ? `${diff}` : `+${diff}`;
 	};
 	// 昨日收益
 	const lastIncome = () => {
-		const number = (base.init_cost * data.realUnit * data.realPercent) / 100;
-		return number > 0 ? `+${number.toFixed(2)}` : number.toFixed(2);
+		const number = (data.init_cost * data.realUnit * data.realPercent) / 100;
+		if (!Number.isNaN(number)) {
+			return number > 0 ? `+${number.toFixed(2)}` : number.toFixed(2);
+		}
+		return '0';
 	};
 	// 实时估算
 	const fakeIncome = () => {
@@ -131,29 +135,34 @@ const Item = (props) => {
 		}
 	};
 
+	// 实时估算的saga
+	const params = {
+		code: data.code,
+		totalCost: currentCost,
+		lastIncome: lastIncome(),
+		fakeIncome: fakeIncome() === "--" ? 0 : fakeIncome(),
+		totalIncome: totalIncome(),
+	};
+	const totalDataSaga = new Saga(() => setTotalData(params));
+
 	const openDetailHandler = () => {
 		setDetailState({
 			state: true,
 			code: data.code,
-			followState: base.follow,
-			cost: base.init_cost,
-			unit: base.init_unit,
+			followState: data.follow,
+			cost: data.init_cost,
+			unit: data.init_unit,
 		});
 	};
 
 	useEffect(() => {
-		if (type && base.init_cost) {
-			// 提交并计算总资产
-			const params = {
-				code: data.code,
-				totalCost: currentCost,
-				lastIncome: lastIncome(),
-				fakeIncome: fakeIncome() === "--" ? 0 : fakeIncome(),
-				totalIncome: totalIncome(),
-			};
-			setTotalData(params);
-		}
-	}, [type, refreshTotal]);
+		// 提交并计算总资产
+		totalDataSaga.start((_) => console.log("定期提交"), 5000);
+
+		return () => {
+			totalDataSaga.stop();
+		};
+	}, [user]);
 
 	if (!type) {
 		return (

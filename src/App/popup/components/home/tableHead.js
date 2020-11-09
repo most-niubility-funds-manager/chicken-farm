@@ -162,13 +162,13 @@ const Head = (props) => {
 				持有
 			</ThMain>
 			<span className="value">{ switchType ? '' : '净值'}</span>
-			<SortMenu>
+			{/* <SortMenu>
 				<div className={`sort-enter ${menuActive && "active"}`} onClick={openMenu}>
 					{currentSort.name}
 					<i className="iconfont chicken-arrow-left"></i>
 				</div>
 				<div className={`sort-menu ${menuActive && "active"}`}>{renderOptionsJSX()}</div>
-			</SortMenu>
+			</SortMenu> */}
 		</Wrapper>
 	);
 };

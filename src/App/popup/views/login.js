@@ -1,7 +1,15 @@
 // 不登录就不能用a
 import React, { useState, useRef } from "react";
 import styled, { keyframes } from "styled-components";
-import { createUid, checkName, register, login, setUserInfo, updateUserInfo } from "../services";
+import {
+	createUid,
+	checkName,
+	register,
+	login,
+	setUserInfo,
+	updateUserInfo,
+	setLoginActive,
+} from "../services";
 
 const slideUp = keyframes`
   0% {
@@ -159,7 +167,7 @@ const ErrorTip = styled.p`
 `;
 
 const LoginPage = (props) => {
-	const { user } = props;
+	const { user, active } = props;
 	const [isLogin, toggleLogin] = useState(true);
 	const [newUid, setUid] = useState(null);
 	const [isError, setError] = useState(false);
@@ -191,6 +199,13 @@ const LoginPage = (props) => {
 		}
 	};
 
+	const clearAllInput = () => {
+		loginNameEl.current.value = "";
+		loginPwdEl.current.value = "";
+		registerNameEl.current.value = "";
+		registerPwdEl.current.value = "";
+	};
+
 	const loginHandler = async () => {
 		const name = loginNameEl.current.value;
 		const password = loginPwdEl.current.value;
@@ -215,7 +230,9 @@ const LoginPage = (props) => {
 		}
 
 		setUserInfo({ uid, name });
+		setLoginActive(false);
 		updateUserInfo();
+		clearAllInput();
 	};
 
 	const registerHandler = async () => {
@@ -250,7 +267,9 @@ const LoginPage = (props) => {
 
 		// 更新本地数据 关闭弹窗
 		setUserInfo({ uid: newUid, name });
+		setLoginActive(false);
 		updateUserInfo();
+		clearAllInput();
 	};
 
 	const loginKeydownHandler = (e) => {
@@ -264,8 +283,8 @@ const LoginPage = (props) => {
 
 	return (
 		<Wrapper>
-			<Mask className={!user && "active"}></Mask>
-			<Content className={!user && "active"}>
+			<Mask className={active && "active"}></Mask>
+			<Content className={active && "active"}>
 				<Head>
 					<div className="tab-group">
 						<span className={isLogin && "active"} onClick={() => toggleLoginHandler(true)}>

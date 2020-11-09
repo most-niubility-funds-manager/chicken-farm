@@ -1,12 +1,12 @@
 /*
  * @Date: 2020-10-08 21:00:33
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-18 12:16:03
+ * @LastEditTime: 2020-10-25 11:22:28
  * @Description: 搜索页面
  */
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { postFund } from "../services";
+import { postFund, setLoginActive } from "../services";
 
 const fadeIn = keyframes`
 	from {
@@ -103,33 +103,21 @@ const Empty = styled.div`
 `;
 
 const Search = (props) => {
-	const { user, data } = props;
-	const [result, setResult] = useState([]);
-
-	useEffect(() => {
-		console.log("user", user);
-		data.length && setResult(data.map((v) => ({ ...v, active: false })));
-	}, [data]);
+	const { user, data, follow } = props;
 
 	const followHandler = (idx) => {
-		const { uid } = user;
-		const code = result[idx].code;
-		const isActive = result[idx].active;
-		const list = result.map((v, i) => {
-			if (i === idx) {
-				return { ...v, active: true };
-			}
-			return v;
-		});
-		if (!isActive) {
-			setResult(list);
-			postFund({ uid, code });
+		if (!user) {
+			return setLoginActive(true);
 		}
+
+		const {active} = data[idx]
+		follow(idx, !active)
+		console.log('点击关注或取关', idx, active)
 	};
 
 	const renderContentJSX = () => {
-		if (result.length) {
-			return result.map(({ code, name, value, active }, i) => (
+		if (data.length) {
+			return data.map(({ code, name, value, active }, i) => (
 				<Item key={code}>
 					<div className="first">
 						<span className="top">{name}</span>

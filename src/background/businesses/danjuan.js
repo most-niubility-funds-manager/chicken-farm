@@ -1,35 +1,26 @@
 /*
  * @Date: 2020-10-05 22:36:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-19 14:50:28
+ * @LastEditTime: 2020-11-03 22:28:53
  * @Description: 蛋卷基金相关请求控制
  */
 import store from "../model/store";
-import { getFundBase, getFundHistory, findFund, getLiveFundData } from "../services/index";
+import {
+	getFundBase,
+	findFund,
+	getLiveFundData,
+	getFundDetailMain,
+	getUserFunds,
+} from "../services/index";
+import { getLocalUser } from "./account";
 import { getLastDay, getPreciseTime } from "@utils";
 import { sendMessage } from "@lib/chrome";
+import Saga from "@lib/saga";
 
 // 是否需要更新
 const isDiffTime = (time) => {
 	const today = new Date(getPreciseTime());
 	return time !== today;
-};
-
-//  所有基金历史日增值数据
-export const fundHistory = async (code, sendResponse) => {
-	const expired = store.get("expired") || getLastDay(); //  若无 获取昨日时间戳
-	const history = store.get("fundHistory");
-	const historyData = history[code] || null;
-
-	if (isDiffTime(expired) || !historyData) {
-		const currentData = await getFundHistory(code);
-		// code value 键值对数组
-		store.set("fundHistory", { ...history, [code]: { ...currentData } });
-		store.set("expired", getPreciseTime());
-		sendResponse(currentData);
-	} else {
-		sendResponse(historyData);
-	}
 };
 
 // 大盘数据获取
@@ -47,7 +38,40 @@ export const fundKeyword = async (keyword, sendResponse) => {
 	sendResponse(data);
 };
 
+// 实时数据
 export const getFundRealTimeData = async (codes, sendResponse) => {
 	const liveData = await getLiveFundData({ codes });
 	sendResponse(liveData);
 };
+
+// 更新基金详情数据
+export const fetchEachFundDetail = async () => {
+	const user = getLocalUser();
+	const allCodes = await getUserFunds(user && user.uid);
+	const codes = allCodes.map(({ code }) => code);
+
+	Promise.all(codes.map((c) => getFundDetailMain(c))).then((datas) => {
+		const originStoreHistory = store.get("fundHistory");
+		const convertData = datas.reduce((obj, item, idx) => ({ ...obj, [codes[idx]]: item }), {});
+
+		store.set("fundHistory", { ...originStoreHistory, ...convertData });
+		store.set("expired", getPreciseTime());
+	});
+}
+
+// 每日定时获取基金详情数据
+const pollFetchEachFund = async () => {
+	const checkNowTime = () => {
+		const current = store.get("expired");
+		return isDiffTime(current);
+	};
+	const timeSaga = new Saga(checkNowTime);
+	
+	timeSaga.start((needUpdate) => {	
+		if (needUpdate) {
+			fetchEachFundDetail()
+		}
+	}, 30000);
+};
+
+pollFetchEachFund();

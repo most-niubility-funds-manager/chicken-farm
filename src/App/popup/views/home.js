@@ -31,11 +31,20 @@ const HomeWrapper = styled.div.attrs({ className: "home" })`
 `;
 
 const Home = (props) => {
-	const { user, setting } = props;
+	const { user, setting, update } = props;
 	const [searchActive, setSearchActive] = useState(false);
-	const [update, setUpdate] = useState(false);
 	const [tableType, setTableType] = useState(false);
 	const [searchData, setSearchData] = useState([]); //	获取搜搜哦结果
+	const [tempFollowCodes, setTempFollowCodes] = useState([]); //	临时存要关注的基金
+
+	// 搜索结果的关注
+	const searchDataSelectHandler = (idx, state) => {
+		const data = [...searchData];
+		data[idx].active = state;
+		const codes = data.filter(({ active }) => active).map(({ code }) => code);
+		setSearchData(data);
+		setTempFollowCodes(codes);
+	};
 
 	// 顶部框
 	const renderTopPanelJSX = () => {
@@ -54,11 +63,11 @@ const Home = (props) => {
 			return (
 				<HomeWrapper>
 					{renderTopPanelJSX()}
-					<Content user={user} forceUpdate={update} tableType={tableType} setting={setting} />
+					<Content user={user} update={update} tableType={tableType} setting={setting} />
 				</HomeWrapper>
 			);
 		} else {
-			return <Search user={user} data={searchData} />;
+			return <Search user={user} data={searchData} follow={searchDataSelectHandler} />;
 		}
 	};
 
@@ -66,13 +75,6 @@ const Home = (props) => {
 	const onMessageListener = (message) => {
 		const { command, data = null } = message;
 		const commandMap = new Map([
-			[
-				"forceUpdate",
-				() => {
-					setUpdate(true);
-					setTimeout(() => setUpdate(false));
-				},
-			],
 			["changeListType", (data) => setTableType(data)],
 			[
 				"setSearchState",
@@ -81,7 +83,7 @@ const Home = (props) => {
 					setSearchActive(data);
 				},
 			],
-			["setSearchData", (data) => setSearchData(data)],
+			["setSearchData", (data) => setSearchData(data.map((v) => ({ ...v, active: false })))],
 		]);
 
 		if (commandMap.get(command)) {
@@ -100,7 +102,7 @@ const Home = (props) => {
 
 	return (
 		<Wrapper>
-			<Nav searchActive={searchActive}></Nav>
+			<Nav searchActive={searchActive} user={user} followData={tempFollowCodes}></Nav>
 			{renderBodyJSX()}
 		</Wrapper>
 	);

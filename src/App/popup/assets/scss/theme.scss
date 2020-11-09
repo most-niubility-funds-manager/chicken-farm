@@ -80,6 +80,20 @@
 	--detail-button-disable: var(--white-ff-dim12);
 	--detail-button-disable-color: var(--white-ff-dim45);
 
+	--detail-main-bg: var(--black-1f);
+	--detail-main-h2: var(--white-ff-dim85);
+	--detail-main-p: var(--white-ff-dim45);
+	--detail-main-normal: var(--white-ff-dim85);
+	--detail-main-increase: var(--red);
+	--detail-main-decrease: var(--green);
+	--detail-main-text: var(--white-ff-dim45);
+
+	--detail-worth-tab: var(--white-ff-dim85);
+	--detail-worth-tab-active: var(--blue);
+	--detail-worth-thead: var(--white-ff-dim50);
+	--detail-worth-tbody: var(--white-ff-dim85);
+	--detail-worth-rank: var(--white-ff-dim50);
+
 	--detail-hold-bg: var(--black-1f);
 	--detail-hold-title: var(--white-ff-dim85);
 	--detail-hold-icon: var(--white-ff-dim12);
@@ -112,6 +126,7 @@
 	--table-th-icon: var(--white-ff-dim12);
 	--table-th-menu-bg: var(--black-2a);
 	--table-th-menu-active: var(--white-ff-dim08);
+	--table-empty-hover: var(--white-ff-dim65);
 
 	--table-tr: var(--white-ff-dim85);
 	--table-tr-code: var(--white-ff-dim45);
@@ -162,4 +177,32 @@
 	--login-btn: var(--white-ff-dim85);
 	--login-btn-bg: var(--blue);
 	--login-error: var(--red-f5);
+
+	--detail-bg: var(--black-17);
+	--detail-title: var(--white-ff-dim85);
+	--detail-button: var(--blue);
+	--detail-button-color: var(--white-ff-dim85);
+	--detail-button-disable: var(--white-ff-dim12);
+	--detail-button-disable-color: var(--white-ff-dim45);
+
+	--detail-main-bg: var(--black-1f);
+	--detail-main-h2: var(--white-ff-dim85);
+	--detail-main-p: var(--white-ff-dim45);
+	--detail-main-normal: var(--white-ff-dim85);
+	--detail-main-increase: var(--green);
+	--detail-main-decrease: var(--red);
+	--detail-main-text: var(--white-ff-dim45);
+
+	--detail-worth-tab: var(--white-ff-dim85);
+	--detail-worth-tab-active: var(--blue);
+
+	--detail-hold-bg: var(--black-1f);
+	--detail-hold-title: var(--white-ff-dim85);
+	--detail-hold-icon: var(--white-ff-dim12);
+	--detail-hold-label: var(--white-ff-dim65);
+	--detail-hold-input: var(--white-ff-dim85);
+	--detail-hold-input-bg: var(--black-2d);
+	--detail-hold-btn: var(--white-ff-dim85);
+	--detail-hold-btn-bg: var(--blue);
+	--detail-hold-cost: var(--white-ff-dim45);
 }

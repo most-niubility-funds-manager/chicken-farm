@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-17 15:25:17
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-03 02:13:10
+ * @LastEditTime: 2020-10-27 10:28:45
  * @Description: webpack通用配置
  */
 const path = require("path");
@@ -82,9 +82,14 @@ module.exports = {
 	optimization: {
 		usedExports: true,
 		splitChunks: {
-			minChunks: 1,
+			minChunks: 30,
+			minSize: 10,
 			chunks: "all",
 			cacheGroups: {
+				common: {
+					name: 'common',
+					priority: 1,
+				},
 				vendor: {
 					name: "vendor",
 					test: /node_modules/,

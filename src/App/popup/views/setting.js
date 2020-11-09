@@ -1,12 +1,12 @@
 /*
  * @Date: 2020-10-18 19:53:03
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-22 11:20:56
+ * @LastEditTime: 2020-10-31 18:25:35
  * @Description: 个人设置页
  */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { setSettingState, clearUserInfo } from "../services";
+import { setSettingState, clearUserInfo, setLoginActive } from "../services";
 import Item from "../components/setting/item";
 
 const Wrapper = styled.div`
@@ -75,8 +75,32 @@ const LoginOutBlock = styled.div`
 const Setting = (props) => {
 	const { active, data, user } = props;
 	const { reverseColor, tradeNotice, marketState, incomeState } = data;
+	const [isLogin, setIsLogin] = useState(false);
 
 	const closeHandler = () => setSettingState(false);
+
+	const loginOutHandler = () => {
+		setLoginActive(false);
+		clearUserInfo();
+		setIsLogin(false);
+	};
+
+	const renderLoginBtnJSX = () => {
+		if (isLogin) {
+			return (
+				<LoginOutBlock onClick={loginOutHandler}>
+					退出账号 <span className="name">（当前登录：{user ? user.name : ""}）</span>
+				</LoginOutBlock>
+			);
+		} else {
+			return <LoginOutBlock onClick={() => setLoginActive(true)}>登录/注册账号</LoginOutBlock>;
+		}
+	};
+
+	useEffect(() => {
+		console.log('user', user)
+		setIsLogin(!!user);
+	}, [user]);
 
 	return (
 		<Wrapper className={active && "active"}>
@@ -90,9 +114,7 @@ const Setting = (props) => {
 				<Item text="开启/关闭大盘数据" active={marketState} keyName="marketState"></Item>
 				<Item text="开启/关闭收益面板" active={incomeState} keyName="incomeState"></Item>
 			</Block>
-			<LoginOutBlock onClick={clearUserInfo}>
-				退出账号 <span className="name">（当前登录：{user ? user.name : ''}）</span>
-			</LoginOutBlock>
+			{renderLoginBtnJSX()}
 		</Wrapper>
 	);
 };

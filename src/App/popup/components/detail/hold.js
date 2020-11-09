@@ -1,19 +1,19 @@
 // 持有弹窗
 import React, { useState, useEffect, useRef } from "react";
 import styled, { keyframes } from "styled-components";
-import { setFundHold, resetTotalData } from "../../services";
+import { setFundHold, modifyHold } from "../../services";
 
 const slideUp = keyframes`
   0% {
-    transform: translate(-50%, 100%);
+		top: 0;
     opacity: 0;
 	}
 	10% {
-		transform: translate(-50%, -45%);
+		top: 40%;
 		opacity: 0;
 	}
   100% {
-    transform: translate(-50%, -50%);
+		top: 50%;
     opacity: 1;
   }
 `;
@@ -32,19 +32,19 @@ const Mask = styled.div`
 	width: 100%;
 	height: 100%;
 	backdrop-filter: blur(0px);
-	transform: translateY(100%);
 	transition: all 0.2s linear;
 	will-change: backdrop-filter;
+	pointer-events: none;
 
 	&.active {
 		backdrop-filter: blur(5px);
-		transform: translateY(0);
+		pointer-events: auto;
 	}
 `;
 
 const Content = styled.div`
 	position: fixed;
-	top: 50%;
+	top: 0;
 	left: 50%;
 	width: 255px;
 	height: 270px;
@@ -52,10 +52,12 @@ const Content = styled.div`
 	background-color: var(--detail-hold-bg);
 	padding: 15px 20px 30px;
 	opacity: 0;
-	transform: translate(-50%, 100%);
+	transform: translate(-50%, -50%);
+	pointer-events: none;
 
 	&.active {
 		animation: ${slideUp} 0.18s linear 0.5s forwards;
+		pointer-events: auto;
 	}
 `;
 
@@ -134,7 +136,7 @@ const HoldPage = (props) => {
 		if (cost < 0 || unit < 0) return;
 
 		await setFundHold({ uid, code, cost, unit });
-		resetTotalData();
+		modifyHold(uid);
 		closeEvent();
 	};
 

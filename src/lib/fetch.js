@@ -4,10 +4,11 @@
  * @function (post) url, params
  * @return {json}
  */
+import { fetch } from "whatwg-fetch";
 import qs from "qs";
 
 export default class Http {
-	static get(url, params = {}, type = 'json') {
+	static get(url, params = {}, type = "json") {
 		const link =
 			url +
 			Object.keys(params).reduce((str, key, idx) => {

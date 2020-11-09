@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-16 18:17:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-21 22:43:33
+ * @LastEditTime: 2020-11-02 21:29:47
  * @Description: 项目wrapper
  */
 import React, { useState, useEffect } from "react";
@@ -10,6 +10,7 @@ import Home from "./home";
 import Setting from "./setting";
 import Detail from "./detail";
 import LoginPage from "./login";
+import SyncDataTip from '../components/home/syncDataTip'
 import { getUserInfo, getUserLocalSetting, setBodyTheme } from "../services";
 
 const Wrapper = styled.div.attrs({ className: "wrapper" })`
@@ -22,10 +23,12 @@ const Wrapper = styled.div.attrs({ className: "wrapper" })`
 `;
 
 const App = () => {
-	const [user, setUser] = useState({});
+	const [user, setUser] = useState(null);
 	const [settingActive, setSettingActive] = useState(false);
-	const [detailData, setDetailData] = useState({})
+	const [detailData, setDetailData] = useState({});
 	const [userSetting, setUserSetting] = useState({});
+	const [loginActive, setLoginActive] = useState(false);
+	const [update, setUpdate] = useState(false); //	主动更新数据
 
 	const onMessageListener = (message) => {
 		const { command, data } = message;
@@ -34,11 +37,14 @@ const App = () => {
 			[
 				"setDetailState",
 				(data) => {
-					setDetailData(data)
+					setDetailData(data);
+					!data.state && setUpdate(true);
+					
 				},
 			],
 			["updateUserInfo", (data) => setUser(data)],
 			["updateSetting", (data) => setUserSetting(data)],
+			["setLoginActive", (state) => setLoginActive(state)],
 		]);
 
 		if (commandMap.get(command)) {
@@ -69,10 +75,11 @@ const App = () => {
 	return (
 		<Wrapper>
 			{/* 切换页面 */}
-			<Home user={user} setting={userSetting} ></Home>
+			<Home user={user} setting={userSetting} update={update}></Home>
 			<Setting active={settingActive} data={userSetting} user={user}></Setting>
-			<Detail  user={user} data={detailData}></Detail>
-			<LoginPage user={user}></LoginPage>
+			<Detail user={user} data={detailData}></Detail>
+			<LoginPage user={user} active={loginActive}></LoginPage>
+			<SyncDataTip />
 		</Wrapper>
 	);
 };

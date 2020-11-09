@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { setDetailState, setFundFollowState } from "../services";
+import {
+	setDetailState,
+	setFundFollowState,
+	getFundDetailData,
+	getFundRealTimeData,
+} from "../services";
 import HoldPage from "../components/detail/hold";
+import MainInfo from "../components/detail/main";
+import Assets from "../components/detail/assets";
+import Worth from "../components/detail/worth";
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -9,11 +17,12 @@ const Wrapper = styled.div`
 	left: 0;
 	width: 100%;
 	height: 100%;
-	padding: 20px 16px 0;
+	padding: 0 16px 0;
 	background-color: var(--detail-bg);
 	transform: translateX(100%);
 	transition: all 0.18s linear;
 	z-index: 1;
+	overflow: auto;
 
 	&.active {
 		transform: translateX(0);
@@ -24,10 +33,12 @@ const Title = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-
 	color: var(--detail-title);
-
+	background-color: var(--detail-bg);
+	padding-top: 20px;
 	margin-bottom: 20px;
+	position: sticky;
+	top: 0;
 
 	.title {
 		font-size: 16px;
@@ -73,14 +84,16 @@ const Detail = (props) => {
 	} = props;
 	const [followed, setFollowed] = useState(false);
 	const [holdState, setHoldState] = useState(false);
+	const [fundStoreBase, setFundStoreBase] = useState({}); //	background获取的基本信息
+	const [fundRealData, setFundRealData] = useState({}); //	单个基金实时数据
 	const holdPageData = {
 		code,
 		cost,
 		unit,
-		uid: user&& user.uid,
+		uid: user && user.uid,
 	};
 
-	const closeHandler = () => setDetailState(false);
+	const closeHandler = () => setDetailState({ state: false });
 	const toggleFollowState = () => {
 		setFollowed(!followed);
 		setFundFollowState({ uid: user.uid, code, state: !followed ? "1" : undefined, cost });
@@ -88,6 +101,16 @@ const Detail = (props) => {
 
 	useEffect(() => {
 		setFollowed(!!followState);
+		const fetchData = async () => {
+			const _ = await getFundDetailData(code);
+			const data = await getFundRealTimeData([code]);
+			setFundStoreBase(_);
+			setFundRealData(data[0]);
+
+			console.log('fundStoreBase', _)
+		};
+
+		state && fetchData();
 	}, [state]);
 
 	return (
@@ -104,6 +127,9 @@ const Detail = (props) => {
 					<button onClick={() => setHoldState(true)}>持有</button>
 				</div>
 			</Title>
+			<MainInfo realData={fundRealData} storeData={fundStoreBase}></MainInfo>
+			{cost && <Assets data={{ cost, unit }} realData={fundRealData}></Assets>}
+			<Worth data={fundStoreBase}></Worth>
 
 			{/* 持有弹窗 */}
 			<HoldPage

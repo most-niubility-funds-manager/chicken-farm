@@ -114,9 +114,8 @@ const Btn = styled.div`
 `;
 
 const SearchBox = (props) => {
-	const { searchActive } = props
+	const { searchActive, user, followData } = props;
 	const inputEl = useRef(null);
-	const [isExpand, setExpand] = useState(false);
 
 	const keyDownHandler = (e) => {
 		const { keyCode } = e;
@@ -132,14 +131,15 @@ const SearchBox = (props) => {
 
 	// 激活搜索框
 	const expandActiveHandler = () => {
-		if (!isExpand) {
-			setSearchState(true);
+		if (!searchActive) {
+			setSearchState({ state: true });
 		}
 		inputEl.current.focus();
 	};
 	const expandDeactiveHandler = () => {
-		if (isExpand) {
-			setSearchState(false);
+		if (searchActive) {
+			console.log('提交关闭')
+			setSearchState({ state: false, codes: followData, uid: user && user.uid });
 		}
 		inputEl.current.value = "";
 	};
@@ -147,18 +147,27 @@ const SearchBox = (props) => {
 	const settingActiveHandler = () => setSettingState(true);
 
 	useEffect(() => {
-		setExpand(searchActive)
-	}, [searchActive])
+		if (searchActive) {
+			expandActiveHandler();
+		} else {
+			expandDeactiveHandler();
+		}
+	}, [searchActive]);
 
 	return (
 		<Wrapper>
-			<InputWrapper className={isExpand && "expand"} onClick={expandActiveHandler}>
+			<InputWrapper className={searchActive && "expand"} onClick={expandActiveHandler}>
 				<div className="input-box">
-					{!isExpand && <i className="iconfont chicken-search"></i>}
-					<input placeholder="搜索" ref={inputEl} onKeyDown={keyDownHandler} readOnly={!isExpand} />
+					{!searchActive && <i className="iconfont chicken-search"></i>}
+					<input
+						placeholder="搜索"
+						ref={inputEl}
+						onKeyDown={keyDownHandler}
+						readOnly={!searchActive}
+					/>
 				</div>
 				<i
-					className={`iconfont chicken-reeor-fill ${isExpand && "active"}`}
+					className={`iconfont chicken-reeor-fill ${searchActive && "active"}`}
 					onClick={expandDeactiveHandler}
 				></i>
 			</InputWrapper>

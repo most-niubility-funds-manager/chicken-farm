@@ -1,11 +1,12 @@
 /*
  * @Date: 2020-06-18 15:48:20
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-03 01:38:05
+ * @LastEditTime: 2020-10-26 14:18:58
  * @Description: watch配置
  */
 const merge = require("webpack-merge");
 const config = require("./webpack.base");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = merge(config, {
 	watch: true,
@@ -18,4 +19,10 @@ module.exports = merge(config, {
 		minimize: false,
 	},
 	devtool: "eval-cheap-module-source-map",
+	plugins: [
+		new BundleAnalyzerPlugin({
+			generateStatsFile: true,
+			analyzerMode: "disabled",
+		}),
+	],
 });

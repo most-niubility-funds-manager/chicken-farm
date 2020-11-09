@@ -1,13 +1,14 @@
 /*
  * @Date: 2020-10-06 20:42:02
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-21 22:41:09
+ * @LastEditTime: 2020-11-02 17:43:37
  * @Description: 插件基本接口需求
  */
 import store from "../model/store";
-import { getHoliday, getLastTradeTime } from "../services";
+import { getHoliday, updateUserFunds, deleteUserFunds, fundAddBatch } from "../services";
 import { getPreciseTime, convertDate } from "@utils";
 import { sendMessage } from "@lib/chrome";
+import { fetchEachFundDetail } from './danjuan'
 
 // 获取节假日并判断现在的交易状态
 export const getMarketOpen = async (sendResponse) => {
@@ -49,46 +50,9 @@ export const getMarketOpen = async (sendResponse) => {
 	sendResponse({ text: stateText, status: isOpen });
 };
 
-// 获取用户配置的表头, 返回键名及相关信息(日期啥的)
-export const getTableHead = async (sendResponse) => {
-	const tableFields = store.get("tableFields");
-	const keyMap = new Map([
-		["valuation", () => valuation()],
-		["lastTime", () => lastTime()],
-		["lastWeek", () => lastweek()],
-		["afterAdd", () => afterAdd()],
-		["cost", () => cost()],
-		["realTime", () => realTime()],
-	]);
-
-	// 估值字段
-	const valuation = () => {
-		const today = convertDate({ timestamp: Date.now() });
-		return { name: "估值", key: "valuation", sub: today };
-	};
-	// 上次交易日
-	const lastTime = async () => {
-		const time = await getLastTradeTime();
-		return { name: "净值", key: "lastTime", sub: time };
-	};
-	// 上周
-	const lastweek = () => ({ name: "近1周", key: "lastWeek", sub: null });
-	// 添加后
-	const afterAdd = () => ({ name: "添加后收益", key: "afterAdd", sub: "添加时长" });
-	// 总成本
-	const cost = () => ({ name: "总成本", key: "cost", sub: null });
-	// 实时估值
-	const realTime = () => ({ name: "收益估值", key: "realTime", sub: null });
-
-	// 遍历并返回配置
-	const config = await Promise.all(tableFields.map((key) => keyMap.get(key)()));
-
-	sendResponse(config);
-};
-
 // 强制更新popup
 export const forceUpdate = async () => {
-	sendMessage({ command: "forceUpdate", data: true });
+	sendMessage({ command: "forceUpdate" });
 };
 
 // 基金列表切换类型
@@ -97,8 +61,14 @@ export const changeListType = async (state) => {
 };
 
 // 搜索面板
-export const setSearchState = async (state) => {
+export const setSearchState = async ({ state, codes, uid }) => {
+	if (!state && codes.length) {
+		await fundAddBatch({ codes, uid });
+		await updateUserFunds(uid);
+	}
+
 	sendMessage({ command: "setSearchState", data: state });
+	await fetchEachFundDetail()
 };
 
 // 总资产
@@ -117,15 +87,18 @@ export const getTotalData = async (sendResponse) => {
 };
 
 // 设置总资产
-export const setTotalData = async ({ code, totalCost, lastIncome, totalIncome, fakeIncome }) => {
+export const setTotalData = async (
+	{ code, totalCost, lastIncome, totalIncome, fakeIncome },
+	sendResponse
+) => {
 	const total = store.get("totalCost");
 	store.set("totalCost", { ...total, [code]: { totalCost, lastIncome, totalIncome, fakeIncome } });
+	sendResponse("设置完毕");
 };
 
 // 重置总资产
-export const resetTotalData = async () => {
-	store.set("totalCost", {});
-	sendMessage({ command: "forceUpdate" });
+export const modifyHold = async (uid) => {
+	await updateUserFunds(uid);
 };
 
 // 设置页面
@@ -150,4 +123,15 @@ export const setUserLocalSetting = async ({ key, value }) => {
 	const result = { ...config, [key]: value };
 	store.set("userSetting", result);
 	sendMessage({ command: "updateSetting", data: result });
+};
+
+// 切换popup页面登录页面状态
+export const setLoginActive = async (data) => {
+	// 退出登录清空数据
+	if (!data) {
+		store.set("totalCost", {});
+		deleteUserFunds();
+	}
+
+	sendMessage({ command: "setLoginActive", data });
 };

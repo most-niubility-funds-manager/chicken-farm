@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-06 19:11:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-21 22:42:45
+ * @LastEditTime: 2020-10-23 18:26:10
  * @Description: 请求background
  */
 import { sendMessage } from "@lib/chrome";
@@ -26,6 +26,8 @@ export const getUserInfo = () => sendMessage({ command: "getUser" });
 export const updateUserInfo = () => sendMessage({ command: "updateUserInfo" });
 // pop清空user数据
 export const clearUserInfo = () => sendMessage({ command: "clearUserInfo" });
+// 切换登录页面状态
+export const setLoginActive = (state) => sendMessage({ command: "setLoginActive", data: state });
 
 // ------------------------------我是分割线-------------------------------------
 
@@ -33,8 +35,6 @@ export const clearUserInfo = () => sendMessage({ command: "clearUserInfo" });
 export const getFundBaseData = () => sendMessage({ command: "getFundBaseData" });
 // 获取大盘状态
 export const getMarketStatus = () => sendMessage({ command: "checkMarketOpen" });
-// 获取用户表头配置
-export const getUserTableHead = () => sendMessage({ command: "getTableHead" });
 // 获取用户所有基金代码
 export const getAllFundCodes = (uid) => sendMessage({ command: "allFundCodes", data: { uid } });
 // 基金搜索
@@ -46,7 +46,8 @@ export const forceUpdate = () => sendMessage({ command: "forceUpdate" });
 // 切换基金列表
 export const changeListType = (state) => sendMessage({ command: "changeListType", data: state });
 // 激活搜索页面
-export const setSearchState = (state) => sendMessage({ command: "setSearchState", data: state });
+export const setSearchState = ({ state, codes, uid }) =>
+	sendMessage({ command: "setSearchState", data: { state, codes, uid } });
 // 获取基金实时数据
 export const getFundRealTimeData = (codes) =>
 	sendMessage({ command: "getFundRealTimeData", data: codes });
@@ -55,7 +56,7 @@ export const getTotalData = () => sendMessage({ command: "getTotalData" });
 // 每支基金提交资产信息
 export const setTotalData = (data) => sendMessage({ command: "setTotalData", data });
 // 重置总资产
-export const resetTotalData = () => sendMessage({ command: "resetTotalData" });
+export const modifyHold = (uid) => sendMessage({ command: "modifyHold", data: uid });
 // 激活设置页面
 export const setSettingState = (state) => sendMessage({ command: "setSettingState", data: state });
 
@@ -67,6 +68,9 @@ export const setFundFollowState = ({ uid, code, state, cost }) =>
 // 修改基金持有
 export const setFundHold = ({ uid, code, cost, unit, state }) =>
 	sendMessage({ command: "setFundHold", data: { uid, code, cost, unit, state } });
+// 获取基金的详情数据
+export const getFundDetailData = (code) =>
+	sendMessage({ command: "getFundDetailData", data: code });
 
 // 获取配置
 export const getUserLocalSetting = () => sendMessage({ command: "getUserLocalSetting" });

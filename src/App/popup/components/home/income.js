@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-17 15:21:14
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-20 17:33:59
+ * @LastEditTime: 2020-10-23 16:55:51
  * @Description: 顶部收益面板
  */
 import React, { useState, useEffect } from "react";
@@ -56,12 +56,12 @@ const Item = styled.div`
 
 const IncomePanel = () => {
 	const [total, setTotal] = useState({});
-	const totalDataSaga = new Saga(getTotalData);
+	const totalDataSaga = new Saga(getTotalData); 
 
 	useEffect(() => {
 		totalDataSaga.start((data) => {
 			setTotal(data);
-		}, 1000);
+		}, 5000);
 		return () => {
 			totalDataSaga.stop();
 		};
