@@ -1,7 +1,7 @@
 // 持有弹窗
 import React, { useState, useEffect, useRef } from "react";
 import styled, { keyframes } from "styled-components";
-import { setFundHold, modifyHold } from "../../services";
+import { setFundHold, modifyHold, setHoldState } from "../../services";
 
 const slideUp = keyframes`
   0% {
@@ -124,7 +124,7 @@ const Button = styled.button`
 `;
 
 const HoldPage = (props) => {
-	const { active, data, closeEvent } = props;
+	const { active, data } = props;
 	const costEl = useRef(null);
 	const unitEl = useRef(null);
 
@@ -137,22 +137,29 @@ const HoldPage = (props) => {
 
 		await setFundHold({ uid, code, cost, unit });
 		modifyHold(uid);
-		closeEvent();
+		closeHandler();
 	};
+
+	const closeHandler = () => setHoldState({ state: false })
 
 	useEffect(() => {
 		const { cost, unit } = data;
 		costEl.current.value = cost;
 		unitEl.current.value = unit;
-	}, []);
+
+		return () => {
+			costEl.current.value = '';
+			unitEl.current.value = '';
+		}
+	}, [active]);
 
 	return (
 		<Wrapper>
-			<Mask className={active && "active"} onClick={closeEvent}></Mask>
+			<Mask className={active && "active"} onClick={closeHandler}></Mask>
 			<Content className={active && "active"}>
 				<Head>
 					<span>修改持有</span>
-					<i className="iconfont chicken-close" onClick={closeEvent}></i>
+					<i className="iconfont chicken-close" onClick={closeHandler}></i>
 				</Head>
 				<CurrentCost>当前持有：{data.cost || 0} 份</CurrentCost>
 				<Body>

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-11-02 22:11:23
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-02 22:27:47
+ * @LastEditTime: 2020-11-10 15:26:00
  * @Description: indexedDB操作 主要为同步旧版本数据
  */
 
@@ -38,7 +38,7 @@ export const getIndexedFunds = async () => {
   let result = []
   try {
     const funds = await indexedFindAll({ store: 'chicken-farm', table: 'funds' });
-    result = funds.filter(({ state }) => state).map(({ code }) => code);
+    result = funds.filter(({ state }) => state).map(({ code, unit }) => ({code, unit}));
   } catch (error) {
     console.log(error)
   }

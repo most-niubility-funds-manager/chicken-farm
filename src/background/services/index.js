@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 23:00:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-01 20:01:26
+ * @LastEditTime: 2020-11-11 14:49:01
  * @Description: 数据请求的操作
  */
 // 大盘数据
@@ -19,6 +19,7 @@ import {
 	UPDATEFOLLOW,
 	UPDATEHOLD,
 	FUNDMAIN,
+	OLDBATCHADDFUNDS,
 } from "../api";
 
 // 获取大盘数据
@@ -111,6 +112,21 @@ export const fundAdd = async ({ uid, code }) => {
 export const fundAddBatch = async ({ uid, codes }) => {
 	const { status } = await Http.post(ADDBATCHFUNDS, { uid, codes: JSON.stringify(codes) });
 	Promise.all(codes.map((c) => getFundDetailMain(c))); //	批量添加的基金详情数据
+
+	return { status };
+};
+
+// 批量添加老版本基金数据
+export const oldFundAddBatch = async ({ uid, codes }) => {
+	const fundsRealData = await getLiveFundData({ codes: codes.map(({ code }) => code) });
+	const result = fundsRealData.map(({ code, realUnit }, idx) => ({
+		code,
+		unit: realUnit,
+		cost: codes[idx].unit,
+	}));
+	const { status } = await Http.post(OLDBATCHADDFUNDS, { uid, data: JSON.stringify(result) });
+	await Promise.all(codes.map(({ code }) => getFundDetailMain(code))); //	批量添加的基金详情数据
+	await updateUserFunds(uid);
 
 	return { status };
 };
@@ -241,7 +257,6 @@ export const getFundDetailMain = async (code) => {
 export const getDetail = async (code) => {
 	const fundHistoryStore = store.get("fundHistory");
 	const detail = fundHistoryStore[code];
-	console.log("获取单个基金信息", code, fundHistoryStore);
-
+	
 	return detail;
 };

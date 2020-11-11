@@ -1,14 +1,20 @@
 /*
  * @Date: 2020-10-06 20:42:02
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-02 17:43:37
+ * @LastEditTime: 2020-11-11 14:40:43
  * @Description: 插件基本接口需求
  */
 import store from "../model/store";
-import { getHoliday, updateUserFunds, deleteUserFunds, fundAddBatch } from "../services";
+import {
+	getHoliday,
+	updateUserFunds,
+	deleteUserFunds,
+	fundAddBatch,
+	oldFundAddBatch,
+} from "../services";
 import { getPreciseTime, convertDate } from "@utils";
 import { sendMessage } from "@lib/chrome";
-import { fetchEachFundDetail } from './danjuan'
+import { fetchEachFundDetail } from "./danjuan";
 
 // 获取节假日并判断现在的交易状态
 export const getMarketOpen = async (sendResponse) => {
@@ -68,7 +74,7 @@ export const setSearchState = async ({ state, codes, uid }) => {
 	}
 
 	sendMessage({ command: "setSearchState", data: state });
-	await fetchEachFundDetail()
+	await fetchEachFundDetail();
 };
 
 // 总资产
@@ -134,4 +140,15 @@ export const setLoginActive = async (data) => {
 	}
 
 	sendMessage({ command: "setLoginActive", data });
+};
+
+// 持仓窗口
+export const setHoldState = async ({ state, data }) =>
+	sendMessage({ command: "setHoldState", data: { state, data } });
+
+// 手动同步旧数据
+export const syncOldData = async ({ uid, data }, sendResponse) => {
+	const { status } = await oldFundAddBatch({ uid, codes: data });
+
+	sendResponse(status);
 };

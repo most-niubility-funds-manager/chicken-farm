@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-06 19:11:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-23 18:26:10
+ * @LastEditTime: 2020-11-11 14:41:00
  * @Description: 请求background
  */
 import { sendMessage } from "@lib/chrome";
@@ -71,12 +71,19 @@ export const setFundHold = ({ uid, code, cost, unit, state }) =>
 // 获取基金的详情数据
 export const getFundDetailData = (code) =>
 	sendMessage({ command: "getFundDetailData", data: code });
+// 激活基金持仓弹窗
+export const setHoldState = ({ state, data = {} }) =>
+	sendMessage({ command: "setHoldState", data: { state, data } });
 
 // 获取配置
 export const getUserLocalSetting = () => sendMessage({ command: "getUserLocalSetting" });
 // 设置单个配置
 export const setUserLocalSetting = ({ key, value }) =>
 	sendMessage({ command: "setUserLocalSetting", data: { key, value } });
+
+// 手动导入数据
+export const syncOldData = ({ uid, data }) =>
+	sendMessage({ command: "syncOldData", data: { uid, data } });
 
 // 设置
 // 颜色反转

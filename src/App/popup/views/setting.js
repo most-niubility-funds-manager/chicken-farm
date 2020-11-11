@@ -1,13 +1,14 @@
 /*
  * @Date: 2020-10-18 19:53:03
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-10-31 18:25:35
+ * @LastEditTime: 2020-11-11 14:53:47
  * @Description: 个人设置页
  */
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { setSettingState, clearUserInfo, setLoginActive } from "../services";
 import Item from "../components/setting/item";
+import SyncData from "../components/setting/syncData";
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -55,6 +56,20 @@ const Block = styled.div`
 	gap: 20px;
 `;
 
+const PureItem = styled.div`
+	width: 100%;
+	height: 44px;
+	border-radius: 6px;
+	background-color: var(--setting-block-bg);
+	font-size: 13px;
+	color: var(--setting-block);
+	padding: 0 18px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	margin-bottom: 20px;
+`;
+
 const LoginOutBlock = styled.div`
 	width: 100%;
 	height: 44px;
@@ -76,6 +91,7 @@ const Setting = (props) => {
 	const { active, data, user } = props;
 	const { reverseColor, tradeNotice, marketState, incomeState } = data;
 	const [isLogin, setIsLogin] = useState(false);
+	const [syncActive, setSyncActive] = useState(false);
 
 	const closeHandler = () => setSettingState(false);
 
@@ -84,6 +100,9 @@ const Setting = (props) => {
 		clearUserInfo();
 		setIsLogin(false);
 	};
+
+	const openSyncHandler = () => setSyncActive(true);
+	const closeSyncHandler = () => setSyncActive(false);
 
 	const renderLoginBtnJSX = () => {
 		if (isLogin) {
@@ -98,7 +117,6 @@ const Setting = (props) => {
 	};
 
 	useEffect(() => {
-		console.log('user', user)
 		setIsLogin(!!user);
 	}, [user]);
 
@@ -114,7 +132,9 @@ const Setting = (props) => {
 				<Item text="开启/关闭大盘数据" active={marketState} keyName="marketState"></Item>
 				<Item text="开启/关闭收益面板" active={incomeState} keyName="incomeState"></Item>
 			</Block>
+			<PureItem onClick={openSyncHandler}>导入旧版本数据</PureItem>
 			{renderLoginBtnJSX()}
+			<SyncData user={user} active={syncActive} closeEvent={closeSyncHandler} />
 		</Wrapper>
 	);
 };

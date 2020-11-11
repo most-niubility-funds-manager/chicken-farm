@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-09-24 15:00:30
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-03 22:29:07
+ * @LastEditTime: 2020-11-10 16:01:17
  * @Description: 数据交互中心
  */
 import {
@@ -31,6 +31,8 @@ import {
 	getUserLocalSetting,
 	setUserLocalSetting,
 	setLoginActive,
+	setHoldState,
+	syncOldData,
 } from "./base";
 import { addFund, fundCodes, setFundHold, setFundFollowState, getFundDetailData } from "./fund";
 import "./notify"
@@ -66,7 +68,9 @@ const commandMap = new Map([
 	["setUserLocalSetting", (data) => setUserLocalSetting(data)],
 	["clearUserInfo", () => clearUserInfo()],
 	["setFundFollowState", (data, sendResponse) => setFundFollowState(data, sendResponse)],
+	["setHoldState", (data) => setHoldState(data)],	//	基金持仓窗口
 	["setFundHold", (data, sendResponse) => setFundHold(data, sendResponse)], //	修改持有
+	['syncOldData', (data, sendResponse) => syncOldData(data, sendResponse)],	//	用户手动导入旧数据
 ]);
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

@@ -24,3 +24,4 @@ export const ADDFUND = `${API_HOST}/fund/add`;
 export const UPDATEFOLLOW = `${API_HOST}/fund/follow`;
 export const UPDATEHOLD = `${API_HOST}/fund/hold`;
 export const ADDBATCHFUNDS = `${API_HOST}/fund/batch/add`;
+export const OLDBATCHADDFUNDS = `${API_HOST}/fund/batch/add/old`

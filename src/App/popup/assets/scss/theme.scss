@@ -42,8 +42,8 @@
 	--search-input-caret: var(--white-ff-dim85);
 	--search-input-placeholder: var(--white-ff-dim45);
 	--search-input-bg: var(--black-26);
-	--search-btn: var(--white-ff-dim12);
-	--search-btn-hover: var(--white-ff-dim50);
+	--search-btn: var(--white-ff-dim50);
+	--search-btn-hover: var(--white-ff-dim85);
 	--search-btn-bg: var(--black-26);
 
 	--search-item: var(--white-ff-dim85);
@@ -93,6 +93,8 @@
 	--detail-worth-thead: var(--white-ff-dim50);
 	--detail-worth-tbody: var(--white-ff-dim85);
 	--detail-worth-rank: var(--white-ff-dim50);
+	--detail-worth-increase: var(--red);
+	--detail-worth-decrease: var(--green);
 
 	--detail-hold-bg: var(--black-1f);
 	--detail-hold-title: var(--white-ff-dim85);
@@ -103,6 +105,15 @@
 	--detail-hold-btn: var(--white-ff-dim85);
 	--detail-hold-btn-bg: var(--blue);
 	--detail-hold-cost: var(--white-ff-dim45);
+
+	--detail-sync-bg: var(--black-1f);
+	--detail-sync-title: var(--white-ff-dim85);
+	--detail-sync-icon: var(--white-ff-dim12);
+	--detail-sync-label: var(--white-ff-dim65);
+	--detail-sync-input: var(--white-ff-dim85);
+	--detail-sync-input-bg: var(--black-2d);
+	--detail-sync-btn: var(--white-ff-dim85);
+	--detail-sync-btn-bg: var(--blue);
 }
 
 .reserveNormal {
@@ -147,8 +158,8 @@
 	--search-input-caret: var(--white-ff-dim85);
 	--search-input-placeholder: var(--white-ff-dim45);
 	--search-input-bg: var(--black-26);
-	--search-btn: var(--white-ff-dim12);
-	--search-btn-hover: var(--white-ff-dim50);
+	--search-btn: var(--white-ff-dim50);
+	--search-btn-hover: var(--white-ff-dim85);
 	--search-btn-bg: var(--black-26);
 
 	--search-item: var(--white-ff-dim85);
@@ -195,6 +206,11 @@
 
 	--detail-worth-tab: var(--white-ff-dim85);
 	--detail-worth-tab-active: var(--blue);
+	--detail-worth-thead: var(--white-ff-dim50);
+	--detail-worth-tbody: var(--white-ff-dim85);
+	--detail-worth-rank: var(--white-ff-dim50);
+	--detail-worth-increase: var(--green);
+	--detail-worth-decrease: var(--red);
 
 	--detail-hold-bg: var(--black-1f);
 	--detail-hold-title: var(--white-ff-dim85);
@@ -205,4 +221,13 @@
 	--detail-hold-btn: var(--white-ff-dim85);
 	--detail-hold-btn-bg: var(--blue);
 	--detail-hold-cost: var(--white-ff-dim45);
+
+	--detail-sync-bg: var(--black-1f);
+	--detail-sync-title: var(--white-ff-dim85);
+	--detail-sync-icon: var(--white-ff-dim12);
+	--detail-sync-label: var(--white-ff-dim65);
+	--detail-sync-input: var(--white-ff-dim85);
+	--detail-sync-input-bg: var(--black-2d);
+	--detail-sync-btn: var(--white-ff-dim85);
+	--detail-sync-btn-bg: var(--blue);
 }

@@ -157,7 +157,7 @@ const Item = (props) => {
 
 	useEffect(() => {
 		// 提交并计算总资产
-		totalDataSaga.start((_) => console.log("定期提交"), 5000);
+		totalDataSaga.start((_) => _, 5000);
 
 		return () => {
 			totalDataSaga.stop();

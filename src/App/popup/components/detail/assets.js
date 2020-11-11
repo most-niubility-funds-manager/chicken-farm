@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-22 21:49:21
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-03 23:13:39
+ * @LastEditTime: 2020-11-11 14:53:39
  * @Description: 资产详情
  */
 import React, { useState } from "react";
@@ -62,7 +62,6 @@ const Assets = (props) => {
 		realData: { realPercent, realUnit },
 	} = props;
 	const total = (cost * unit).toFixed(2);
-	console.log("cost", cost, unit, realUnit, realUnit * cost);
 
 	const lastIncome = realPercent && ((Number(realPercent) * unit * cost) / 100).toFixed(2);
 	const lastIncomClass = lastIncome && lastIncome.includes("-") ? "decrease" : "increase";

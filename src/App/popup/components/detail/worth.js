@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-31 18:07:53
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-03 23:14:23
+ * @LastEditTime: 2020-11-11 11:01:35
  * @Description: 净值涨幅列表
  */
 import React, { useState } from "react";
@@ -42,7 +42,7 @@ const Table = styled.div`
 	&.worth {
 		.thead,
 		.tr {
-			grid-template-columns: repeat(4, 1fr);
+			grid-template-columns: 50px repeat(3, 1fr);
 		}
 	}
 
@@ -50,7 +50,7 @@ const Table = styled.div`
 		font-size: 12px;
 		color: var(--detail-worth-thead);
 		display: grid;
-		grid-template-columns: 80px 1fr 1fr;
+		grid-template-columns: 80px 100px 1fr;
 		height: 24px;
 		justify-items: flex-end;
 		align-items: center;
@@ -64,12 +64,20 @@ const Table = styled.div`
 		font-size: 12px;
 		color: var(--detail-worth-tbody);
 		display: grid;
-		grid-template-columns: 80px 1fr 1fr;
+		grid-template-columns: 80px 100px 1fr;
 		justify-items: flex-end;
 		align-items: center;
 
 		& > span:first-of-type {
 			justify-self: flex-start;
+		}
+
+		.increase {
+			color: var(--detail-worth-increase);
+		}
+
+		.decrease {
+			color: var(--detail-worth-decrease);
 		}
 
 		.rank {
@@ -94,6 +102,8 @@ const Worth = (props) => {
 
 	const renderTableJSX = () => {
 		if (tabActive) {
+			const reg = /^-/;
+
 			return (
 				<Table className="worth">
 					<div className="thead">
@@ -106,7 +116,9 @@ const Worth = (props) => {
 						historyWorth.slice(0, 7).map((item, idx) => (
 							<div className="tr" key={idx}>
 								{item.map((td, i) => (
-									<span key={i}>{td}</span>
+									<span key={i} className={i === 3 && (reg.test(td) ? "decrease" : "increase")}>
+										{td}
+									</span>
 								))}
 							</div>
 						))}
@@ -124,7 +136,13 @@ const Worth = (props) => {
 						historyPerformance.time.slice(0, 7).map((time, idx) => (
 							<div className="tr" key={idx}>
 								<span>{time}</span>
-								<span>{historyPerformance["crease"][idx]}</span>
+								<span
+									className={
+										historyPerformance["crease"][idx].includes("-") ? "decrease" : "increase"
+									}
+								>
+									{historyPerformance["crease"][idx]}
+								</span>
 								<span className="rank">
 									<span>{historyPerformance["rank"][idx][0]}</span>
 									<i>/</i>

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-09-24 15:54:43
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-02 22:37:22
+ * @LastEditTime: 2020-11-10 15:52:29
  * @Description: 用户账户登录、注册、退出
  */
 import Http from "@lib/fetch";
@@ -9,7 +9,7 @@ import Saga from "@lib/saga";
 import { sendMessage } from "@lib/chrome";
 import { LOGIN, REGISTER, CHECKID, CHECKNAME } from "../api";
 import { fetchEachFundDetail } from './danjuan'
-import { fundAddBatch } from '../services/index'
+import { oldFundAddBatch } from '../services/index'
 import { getIndexedFunds } from '@lib/database'
 
 // 登录
@@ -81,7 +81,7 @@ export const register = async ({ uid, name, password }, sendResponse) => {
 	
 	if (!localSign)
 		localStorage.setItem("already-sync-oldData", Date.now())
-		localCodes.length && await fundAddBatch({ uid, codes: localCodes })
+		localCodes.length && await oldFundAddBatch({ uid, codes: localCodes }) 
 		
 	sendResponse(data);
 

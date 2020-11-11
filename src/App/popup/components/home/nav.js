@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { setSearchState, searchFund, setSettingState } from "../../services";
+
+const expandAnimate = keyframes`
+	0% {
+		width: calc(100% - 47px);
+	}
+	100% {
+		width: 100%;
+	}
+`;
 
 const Wrapper = styled.div.attrs({ className: "search-box" })`
 	width: 100%;
@@ -24,13 +33,14 @@ const InputWrapper = styled.div`
 	.input-box {
 		position: absolute;
 		top: 0;
-		left: 50%;
-		transform: translateX(-50%);
+		left: 0;
+		transform: translateX(130px);
 		width: 42px;
 		height: 100%;
 		display: flex;
 		align-items: center;
 		transition: all 0.15s linear;
+		padding: 0 10px;
 	}
 
 	i {
@@ -69,15 +79,13 @@ const InputWrapper = styled.div`
 	}
 
 	&.expand {
-		width: 100%;
+		animation: ${expandAnimate} 0.15s linear forwards;
 		justify-content: flex-start;
 		z-index: 1;
 
 		.input-box {
-			left: 0;
 			transform: translateX(0);
 			width: 100%;
-			padding: 0 10px;
 		}
 
 		i {
@@ -138,7 +146,7 @@ const SearchBox = (props) => {
 	};
 	const expandDeactiveHandler = () => {
 		if (searchActive) {
-			console.log('提交关闭')
+			console.log("提交关闭");
 			setSearchState({ state: false, codes: followData, uid: user && user.uid });
 		}
 		inputEl.current.value = "";

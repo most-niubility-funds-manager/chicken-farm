@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-22 21:28:20
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-04 12:05:14
+ * @LastEditTime: 2020-11-10 15:02:20
  * @Description: 头部面板
  */
 import React, { useState } from "react";
@@ -83,7 +83,6 @@ const MainInfo = (props) => {
 	const threeMonthClass =
 		threeMonth && threeMonth.includes("-") ? `decrease` : `increase`;
 
-	console.log('realData', realData)
 	return (
 		<Wrapper>
 			<div className="top">

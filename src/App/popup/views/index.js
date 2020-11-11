@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-16 18:17:52
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-02 21:29:47
+ * @LastEditTime: 2020-11-11 14:53:06
  * @Description: 项目wrapper
  */
 import React, { useState, useEffect } from "react";
@@ -11,6 +11,7 @@ import Setting from "./setting";
 import Detail from "./detail";
 import LoginPage from "./login";
 import SyncDataTip from '../components/home/syncDataTip'
+import DetailHold from '../components/detail/hold'
 import { getUserInfo, getUserLocalSetting, setBodyTheme } from "../services";
 
 const Wrapper = styled.div.attrs({ className: "wrapper" })`
@@ -28,6 +29,8 @@ const App = () => {
 	const [detailData, setDetailData] = useState({});
 	const [userSetting, setUserSetting] = useState({});
 	const [loginActive, setLoginActive] = useState(false);
+	const [holdActive, setHoldActive] = useState(false)
+	const [holdData, setHoldData] = useState({})
 	const [update, setUpdate] = useState(false); //	主动更新数据
 
 	const onMessageListener = (message) => {
@@ -45,6 +48,10 @@ const App = () => {
 			["updateUserInfo", (data) => setUser(data)],
 			["updateSetting", (data) => setUserSetting(data)],
 			["setLoginActive", (state) => setLoginActive(state)],
+			["setHoldState", ({ state, data }) => {
+				setHoldData(data)
+				setHoldActive(state)
+			}]
 		]);
 
 		if (commandMap.get(command)) {
@@ -80,6 +87,7 @@ const App = () => {
 			<Detail user={user} data={detailData}></Detail>
 			<LoginPage user={user} active={loginActive}></LoginPage>
 			<SyncDataTip />
+			<DetailHold data={holdData} active={holdActive} />
 		</Wrapper>
 	);
 };

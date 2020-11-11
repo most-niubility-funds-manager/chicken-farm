@@ -5,6 +5,7 @@ import {
 	setFundFollowState,
 	getFundDetailData,
 	getFundRealTimeData,
+	setHoldState,
 } from "../services";
 import HoldPage from "../components/detail/hold";
 import MainInfo from "../components/detail/main";
@@ -83,7 +84,6 @@ const Detail = (props) => {
 		user,
 	} = props;
 	const [followed, setFollowed] = useState(false);
-	const [holdState, setHoldState] = useState(false);
 	const [fundStoreBase, setFundStoreBase] = useState({}); //	background获取的基本信息
 	const [fundRealData, setFundRealData] = useState({}); //	单个基金实时数据
 	const holdPageData = {
@@ -98,6 +98,7 @@ const Detail = (props) => {
 		setFollowed(!followed);
 		setFundFollowState({ uid: user.uid, code, state: !followed ? "1" : undefined, cost });
 	};
+	const openHoldPop = () => setHoldState({ state: true, data: holdPageData });
 
 	useEffect(() => {
 		setFollowed(!!followState);
@@ -106,8 +107,6 @@ const Detail = (props) => {
 			const data = await getFundRealTimeData([code]);
 			setFundStoreBase(_);
 			setFundRealData(data[0]);
-
-			console.log('fundStoreBase', _)
 		};
 
 		state && fetchData();
@@ -124,19 +123,12 @@ const Detail = (props) => {
 					<button className={followed && "disabled"} onClick={toggleFollowState}>
 						{followed ? "已关注" : "关注"}
 					</button>
-					<button onClick={() => setHoldState(true)}>持有</button>
+					<button onClick={openHoldPop}>持有</button>
 				</div>
 			</Title>
 			<MainInfo realData={fundRealData} storeData={fundStoreBase}></MainInfo>
 			{cost && <Assets data={{ cost, unit }} realData={fundRealData}></Assets>}
 			<Worth data={fundStoreBase}></Worth>
-
-			{/* 持有弹窗 */}
-			<HoldPage
-				active={holdState}
-				data={holdPageData}
-				closeEvent={() => setHoldState(false)}
-			></HoldPage>
 		</Wrapper>
 	);
 };

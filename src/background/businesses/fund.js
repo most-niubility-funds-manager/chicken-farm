@@ -6,7 +6,6 @@ import {
 	getDetail,
 	updateUserFunds,
 } from "../services/index";
-import store from '../model/store'
 
 // 基金数据获取
 export const fundCodes = async ({ uid }, sendResponse) => {
