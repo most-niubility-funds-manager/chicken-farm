@@ -7,10 +7,10 @@ import {
 	getFundRealTimeData,
 	setHoldState,
 } from "../services";
-import HoldPage from "../components/detail/hold";
 import MainInfo from "../components/detail/main";
 import Assets from "../components/detail/assets";
 import Worth from "../components/detail/worth";
+import Stock from "../components/detail/stock";
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -129,6 +129,7 @@ const Detail = (props) => {
 			<MainInfo realData={fundRealData} storeData={fundStoreBase}></MainInfo>
 			{cost && <Assets data={{ cost, unit }} realData={fundRealData}></Assets>}
 			<Worth data={fundStoreBase}></Worth>
+			{fundStoreBase.stocks && <Stock data={fundStoreBase.stocks} state={state}></Stock>}
 		</Wrapper>
 	);
 };

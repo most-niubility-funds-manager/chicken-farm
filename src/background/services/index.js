@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 23:00:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-11 14:49:01
+ * @LastEditTime: 2020-11-12 16:08:32
  * @Description: 数据请求的操作
  */
 // 大盘数据
@@ -20,6 +20,7 @@ import {
 	UPDATEHOLD,
 	FUNDMAIN,
 	OLDBATCHADDFUNDS,
+	FUNDSTOCK,
 } from "../api";
 
 // 获取大盘数据
@@ -182,6 +183,54 @@ export const updateHold = async ({ uid, code, cost, unit }) => {
 	return { status };
 };
 
+// 天天基金获取重仓股票
+export const getFundStock = async (code) => {
+	const html = await Http.get(FUNDSTOCK(code), {}, "text");
+	const $ = cheerio.load(/"(.*)"/g.exec(html)[1]);
+	const holdData = [];
+	const gpdmList = $("#gpdmList").eq(0).text();
+	const tempCodes = gpdmList.split(",");
+	tempCodes.pop();
+	const codes = tempCodes.map((v) => v.split(".")[1]);
+
+	$(".tzxq tbody tr").each(function (i) {
+		const code = codes[i];
+		const name = $(this).find("td").eq(2).text();
+		const percent = $(this).find("td").eq(6).text();
+
+		holdData.length < 10 && holdData.push({ code, name, percent });
+	});
+
+	const params = {
+		fltt: 2,
+		invt: 2,
+		fields: "f2,f3,f12,f14,f9",
+		secids: gpdmList,
+		_: Date.now(),
+	};
+	const { data } = await Http.get(FUNDBASE, params);
+
+	if (data) {
+		const result = holdData
+			.map((v, i) => {
+				const { f3: crease = 0, f2: price = 0 } = data.diff.find(({ f12 }) => v.code === f12) || {};
+				return { ...v, crease, price };
+			})
+			.reduce(
+				(arr, { name, percent, crease, price, code }) => [
+					...arr,
+					[name, percent, crease > 0 ? `+${crease}%` : `${crease}%`, price, code],
+				],
+				[]
+			);
+
+		console.log('股票持仓', result)
+		return result;
+	}
+
+	return null;
+};
+
 // 天天基金获取主要数据
 export const getFundDetailMain = async (code) => {
 	const html = await Http.get(FUNDMAIN(code), {}, "text");
@@ -241,6 +290,9 @@ export const getFundDetailMain = async (code) => {
 			.map((td) => $(td).text().replace(/\s+/g, "").split("|"))
 			.slice(1),
 	};
+	// 重仓股票
+	const stocks = await getFundStock(code);
+
 	// 目前所有结果
 	const result = {
 		type: fundType,
@@ -248,6 +300,7 @@ export const getFundDetailMain = async (code) => {
 		scale: fundScale,
 		historyWorth: fundHistoryWorth,
 		historyPerformance: fundHistoryPerformance,
+		stocks,
 	};
 
 	return result;
@@ -257,6 +310,6 @@ export const getFundDetailMain = async (code) => {
 export const getDetail = async (code) => {
 	const fundHistoryStore = store.get("fundHistory");
 	const detail = fundHistoryStore[code];
-	
+
 	return detail;
 };

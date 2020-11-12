@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 22:36:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-03 22:28:53
+ * @LastEditTime: 2020-11-12 15:51:32
  * @Description: 蛋卷基金相关请求控制
  */
 import store from "../model/store";
@@ -13,13 +13,13 @@ import {
 	getUserFunds,
 } from "../services/index";
 import { getLocalUser } from "./account";
-import { getLastDay, getPreciseTime } from "@utils";
+import { getPreciseTime } from "@utils";
 import { sendMessage } from "@lib/chrome";
 import Saga from "@lib/saga";
 
 // 是否需要更新
 const isDiffTime = (time) => {
-	const today = new Date(getPreciseTime());
+	const today = new Date(getPreciseTime()).getTime();
 	return time !== today;
 };
 

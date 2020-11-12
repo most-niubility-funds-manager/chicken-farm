@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-31 18:07:53
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-11 11:01:35
+ * @LastEditTime: 2020-11-12 15:33:33
  * @Description: 净值涨幅列表
  */
 import React, { useState } from "react";
@@ -42,35 +42,32 @@ const Table = styled.div`
 	&.worth {
 		.thead,
 		.tr {
-			grid-template-columns: 50px repeat(3, 1fr);
+			grid-template-columns: 60px repeat(2, 1fr) 60px;
+		}
+	}
+
+	.thead,
+	.tr {
+		height: 24px;
+		font-size: 12px;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		justify-items: center;
+		align-items: center;
+
+		& > span:first-of-type {
+			justify-self: flex-start;
+		}
+		& > span:last-of-type {
+			justify-self: flex-end;
 		}
 	}
 
 	.thead {
-		font-size: 12px;
 		color: var(--detail-worth-thead);
-		display: grid;
-		grid-template-columns: 80px 100px 1fr;
-		height: 24px;
-		justify-items: flex-end;
-		align-items: center;
-
-		& > span:first-of-type {
-			justify-self: flex-start;
-		}
 	}
 	.tr {
-		height: 24px;
-		font-size: 12px;
 		color: var(--detail-worth-tbody);
-		display: grid;
-		grid-template-columns: 80px 100px 1fr;
-		justify-items: flex-end;
-		align-items: center;
-
-		& > span:first-of-type {
-			justify-self: flex-start;
-		}
 
 		.increase {
 			color: var(--detail-worth-increase);

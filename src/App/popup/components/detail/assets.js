@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-22 21:49:21
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-11 14:53:39
+ * @LastEditTime: 2020-11-12 11:15:36
  * @Description: 资产详情
  */
 import React, { useState } from "react";
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 
 	h2 {
 		text-align: left;
-		font-size: 13px;
+		font-size: 14px;
 		color: var(--detail-main-h2);
 		margin-bottom: 12px;
 		line-height: 1;
@@ -63,7 +63,7 @@ const Assets = (props) => {
 	} = props;
 	const total = (cost * unit).toFixed(2);
 
-	const lastIncome = realPercent && ((Number(realPercent) * unit * cost) / 100).toFixed(2);
+	const lastIncome = realPercent && (((Number(realPercent) || 0) * unit * cost) / 100).toFixed(2);
 	const lastIncomClass = lastIncome && lastIncome.includes("-") ? "decrease" : "increase";
 	const holdCost = (realUnit * cost - total).toFixed(2);
 	const holdCostClass = holdCost && holdCost.includes("-") ? "decrease" : "increase";
