@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 23:00:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-12 16:08:32
+ * @LastEditTime: 2020-11-13 14:53:28
  * @Description: 数据请求的操作
  */
 // 大盘数据
@@ -21,6 +21,8 @@ import {
 	FUNDMAIN,
 	OLDBATCHADDFUNDS,
 	FUNDSTOCK,
+	FUNDTREND,
+	FUNDVALUATION,
 } from "../api";
 
 // 获取大盘数据
@@ -224,11 +226,27 @@ export const getFundStock = async (code) => {
 				[]
 			);
 
-		console.log('股票持仓', result)
+		console.log("股票持仓", result);
 		return result;
 	}
 
 	return null;
+};
+
+// 蛋卷基金走势图 有的有 无的无
+export const getFundTrend = async (code) => {
+	const days = [30, 90, 180, 360];
+	const datas = await Promise.all(days.map((d) => Http.get(FUNDTREND(code), { day: d })));
+	const noData = datas.some(({ data }) => !Object.keys(data).length);
+
+	if (noData) return null;
+
+	const result = datas.reduce(
+		(obj, { data: { fund_nav_growth } }, idx) => ({ ...obj, [days[idx]]: fund_nav_growth }),
+		{}
+	);
+
+	return result;
 };
 
 // 天天基金获取主要数据
@@ -292,6 +310,8 @@ export const getFundDetailMain = async (code) => {
 	};
 	// 重仓股票
 	const stocks = await getFundStock(code);
+	// 基金走势
+	const trend = await getFundTrend(code);
 
 	// 目前所有结果
 	const result = {
@@ -301,9 +321,23 @@ export const getFundDetailMain = async (code) => {
 		historyWorth: fundHistoryWorth,
 		historyPerformance: fundHistoryPerformance,
 		stocks,
+		trend,
 	};
 
 	return result;
+};
+
+// 蛋卷实时估算净值
+export const getDJFundValuation = async (code) => {
+	try {
+		const {
+			data: { items },
+		} = await Http.get(FUNDVALUATION(code));
+
+		return items;
+	} catch (error) {
+		return [];
+	}
 };
 
 // popup获取详情数据

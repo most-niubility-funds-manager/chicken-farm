@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-09-24 15:00:30
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-10 16:01:17
+ * @LastEditTime: 2020-11-13 14:55:02
  * @Description: 数据交互中心
  */
 import {
@@ -17,7 +17,7 @@ import {
 	updateUserInfo,
 	clearUserInfo,
 } from "./account";
-import { fundBase, fundKeyword, getFundRealTimeData } from "./danjuan";
+import { fundBase, fundKeyword, getFundRealTimeData, getFundValuation } from "./danjuan";
 import {
 	getMarketOpen,
 	forceUpdate,
@@ -35,7 +35,7 @@ import {
 	syncOldData,
 } from "./base";
 import { addFund, fundCodes, setFundHold, setFundFollowState, getFundDetailData } from "./fund";
-import "./notify"
+import "./notify";
 
 const commandMap = new Map([
 	["getUser", (data, sendResponse) => getLocalUser(sendResponse)],
@@ -63,14 +63,15 @@ const commandMap = new Map([
 	["setSettingState", (data) => setSettingState(data)],
 	["setDetailState", (data) => setDetailState(data)], //	详情页
 	["getFundDetailData", (data, sendResponse) => getFundDetailData(data, sendResponse)], //	获取基金详情数据
+	["getFundValuation", (data, sendResponse) => getFundValuation(data, sendResponse)], //	获取实时估算净值
 	["updateUserInfo", () => updateUserInfo()],
 	["getUserLocalSetting", (data, sendResponse) => getUserLocalSetting(sendResponse)],
 	["setUserLocalSetting", (data) => setUserLocalSetting(data)],
 	["clearUserInfo", () => clearUserInfo()],
 	["setFundFollowState", (data, sendResponse) => setFundFollowState(data, sendResponse)],
-	["setHoldState", (data) => setHoldState(data)],	//	基金持仓窗口
+	["setHoldState", (data) => setHoldState(data)], //	基金持仓窗口
 	["setFundHold", (data, sendResponse) => setFundHold(data, sendResponse)], //	修改持有
-	['syncOldData', (data, sendResponse) => syncOldData(data, sendResponse)],	//	用户手动导入旧数据
+	["syncOldData", (data, sendResponse) => syncOldData(data, sendResponse)], //	用户手动导入旧数据
 ]);
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

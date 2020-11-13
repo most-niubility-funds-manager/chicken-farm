@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 22:36:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-12 15:51:32
+ * @LastEditTime: 2020-11-13 14:54:01
  * @Description: 蛋卷基金相关请求控制
  */
 import store from "../model/store";
@@ -11,6 +11,7 @@ import {
 	getLiveFundData,
 	getFundDetailMain,
 	getUserFunds,
+	getDJFundValuation,
 } from "../services/index";
 import { getLocalUser } from "./account";
 import { getPreciseTime } from "@utils";
@@ -57,7 +58,14 @@ export const fetchEachFundDetail = async () => {
 		store.set("fundHistory", { ...originStoreHistory, ...convertData });
 		store.set("expired", getPreciseTime());
 	});
-}
+};
+
+// 获取=基金实时估算净值
+export const getFundValuation = async (code, sendResponse) => {
+	const data = await getDJFundValuation(code);
+
+	sendResponse(data);
+};
 
 // 每日定时获取基金详情数据
 const pollFetchEachFund = async () => {
@@ -66,10 +74,10 @@ const pollFetchEachFund = async () => {
 		return isDiffTime(current);
 	};
 	const timeSaga = new Saga(checkNowTime);
-	
-	timeSaga.start((needUpdate) => {	
+
+	timeSaga.start((needUpdate) => {
 		if (needUpdate) {
-			fetchEachFundDetail()
+			fetchEachFundDetail();
 		}
 	}, 30000);
 };

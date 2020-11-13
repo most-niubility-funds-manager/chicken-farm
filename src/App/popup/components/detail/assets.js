@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-22 21:49:21
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-12 11:15:36
+ * @LastEditTime: 2020-11-13 15:49:32
  * @Description: 资产详情
  */
 import React, { useState } from "react";
@@ -27,7 +27,7 @@ const Wrapper = styled.div`
 		width: 100%;
 		height: 45px;
 		display: grid;
-		grid-template-columns: 1fr 70px 1fr;
+		grid-template-columns: repeat(3, 1fr);
 
 		.item {
 			display: flex;
@@ -76,7 +76,7 @@ const Assets = (props) => {
 					<span className="text">金额</span>
 					<span className="value">{total}</span>
 				</div>
-				<div className="item">
+				<div className="item" style={{ "align-items": "center" }}>
 					<span className="text">昨日收益</span>
 					<span className={`value ${lastIncomClass}`}>
 						{lastIncome && (lastIncome.includes("-") ? lastIncome : `+${lastIncome}`)}

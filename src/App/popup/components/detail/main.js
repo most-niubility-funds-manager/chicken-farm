@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-22 21:28:20
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-10 15:02:20
+ * @LastEditTime: 2020-11-13 15:48:54
  * @Description: 头部面板
  */
 import React, { useState } from "react";
@@ -36,13 +36,18 @@ const Wrapper = styled.div`
 		width: 100%;
 		height: 45px;
 		display: grid;
-		grid-template-columns: 1fr 70px 1fr;
+		grid-template-columns: repeat(3, 1fr);
 
 		.item {
 			display: flex;
 			flex-direction: column;
-			justify-content: space-between;
+			justify-content: flex-end;
 			align-items: flex-end;
+			gap: 4px;
+
+			&:last-of-type .value{
+				font-size: 16px;
+			}
 
 			.value {
 				font-size: 13px;
@@ -94,13 +99,13 @@ const MainInfo = (props) => {
 					<span className="value">{realData.realUnit}</span>
 					<span className="text">净值</span>
 				</div>
-				<div className="item">
+				<div className="item" style={{ "align-items": "center" }}>
 					<span className={`value ${realPercentClass}`}>{realPercent}</span>
-					<span className="text">昨日涨幅</span>
+					<span className="text">日涨跌</span>
 				</div>
 				<div className="item">
 					<span className={`value ${threeMonthClass}`}>{threeMonth}</span>
-					<span className="text">近3个月涨幅</span>
+					<span className="text">近三个月收益率</span>
 				</div>
 			</div>
 		</Wrapper>

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-06 19:11:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-11 14:41:00
+ * @LastEditTime: 2020-11-13 14:55:46
  * @Description: 请求background
  */
 import { sendMessage } from "@lib/chrome";
@@ -71,6 +71,8 @@ export const setFundHold = ({ uid, code, cost, unit, state }) =>
 // 获取基金的详情数据
 export const getFundDetailData = (code) =>
 	sendMessage({ command: "getFundDetailData", data: code });
+// 获取估算净值 实时数据
+export const getFundValuation = (code) => sendMessage({ command: "getFundValuation", data: code });
 // 激活基金持仓弹窗
 export const setHoldState = ({ state, data = {} }) =>
 	sendMessage({ command: "setHoldState", data: { state, data } });

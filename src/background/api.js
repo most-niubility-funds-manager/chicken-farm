@@ -17,6 +17,8 @@ export const FUNDMAIN = (code) => `http://fund.eastmoney.com/${code}.html?spm=se
 export const FUNDSTOCK = (code) =>
 	`http://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jjcc&code=${code}&topline=10&year=&month=&rt=${Math.random()}`;
 export const STOCKSEARCH = (code) => `http://so.eastmoney.com/web/s?keyword=${code}`; //	股票查询
+export const FUNDTREND = (code) => `https://danjuanapp.com/djapi/fund/nav-growth/${code}`; //	蛋卷一年的走势 day
+export const FUNDVALUATION = (code) => `https://danjuanapp.com/djapi/fund/estimate-nav/${code}`; //	蛋卷实时净值
 
 // 百度节假日
 export const HOLIDAY = `https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php`; //  query=2020&resource_id=6018
