@@ -1,13 +1,13 @@
 /*
  * @Date: 2020-06-17 15:25:17
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-02 11:04:01
+ * @LastEditTime: 2020-10-27 10:28:45
  * @Description: webpack通用配置
  */
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
+const alias = require("./alias");
 const entryList = require("./entryList.js");
 const MergeLocale = require("./mergeLocale.js");
 const templateList = require("./templateList.js");
@@ -22,6 +22,7 @@ module.exports = {
 	},
 	resolve: {
 		extensions: [".js", ".jsx", ".ts", ".tsx", ".json", ".scss", ".css"],
+		alias,
 	},
 	module: {
 		rules: [
@@ -81,20 +82,25 @@ module.exports = {
 	optimization: {
 		usedExports: true,
 		splitChunks: {
-			minChunks: 1,
+			minChunks: 30,
+			minSize: 10,
 			chunks: "all",
 			cacheGroups: {
+				common: {
+					name: 'common',
+					priority: 1,
+				},
 				vendor: {
 					name: "vendor",
-					test: /[\\/]node_modules[\\/]/,
-					priority: -10,
+					test: /node_modules/,
+					priority: 10,
 				},
 			},
 		},
 	},
 	plugins: [
 		...templateList,
-    // CopyWebpackPlugin这玩意更新好快啊
+		// CopyWebpackPlugin这玩意更新好快啊
 		new CopyWebpackPlugin({
 			patterns: [
 				{
@@ -103,8 +109,8 @@ module.exports = {
 				},
 				{
 					from: "public/icons/**/*",
-          to: "static/icons/",
-          flatten: true,
+					to: "static/icons/",
+					flatten: true,
 				},
 			],
 		}),

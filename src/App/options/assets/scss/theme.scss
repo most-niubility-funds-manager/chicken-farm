@@ -1,0 +1,25 @@
+@import "./color.scss";
+
+.normal {
+	--main-background: var(--white);
+	--main-font: var(--black-33);
+	--nav-background: var(--white-fa);
+	--nav-item: var(--blue-36);
+	--nav-item-hover: var(--blue);
+	--nav-border: rgba(0, 0, 0, 0.06);
+	--head-font: var(--gray-cc);
+	--head-font-hover: var(--black-44);
+	--head-bg-hover: var(--white-fa);
+	--login-mask: rgba(0, 0, 0, 0.3);
+	--login-bg: var(--white);
+	--login-tab: var(--gray-cc);
+	--login-tab-active: var(--black-44);
+	--login-border: rgba(0, 0, 0, 0.06);
+	--login-error: var(--red);
+	--login-input-bg: var(--white-fa);
+	--login-btn: var(--blue);
+	--login-btn-font: var(--white);
+	--login-help-font: var(--black-99);
+	--login-help-question: var(--black-44);
+	--login-help-answer: var(--black-99);
+}

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-18 15:49:09
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-07-02 11:06:05
+ * @LastEditTime: 2020-10-25 23:02:13
  * @Description: 打包
  */
 const path = require("path");
@@ -18,7 +18,13 @@ module.exports = merge(config, {
 			test: /\.(ts|tsx|js|jsx)?$/,
 			exclude: /node_modules/,
 			parallel: true,
-			sourceMap: true,
+			sourceMap: false,
+			uglifyOptions: {
+				compress: {
+					drop_console: true,
+					drop_debugger: true,
+				},
+			},
 		}),
 		new FileManagerPlugin({
 			onEnd: {
