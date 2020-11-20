@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-18 19:53:03
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-11 14:53:47
+ * @LastEditTime: 2020-11-16 14:30:34
  * @Description: 个人设置页
  */
 import React, { useState, useEffect } from "react";
@@ -89,7 +89,7 @@ const LoginOutBlock = styled.div`
 
 const Setting = (props) => {
 	const { active, data, user } = props;
-	const { reverseColor, tradeNotice, marketState, incomeState } = data;
+	const { wideMode, reverseColor, tradeNotice, marketState, incomeState } = data;
 	const [isLogin, setIsLogin] = useState(false);
 	const [syncActive, setSyncActive] = useState(false);
 
@@ -127,6 +127,7 @@ const Setting = (props) => {
 				功能设置
 			</Title>
 			<Block>
+				<Item text="宽屏模式" active={wideMode} keyName="wideMode"></Item>
 				<Item text="涨跌颜色反转" active={reverseColor} keyName="reverseColor"></Item>
 				<Item text="每日交易提醒" active={tradeNotice} keyName="tradeNotice"></Item>
 				<Item text="开启/关闭大盘数据" active={marketState} keyName="marketState"></Item>

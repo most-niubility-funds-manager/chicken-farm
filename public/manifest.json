@@ -1,42 +1,45 @@
 {
-	"version": "2.0.0",
-	"manifest_version": 2,
-	"minimum_chrome_version": "56.0.0",
-	"name": "基金管理助手",
-	"short_name": "基金管理助手",
-	"description": "自选基金管理助手，获取基金实时信息。",
-	"offline_enabled": false,
-	"default_locale": "zh_CN",
-	"icons": {
-		"16": "static/icons/logo16.png",
-		"48": "static/icons/logo48.png",
-		"128": "static/icons/logo128.png"
-	},
-	"options_ui": {
-		"chrome_style": true,
-		"page": "options.html"
-	},
-	"background": {
-		"page": "background.html",
-		"persistent": true
-	},
-	"browser_action": {
-		"default_icon": {
-			"16": "static/icons/logo16.png",
-			"48": "static/icons/logo48.png",
-			"128": "static/icons/logo128.png"
-		},
-		"default_popup": "popup.html",
-		"default_title": "Funds Manager"
-	},
-	"permissions": [
-		"tabs",
-		"storage",
-		"webRequest",
-		"webRequestBlocking",
-		"notifications",
-		"<all_urls>"
-	],
-	"web_accessible_resources": ["static/js/*", "http://fund.eastmoney.com"],
-	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "version": "2.1.0",
+  "manifest_version": 2,
+  "minimum_chrome_version": "56.0.0",
+  "name": "基金管理助手",
+  "short_name": "基金管理助手",
+  "description": "自选基金管理助手，获取基金实时信息。",
+  "offline_enabled": false,
+  "default_locale": "zh_CN",
+  "icons": {
+    "16": "static/icons/logo16.png",
+    "48": "static/icons/logo48.png",
+    "128": "static/icons/logo128.png"
+  },
+  "options_ui": {
+    "chrome_style": true,
+    "page": "options.html"
+  },
+  "background": {
+    "page": "background.html",
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "static/icons/logo16.png",
+      "48": "static/icons/logo48.png",
+      "128": "static/icons/logo128.png"
+    },
+    "default_popup": "popup.html",
+    "default_title": "Funds Manager"
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "notifications",
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [
+    "static/js/*",
+    "http://fund.eastmoney.com"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

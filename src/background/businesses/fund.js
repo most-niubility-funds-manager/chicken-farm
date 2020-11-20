@@ -5,7 +5,11 @@ import {
 	updateHold,
 	getDetail,
 	updateUserFunds,
+	batchDelete,
+	updateSort,
 } from "../services/index";
+import { setDetailState } from './base'
+import store from "../model/store";
 
 // 基金数据获取
 export const fundCodes = async ({ uid }, sendResponse) => {
@@ -29,6 +33,8 @@ export const setFundFollowState = async ({ uid, code, state, cost }, sendRespons
 // 修改基金持有
 export const setFundHold = async ({ uid, code, cost, unit }, sendResponse) => {
 	const { status } = await updateHold({ uid, code, cost, unit });
+	store.set("totalCost", {});
+
 	sendResponse(status);
 };
 
@@ -37,4 +43,22 @@ export const getFundDetailData = async (code, sendResponse) => {
 	const data = await getDetail(code);
 
 	sendResponse(data);
+};
+
+// 批量删除基金
+export const deleteBatchFund = async ({ uid, code }, sendResponse) => {
+	await batchDelete(code);
+	await updateUserFunds(uid);
+	setDetailState(false)
+
+	sendResponse(true);
+};
+
+// 修改排序
+export const updateFundSort = async ({ uid, code }, sendResponse) => {
+	await updateSort(code);
+	await updateUserFunds(uid);
+	setDetailState(false)
+
+	sendResponse(true);
 };

@@ -11,7 +11,7 @@ import MainInfo from "../components/detail/main";
 import Assets from "../components/detail/assets";
 import Worth from "../components/detail/worth";
 import Stock from "../components/detail/stock";
-import Trend from "../components/detail/trend";
+// import Trend from "../components/detail/trend";
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -128,7 +128,7 @@ const Detail = (props) => {
 				</div>
 			</Title>
 			<MainInfo realData={fundRealData} storeData={fundStoreBase}></MainInfo>
-			{cost && <Assets data={{ cost, unit }} realData={fundRealData}></Assets>}
+			{cost && <Assets data={{ cost, unit }} realData={fundRealData} storeData={fundStoreBase}></Assets>}
 			<Worth data={fundStoreBase}></Worth>
 			{fundStoreBase.stocks && <Stock data={fundStoreBase.stocks} state={state}></Stock>}
 		</Wrapper>

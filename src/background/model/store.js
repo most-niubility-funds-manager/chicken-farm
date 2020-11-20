@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 22:43:25
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-04 09:54:16
+ * @LastEditTime: 2020-11-16 14:30:16
  * @Description: 缓存数据 避免重复请求
  */
 const config = {
@@ -14,6 +14,7 @@ const config = {
 	fundHistory: {}, //  各基金详情基本信息
 	tempAddFunds: [],	//	临时保存的基金
 	userSetting: {
+		wideMode: true,
 		reverseColor: false,
 		tradeNotice: true,
 		marketState: true,

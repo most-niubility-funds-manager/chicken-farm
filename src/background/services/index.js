@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-05 23:00:41
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-13 14:53:28
+ * @LastEditTime: 2020-11-20 11:57:51
  * @Description: 数据请求的操作
  */
 // 大盘数据
@@ -23,6 +23,8 @@ import {
 	FUNDSTOCK,
 	FUNDTREND,
 	FUNDVALUATION,
+	DELETEFUND,
+	SORTFUND,
 } from "../api";
 
 // 获取大盘数据
@@ -226,7 +228,6 @@ export const getFundStock = async (code) => {
 				[]
 			);
 
-		console.log("股票持仓", result);
 		return result;
 	}
 
@@ -346,4 +347,18 @@ export const getDetail = async (code) => {
 	const detail = fundHistoryStore[code];
 
 	return detail;
+};
+
+// 批量删除基金
+export const batchDelete = async (id) => {
+	const { state } = await Http.post(DELETEFUND, { id: JSON.stringify(id) });
+
+	return state;
+};
+
+// 修改排序
+export const updateSort = async (code) => {
+	const { state } = await Http.post(SORTFUND, { code: JSON.stringify(code) });
+
+	return state;
 };

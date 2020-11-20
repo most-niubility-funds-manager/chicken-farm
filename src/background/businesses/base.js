@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-06 20:42:02
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-11 14:40:43
+ * @LastEditTime: 2020-11-17 21:11:08
  * @Description: 插件基本接口需求
  */
 import store from "../model/store";
@@ -110,6 +110,11 @@ export const modifyHold = async (uid) => {
 // 设置页面
 export const setSettingState = async (state) => {
 	sendMessage({ command: "setSettingState", data: state });
+};
+
+// 排序页面
+export const setSortState = async (state) => {
+	sendMessage({ command: "setSortState", data: state });
 };
 
 // 详情页

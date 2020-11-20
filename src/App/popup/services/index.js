@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-06 19:11:37
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-13 14:55:46
+ * @LastEditTime: 2020-11-20 12:01:15
  * @Description: 请求background
  */
 import { sendMessage } from "@lib/chrome";
@@ -59,6 +59,8 @@ export const setTotalData = (data) => sendMessage({ command: "setTotalData", dat
 export const modifyHold = (uid) => sendMessage({ command: "modifyHold", data: uid });
 // 激活设置页面
 export const setSettingState = (state) => sendMessage({ command: "setSettingState", data: state });
+// 激活排序页面
+export const setSortState = (state) => sendMessage({ command: "setSortState", data: state });
 
 // 激活产品详情页
 export const setDetailState = (data) => sendMessage({ command: "setDetailState", data });
@@ -86,6 +88,14 @@ export const setUserLocalSetting = ({ key, value }) =>
 // 手动导入数据
 export const syncOldData = ({ uid, data }) =>
 	sendMessage({ command: "syncOldData", data: { uid, data } });
+
+// 批量删除
+export const deleteBatchFund = ({ uid, code }) =>
+	sendMessage({ command: "deleteBatchFund", data: { uid, code } });
+
+// 修改排序
+export const updateFundSort = ({ uid, code }) =>
+	sendMessage({ command: "updateFundSort", data: { uid, code } });
 
 // 设置
 // 颜色反转

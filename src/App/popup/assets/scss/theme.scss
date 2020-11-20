@@ -22,6 +22,7 @@
 	--table-th-menu-bg: var(--black-2a);
 	--table-th-menu-active: var(--white-ff-dim08);
 	--table-empty-hover: var(--white-ff-dim65);
+	--table-th-light: var(--white);
 
 	--table-tr: var(--white-ff-dim85);
 	--table-tr-code: var(--white-ff-dim45);
@@ -29,7 +30,12 @@
 	--table-tr-detail: var(--black-7f);
 	--table-tr-increase: var(--red);
 	--table-tr-decrease: var(--green);
-
+	--table-arrow: var(--white-ff-dim45);
+	--table-arrow-active: var(--yellow-fd);
+	--table-badge: var(--white);
+	--table-badge-bg: var(--blue-00);
+	--table-tr-bg-active: var(--black-15);
+	
 	--footer-bg: var(--black-1f);
 	--footer-border: var(--black-33);
 	--footer-font: var(--white-ee);
@@ -120,6 +126,23 @@
 	--detail-stock-active: var(--blue);
 	--detail-stock-thead: var(--white-ff-dim50);
 	--detail-stock-tbody: var(--white-ff-dim85);
+
+	--sort-bg: var(--black-17);
+	--sort-title: var(--white-ff-dim85);
+	--sort-select: var(--white-ff-dim85);
+	--sort-select-border: var(--black-99);
+	--sort-select-active: var(--blue);
+	--sort-btn: var(--white-ff-dim85);
+	--sort-btn-red: var(--red-bb);
+	--sort-btn-blue: var(--blue);
+	--sort-item-active: var(--black-33);
+	--sort-item-border: var(--black-33);
+	--sort-item-drag-bg: var(--black-4e);
+	--sort-item-drag: var(--white-ff-dim45);
+	--sort-item-drag-active: var(--white-ff-dim65);
+
+	--sort-delete-btn: var(--red-bb);
+	--sort-delete-title: var(--white-ff-dim85);
 }
 
 .reserveNormal {
@@ -144,6 +167,7 @@
 	--table-th-menu-bg: var(--black-2a);
 	--table-th-menu-active: var(--white-ff-dim08);
 	--table-empty-hover: var(--white-ff-dim65);
+	--table-th-light: var(--white);
 
 	--table-tr: var(--white-ff-dim85);
 	--table-tr-code: var(--white-ff-dim45);
@@ -151,6 +175,11 @@
 	--table-tr-detail: var(--black-7f);
 	--table-tr-increase: var(--green);
 	--table-tr-decrease: var(--red);
+	--table-arrow: var(--white-ff-dim45);
+	--table-arrow-active: var(--yellow-fd);
+	--table-badge: var(--white);
+	--table-badge-bg: var(--blue-00);
+	--table-tr-bg-active: var(--black-15);
 
 	--footer-bg: var(--black-1f);
 	--footer-border: var(--black-33);
@@ -242,4 +271,21 @@
 	--detail-stock-active: var(--blue);
 	--detail-stock-thead: var(--white-ff-dim50);
 	--detail-stock-tbody: var(--white-ff-dim85);
+
+	--sort-bg: var(--black-17);
+	--sort-title: var(--white-ff-dim85);
+	--sort-select: var(--white-ff-dim85);
+	--sort-select-border: var(--black-99);
+	--sort-select-active: var(--blue);
+	--sort-btn: var(--white-ff-dim85);
+	--sort-btn-red: var(--red-bb);
+	--sort-btn-blue: var(--blue);
+	--sort-item-active: var(--black-33);
+	--sort-item-border: var(--black-33);
+	--sort-item-drag-bg: var(--black-4e);
+	--sort-item-drag: var(--white-ff-dim45);
+	--sort-item-drag-active: var(--white-ff-dim65);
+
+	--sort-delete-btn: var(--red-bb);
+	--sort-delete-title: var(--white-ff-dim85);
 }

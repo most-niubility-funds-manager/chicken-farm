@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled, { keyframes } from "styled-components";
-import { setSearchState, searchFund, setSettingState } from "../../services";
+import { setSearchState, searchFund, setSettingState, setSortState } from "../../services";
 
 const expandAnimate = keyframes`
 	0% {
@@ -22,7 +22,7 @@ const InputWrapper = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: calc(100% - 47px);
+	width: calc(100% - 94px);
 	height: 36px;
 	border-radius: 6px;
 	background-color: var(--search-input-bg);
@@ -34,7 +34,7 @@ const InputWrapper = styled.div`
 		position: absolute;
 		top: 0;
 		left: 0;
-		transform: translateX(130px);
+		transform: translateX(95px);
 		width: 42px;
 		height: 100%;
 		display: flex;
@@ -146,13 +146,14 @@ const SearchBox = (props) => {
 	};
 	const expandDeactiveHandler = () => {
 		if (searchActive) {
-			console.log("提交关闭");
 			setSearchState({ state: false, codes: followData, uid: user && user.uid });
 		}
 		inputEl.current.value = "";
 	};
 	// 打开设置
 	const settingActiveHandler = () => setSettingState(true);
+	// 打开排序
+	const sortActiveHandler = () => setSortState(true)
 
 	useEffect(() => {
 		if (searchActive) {
@@ -179,7 +180,8 @@ const SearchBox = (props) => {
 					onClick={expandDeactiveHandler}
 				></i>
 			</InputWrapper>
-			<Btn className="iconfont chicken-conditions" onClick={settingActiveHandler}></Btn>
+			<Btn className="iconfont chicken-paixu" onClick={sortActiveHandler} style={{ right: "47px" }} />
+			<Btn className="iconfont chicken-conditions" onClick={settingActiveHandler} />
 		</Wrapper>
 	);
 };

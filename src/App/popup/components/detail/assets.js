@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-10-22 21:49:21
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-13 15:49:32
+ * @LastEditTime: 2020-11-20 13:03:51
  * @Description: 资产详情
  */
 import React, { useState } from "react";
@@ -59,11 +59,13 @@ const Wrapper = styled.div`
 const Assets = (props) => {
 	const {
 		data: { cost, unit },
-		realData: { realPercent, realUnit },
+		realData: { realUnit },
+		storeData: { historyWorth },
 	} = props;
 	const total = (cost * unit).toFixed(2);
 
-	const lastIncome = realPercent && (((Number(realPercent) || 0) * unit * cost) / 100).toFixed(2);
+	const dayBeforeUnit = historyWorth ? historyWorth[1][1] : 0;
+	const lastIncome = (cost * (realUnit - dayBeforeUnit)).toFixed(2);
 	const lastIncomClass = lastIncome && lastIncome.includes("-") ? "decrease" : "increase";
 	const holdCost = (realUnit * cost - total).toFixed(2);
 	const holdCostClass = holdCost && holdCost.includes("-") ? "decrease" : "increase";
@@ -83,7 +85,7 @@ const Assets = (props) => {
 					</span>
 				</div>
 				<div className="item">
-					<span className="text">持有收益</span>
+					<span className="text">累计收益</span>
 					<span className={`value ${holdCostClass}`}>
 						{holdCost && (holdCost.includes("-") ? holdCost : `+${holdCost}`)}
 					</span>

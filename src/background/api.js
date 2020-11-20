@@ -30,3 +30,5 @@ export const UPDATEFOLLOW = `${API_HOST}/fund/follow`;
 export const UPDATEHOLD = `${API_HOST}/fund/hold`;
 export const ADDBATCHFUNDS = `${API_HOST}/fund/batch/add`;
 export const OLDBATCHADDFUNDS = `${API_HOST}/fund/batch/add/old`;
+export const DELETEFUND = `${API_HOST}/fund/batch/delete`;
+export const SORTFUND = `${API_HOST}/fund/sort`;

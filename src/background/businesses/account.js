@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-09-24 15:54:43
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-10 15:52:29
+ * @LastEditTime: 2020-11-16 13:35:45
  * @Description: 用户账户登录、注册、退出
  */
 import Http from "@lib/fetch";
@@ -78,10 +78,10 @@ export const register = async ({ uid, name, password }, sendResponse) => {
 	const localSign = localStorage.getItem("already-sync-oldData")
 	const data = await Http.post(REGISTER, { uid, name, password });
 	const localCodes = await getIndexedFunds()
-	
+
 	if (!localSign)
 		localStorage.setItem("already-sync-oldData", Date.now())
-		localCodes.length && await oldFundAddBatch({ uid, codes: localCodes }) 
+		localCodes.length && await oldFundAddBatch({ uid, codes: localCodes })
 		
 	sendResponse(data);
 

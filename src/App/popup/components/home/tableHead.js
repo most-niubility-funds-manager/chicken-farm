@@ -133,7 +133,7 @@ const Head = (props) => {
 
 	const changeSortHandler = (idx) => {
 		setCurrentSort(sortList[idx]);
-		closeMenu();
+		// closeMenu();
 	};
 
 	const openMenu = () => setMenuActive(!menuActive);

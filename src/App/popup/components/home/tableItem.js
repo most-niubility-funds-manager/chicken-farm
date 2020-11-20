@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { setTotalData, setDetailState } from "../../services";
+import { setTotalData, setDetailState, getFundDetailData } from "../../services";
 import Saga from "@lib/saga";
 
 const FocusWrapper = styled.div.attrs({ className: "table-list-item" })`
@@ -101,34 +101,37 @@ const HoldWrapper = styled.div.attrs({ className: "table-list-item" })`
 
 const Item = (props) => {
 	const { type = true, data, user } = props;
+	const { fakePercent, init_cost, init_unit, realUnit, code, name, follow, fakeUnit } = data;
+	const [baseDetail, setBaseDetail] = useState({});
 
 	// 涨跌clss
-	const creaseType = data.fakePercent.includes("-") ? "decrease" : "increase";
+	const creaseType = fakePercent.includes("-") ? "decrease" : "increase";
 	// 实时百分比
-	const fakePercent = data.fakePercent.includes("-")
-		? `${data.fakePercent}%`
-		: `+${data.fakePercent}%`;
+	const _fakePercent = fakePercent.includes("-") ? `${fakePercent}%` : `+${fakePercent}%`;
 	// 成本
-	const cost = (data.init_cost * data.init_unit).toFixed(2);
-	const currentCost = (data.init_cost * data.realUnit).toFixed(2);
+	const cost = (init_cost * init_unit).toFixed(2);
+	const currentCost = (init_cost * realUnit).toFixed(2);
 	// 累计收益
 	const totalIncome = () => {
-		const value = (data.init_cost * data.realUnit).toFixed(2);
+		const value = (init_cost * realUnit).toFixed(2);
 		const diff = (value - cost).toFixed(2);
 		return diff.includes("-") ? `${diff}` : `+${diff}`;
 	};
 	// 昨日收益
 	const lastIncome = () => {
-		const number = (data.init_cost * data.realUnit * data.realPercent) / 100;
+		// 基金详情
+		const { historyWorth = null } = baseDetail || {};
+		const dayBeforeUnit = historyWorth ? historyWorth[1][1] : 0;
+		const number = init_cost * (realUnit - dayBeforeUnit);
 		if (!Number.isNaN(number)) {
 			return number > 0 ? `+${number.toFixed(2)}` : number.toFixed(2);
 		}
-		return '0';
+		return "0";
 	};
 	// 实时估算
 	const fakeIncome = () => {
-		if (data.fakePercent !== "--") {
-			const number = (cost * data.fakePercent) / 100;
+		if (fakePercent !== "--") {
+			const number = (currentCost * fakePercent) / 100;
 			return number > 0 ? `+${number.toFixed(2)}` : number.toFixed(2);
 		} else {
 			return "--";
@@ -137,21 +140,22 @@ const Item = (props) => {
 
 	// 实时估算的saga
 	const params = {
-		code: data.code,
+		code: code,
 		totalCost: currentCost,
 		lastIncome: lastIncome(),
 		fakeIncome: fakeIncome() === "--" ? 0 : fakeIncome(),
 		totalIncome: totalIncome(),
 	};
+
 	const totalDataSaga = new Saga(() => setTotalData(params));
 
 	const openDetailHandler = () => {
 		setDetailState({
 			state: true,
-			code: data.code,
-			followState: data.follow,
-			cost: data.init_cost,
-			unit: data.init_unit,
+			code: code,
+			followState: follow,
+			cost: init_cost,
+			unit: init_unit,
 		});
 	};
 
@@ -164,21 +168,29 @@ const Item = (props) => {
 		};
 	}, [user]);
 
+	useEffect(() => {
+		const fetchData = async () => {
+			const _ = await getFundDetailData(code);
+			setBaseDetail(_);
+		};
+		fetchData();
+	}, []);
+
 	if (!type) {
 		return (
 			<FocusWrapper onClick={openDetailHandler}>
 				<span className="first">
-					<p className="title">{data.name}</p>
-					<p className="code">{data.code}</p>
+					<p className="title">{name}</p>
+					<p className="code">{code}</p>
 				</span>
-				<span className="second">{data.fakeUnit}</span>
-				<span className={`thrid ${creaseType}`}>{fakePercent}</span>
+				<span className="second">{fakeUnit}</span>
+				<span className={`thrid ${creaseType}`}>{_fakePercent}</span>
 			</FocusWrapper>
 		);
 	} else {
 		return (
 			<HoldWrapper onClick={openDetailHandler}>
-				<p className="title">{data.name}</p>
+				<p className="title">{name}</p>
 				<div className="detail-grid">
 					<div className="item">
 						<p>金额</p>

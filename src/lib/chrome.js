@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-09-24 15:04:54
  * @LastEditors: elegantYu
- * @LastEditTime: 2020-11-02 22:43:07
+ * @LastEditTime: 2020-11-16 11:04:19
  * @Description: chrome 基础api封装
  */
 
@@ -85,3 +85,10 @@ export const clearNotifiy = (id) =>
  * @return {} resource
  */
 export const getURL = (path) => chrome.runtime.getURL(path);
+
+/**
+ * @description: 获取背景页window
+ * @return {} window
+ */
+export const getBackgroundPage = () =>
+	new Promise((resolve) => chrome.runtime.getBackgroundPage(resolve));

@@ -5,6 +5,8 @@ import Income from "../components/home/income";
 import Content from "../components/home/content";
 import Search from "./search";
 import Nav from "../components/home/nav";
+import WideBanner from "../components/home/wideBanner";
+import WideTable from "../components/home/wideTable"
 
 const fadeIn = keyframes`
 	from {
@@ -48,9 +50,13 @@ const Home = (props) => {
 
 	// 顶部框
 	const renderTopPanelJSX = () => {
-		if (!tableType && setting.marketState) {
+		const { marketState, incomeState, wideMode } = setting;
+
+		if (wideMode && (marketState || incomeState)) {
+			return <WideBanner setting={setting} />;
+		} else if (!tableType && marketState) {
 			return <Market />;
-		} else if (tableType && setting.incomeState) {
+		} else if (tableType && incomeState) {
 			return <Income />;
 		} else {
 			return null;
